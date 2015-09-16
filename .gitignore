@@ -1,3 +1,4 @@
 .ipynb_checkpoints
 .ropeproject
 __pycache__
+*.gdx

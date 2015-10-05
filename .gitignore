@@ -8,3 +8,4 @@ private_settings.py
 *.swp
 node_modules
 *.pid
+cecp-cop21-data

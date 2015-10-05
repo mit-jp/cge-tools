@@ -4,10 +4,8 @@
 appnope=0.1.0=py34_0
 bokeh=0.10.0=nppy34_1
 certifi=14.05.14=py34_0
-curl=7.43.0=1
 decorator=4.0.4=py34_0
 flask=0.10.1=py34_1
-gdal=2.0.0=np19py34_0
 hdf5=1.8.15.1=1
 ipykernel=4.0.3=py34_0
 ipython=4.0.0=py34_1
@@ -18,14 +16,12 @@ jinja2=2.8=py34_0
 jsonschema=2.4.0=py34_0
 jupyter_client=4.0.0=py34_0
 jupyter_core=4.0.6=py34_0
-krb5=1.13.2=0
-libgdal=2.0.0=0
-libnetcdf=4.3.3.1=1
 libsodium=0.4.5=0
 markupsafe=0.23=py34_0
 mistune=0.7.1=py34_0
 nbconvert=4.0.0=py34_0
 nbformat=4.0.0=py34_0
+nodejs=4.1.0=1
 notebook=4.0.5=py34_0
 numexpr=2.4.4=np19py34_0
 numpy=1.9.3=py34_0

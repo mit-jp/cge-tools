@@ -4,3 +4,7 @@ __pycache__
 *.egg-info
 *.gdx
 output
+private_settings.py
+*.swp
+node_modules
+*.pid

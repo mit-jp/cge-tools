@@ -13,7 +13,7 @@ TIMEZONE = 'America/New_York'
 
 DEFAULT_LANG = 'en'
 
-THEME = 'mdl'
+THEME = 'theme'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['mdl_renderer',]
+PLUGINS = ['viz_renderer',]

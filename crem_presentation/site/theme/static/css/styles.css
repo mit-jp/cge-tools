@@ -17,19 +17,11 @@
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
-.demo-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-}
 .demo-layout .demo-header .mdl-textfield {
   padding-top: 27px;
 }
 .demo-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: rgba(0, 0, 0, 0.54);
-}
-.mdl-layout__drawer .avatar {
-  margin-bottom: 16px;
 }
 .demo-drawer {
   border: none;
@@ -53,7 +45,6 @@ html, body {
           align-items: center;
 }
 .demo-drawer-header {
-  box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -69,23 +60,6 @@ html, body {
           justify-content: flex-end;
   padding: 16px;
   height: 151px;
-}
-.demo-avatar-dropdown {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  position: relative;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: 100%;
 }
 
 .demo-navigation {
@@ -240,6 +214,9 @@ _:-ms-input-placeholder, :root .demo-graph {
       -ms-flex-align: center;
           align-items: center;
 }
+
+/* dl-dd-dt - used in heading text */
+
 .mdl-components-dl {
   padding: 0.5em;
   width: 80%;
@@ -257,4 +234,10 @@ _:-ms-input-placeholder, :root .demo-graph {
 .mdl-components-dd {
   margin: 0 0 0 150px;
   padding: 0 0 0.5em 0;
+}
+
+/* bokeh plots */
+
+.plotdiv {
+  width: 100%;
 }

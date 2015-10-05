@@ -1,5 +1,7 @@
 Title: Home
+SubTitle: This is the home page, meatball sirloin jerky cupim short ribs tri-tip jowl beef ribs. Flank filet mignon porchetta strip steak. Shank bresaola biltong swine filet mignon. Frankfurter fatback salami brisket bacon.
 Date: 2015-10-05
+Viz: plot_2
 save_as: index.html
 
   <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">

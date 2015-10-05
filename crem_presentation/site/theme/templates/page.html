@@ -9,9 +9,10 @@
             <dd class="mdl-components-dd">{{ page.subtitle }}</dd>
     </dl>
   </div>
-  <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-    {{ page.bokeh }}
-  </div>
+
+  {# Note that viz_render method need to put its own divs in to encapsulate plot #}
+  {{ page.viz_rendered }}
+
   <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
     {{ page.content }}
   </div>

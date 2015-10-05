@@ -5,11 +5,15 @@
 
 # Load all the GDX files
 from collections import OrderedDict
+from os import makedirs as mkdir
+from os.path import join
 
 import gdx
 import pandas as pd
 import xray
 
+GDX_DIR = 'gdx'
+OUT_DIR = '../../../cecp-cop21-data'
 FILES = [
     ('bau', 'result_urban_exo.gdx'),
     ('3', 'result_cint_n_3.gdx'),
@@ -66,17 +70,26 @@ for u in temp['urb']:
 
 # In[106]:
 
-# Combine all variables into a single xray.Dataset; truncate time
+# Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
+# National totals
+national = data.sum('r')
 data
 
 
-# In[107]:
+# In[149]:
 
-# Serialize to CSV: national totals
-national = data.sum('r')
+# Create directories
+for r in CREM.set('r'):
+    mkdir(join(OUT_DIR, r))
+mkdir(join(OUT_DIR, 'national'))
 
+# Serialize to CSV
 for c in cases:
-    national.sel(case=c).drop('case').to_dataframe().to_csv('out/{}.csv'
-                                                            .format(c))
+    # Provincial data
+    for r in CREM.set('r'):
+        data.sel(case=c, r=r).drop(['case', 'r']).to_dataframe().to_csv(
+            join(OUT_DIR, r, '{}.csv'.format(c)))
+    # National data
+    national.sel(case=c).drop('case').to_dataframe()             .to_csv(join(OUT_DIR, 'national', '{}.csv'.format(c)))
 

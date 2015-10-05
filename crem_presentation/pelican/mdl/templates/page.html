@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{ SITENAME }} | {{ page.title|title }}{% endblock %}
+{% block section_title %}{{ page.title }}{% endblock %}
+{% block content %}        
+<div class="mdl-grid demo-content">
+  <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+    <dl class="mdl-components-dl">
+            <dt class="mdl-components-dt">{{ page.title }}</dt>
+            <dd class="mdl-components-dd">{{ page.subtitle }}</dd>
+    </dl>
+  </div>
+  <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+    {{ page.bokeh }}
+  </div>
+  <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+    {{ page.content }}
+  </div>
+</div>
+{% endblock %}

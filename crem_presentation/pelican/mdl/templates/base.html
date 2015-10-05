@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+    <head>
+        {% block head %}
+
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+
+        <link rel="shortcut icon" href="images/favicon.png" />
+
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-pink.min.css">
+        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ SITEURL }}/theme/css/styles.css">
+
+        <meta name="author" value="{% block meta_author %}{{ AUTHOR }}{% endblock %}" />
+        <meta name="description" value="{% block meta_description %}{% endblock %}" />
+        <meta name="keywords" value="{% block meta_keywords %}{% endblock %}" />
+
+        {% endblock %}
+    </head>
+    <body>
+        <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+          <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+            <header class="demo-drawer-header">
+              <span class="mdl-layout-title">{{ SITENAME }}</span>
+              <p>{{ SITESUBTITLE }}</p>
+            </header>
+            {% include 'nav.html' %}
+          </div>
+          <main class="mdl-layout__content mdl-color--grey-100">
+              {% block content %}{% endblock %}
+          </main>
+        </div>
+    </body>
+</html>

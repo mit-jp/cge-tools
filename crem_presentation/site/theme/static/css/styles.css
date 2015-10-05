@@ -235,3 +235,9 @@ _:-ms-input-placeholder, :root .demo-graph {
   margin: 0 0 0 150px;
   padding: 0 0 0.5em 0;
 }
+
+/* bokeh plots */
+
+.plotdiv {
+  width: 100%;
+}

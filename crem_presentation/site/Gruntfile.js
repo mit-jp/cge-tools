@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      files: ['content/**/*.md','theme/**/*.*'],
+      files: ['content/**/*.*','theme/**/*.*'],
       tasks: ['build'],
       options: {
         livereload: 35729,

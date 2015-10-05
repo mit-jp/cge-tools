@@ -16,4 +16,4 @@ DEFAULT_LANG = 'en'
 THEME = 'theme'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['mdl_renderer',]
+PLUGINS = ['viz_renderer',]

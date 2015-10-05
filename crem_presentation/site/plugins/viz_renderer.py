@@ -11,7 +11,6 @@ class VizReader(MarkdownReader):
         "Parses content and handles viz parameter"
 
         content, metadata = super(VizReader, self).read(source_path)
-        print(metadata)
 
         if metadata['viz']:
             viz_name = metadata['viz']

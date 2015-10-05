@@ -68,6 +68,15 @@ for u in temp['urb']:
     arrays['{}_emi'.format(u.values)] = temp.sel(urb=u).drop('urb')
 
 
+# ## TODO: further variables
+# 
+# - CO2 price: `report('PTCARB',t,'CHN')`
+# - Primary energy `egyreport2('egycons',t,'COL',rs)`
+# - Consumption: `report(c,t,rs)`
+# - Population
+# - Share of coal in production inputs
+# - "(In)efficiency" of coal
+
 # In[106]:
 
 # Combine all variables into a single xray.Dataset and truncate time
@@ -78,6 +87,8 @@ data
 
 
 # In[149]:
+
+# TODO: output a README file along with the data files
 
 # Create directories
 for r in CREM.set('r'):

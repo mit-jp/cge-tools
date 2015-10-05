@@ -32,7 +32,7 @@ time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 #CREM.parameters()
 
 
-# In[64]:
+# In[99]:
 
 arrays = {}
 
@@ -41,23 +41,42 @@ temp = [raw[case].extract('gdp_ref') for case in cases]
 arrays['GDP'] = xray.concat(temp, dim=cases).sel(rs=CREM.set('r'))                     .rename({'rs': 'r'})
 
 
-# In[65]:
+# In[100]:
 
 # CO2 emissions
-arrays['CO2_emi'] = raw['bau'].extract('sectem').sum('g') +     raw['bau'].extract('houem')
+temp = []
+for case in cases:
+    temp.append(raw[case].extract('sectem').sum('g') +
+        raw[case].extract('houem'))
+arrays['CO2_emi'] = xray.concat(temp, dim=cases)
 
 
-# In[78]:
+# In[104]:
+
+# Air pollutant emissions
+temp = []
+for case in cases:
+    temp.append(raw[case].extract('urban').sum('*'))
+temp = xray.concat(temp, dim=cases).sel(rs=CREM.set('r')).rename({'rs': 'r'})
+for u in temp['urb']:
+    if u in ['PM10', 'PM25']:
+        continue
+    arrays['{}_emi'.format(u.values)] = temp.sel(urb=u).drop('urb')
+
+
+# In[106]:
 
 # Combine all variables into a single xray.Dataset; truncate time
 data = xray.Dataset(arrays).sel(t=time)
+data
 
 
-# In[81]:
+# In[107]:
 
 # Serialize to CSV: national totals
 national = data.sum('r')
 
 for c in cases:
-    national.sel(case=c).drop('case').to_dataframe().to_csv('out/{}.csv'.format(c))
+    national.sel(case=c).drop('case').to_dataframe().to_csv('out/{}.csv'
+                                                            .format(c))
 

@@ -5,14 +5,12 @@
 
 # Add the site generator dependencies
 
- $ pip install pelican
- $ pip install markdown
+ $ pip install pelican markdown
 
 # Work with grunt to build the site
 
-Get node, then install node packages
+Install node packages
 
- $ conda install node
  $ cd pelican
  $ npm install
 
@@ -35,8 +33,16 @@ This will create a fresh build in the `output` directory which can be copied to 
 
  $ scp -r output/* user@my.host.com:/path/to/site/
 
+# To run the notebooks under working
+
+It is best to run `ipython notebook` from the parent directory of `crem_presentation`.
+
 ====================================
 Unlikely to need to do the following, but documented just in case
+
+# Build conda environment not from requirements file
+  $ conda install bokeh ipython-notebook node pytables
+
 
 # To manipulate the shape files
 

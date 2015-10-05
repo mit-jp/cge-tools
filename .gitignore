@@ -5,3 +5,5 @@ __pycache__
 *.gdx
 output
 private_settings.py
+*.swp
+node_modules

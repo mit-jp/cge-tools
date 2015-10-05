@@ -39,6 +39,8 @@ endif
 
 help:
 	@echo 'Makefile for a pelican Web site                                           '
+	@echo ''
+	@echo ' Please use GRUNT for managing this site - see README.md for more details '
 	@echo '                                                                          '
 	@echo 'Usage:                                                                    '
 	@echo '   make html                           (re)generate the web site          '

@@ -11,12 +11,12 @@
 
 Install node packages
 
- $ cd pelican
+ $ cd site
  $ npm install
 
-You should have a new folder inside your pelican directory called `node_modules`
+You should have a new folder inside your site directory called `node_modules`
 
-To use the site locally, from the pelican directory:
+To use the site locally, from the site directory:
 
  $ ./node_modules/grunt-cli/bin/grunt serve
 

@@ -31,7 +31,7 @@ Run the following command:
 
 If you are using the anaconda distribution of python (http://continuum.io/downloads) it should contain Bokeh & IPython notebook already and these notebooks should just work.
 
-If you are not, you will need to install bokeh (Note that Bokeh v0.9+ is expected), and its dependencies, via conda or pip:
+If you are not, you will need to install bokeh (Note that Bokeh v0.10+ is expected), and its dependencies, via conda or pip:
 
     $ pip install bokeh "ipython[notebook]" pandas
     or

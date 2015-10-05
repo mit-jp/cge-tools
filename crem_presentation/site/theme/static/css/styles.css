@@ -241,3 +241,67 @@ _:-ms-input-placeholder, :root .demo-graph {
 .plotdiv {
   width: 100%;
 }
+
+/* bokeh hover */ 
+
+
+/* Bokeh - plain styling */
+.bk-tooltip {
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #1e4b6c;
+  background-color: #1e4b6c;
+  border-radius: 5px;
+  pointer-events: none;
+}
+.bk-tooltip.bk-left::before {
+  position: absolute;
+  margin: -7px 0 0 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 0;
+  border-color: transparent;
+  content: " ";
+  display: block;
+  left: -10px;
+  border-right-width: 10px;
+  border-right-color: #1e4b6c;
+}
+.bk-tooltip.bk-right::after {
+  position: absolute;
+  margin: -7px 0 0 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 0;
+  border-color: transparent;
+  content: " ";
+  display: block;
+  right: -10px;
+  border-left-width: 10px;
+  border-left-color: #1e4b6c;
+}
+.bk-tooltip.bk-tooltip-custom.bk-left::before {
+  border-right-color: black;
+}
+.bk-tooltip.bk-tooltip-custom.bk-right::after {
+  border-left-color: black;
+}
+.bk-tooltip.bk-tooltip-custom {
+  border-color: black;
+  background-color: white;
+}
+.bk-tooltip.bk-tooltip-custom {
+    background-color: black !important;
+    opacity: 0.9;
+    color: white;
+    font-size: 0.8em;
+    padding: 0.5em 1.5em;
+}
+
+.bk-tooltip.bk-tooltip-custom:before {
+    border: none !important;
+}

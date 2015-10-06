@@ -10,6 +10,8 @@ from bokeh.models import (
     FixedTicker, NumeralTickFormatter,
     # Tools
     HoverTool,
+    # Widgets
+    TextInput, CustomJS
 )
 from bokeh.properties import value
 from jinja2 import Template
@@ -84,7 +86,6 @@ def _get():
         plot.add_glyph(scenario_label)
 
     plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
-    from bokeh.models import TextInput, CustomJS
     line_array = get_js_array(scenarios)
     code = '''
         var lines = %s,
@@ -101,7 +102,6 @@ def _get():
     ''' % line_array
 
     callback = CustomJS(code=code, args=line_renderers)
-
     text = TextInput(callback=callback)
     return (plot, text)
 
@@ -163,7 +163,6 @@ def render():
         </script>
         {{ plot_script }}
     ''')
-
     script, div = components(dict(plot=plot, select=select), wrap_plot_info=False)
     html = template.render(plot_script=script, plot_div=div)
     return html

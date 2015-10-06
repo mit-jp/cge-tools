@@ -1,46 +1,21 @@
 html, body {
   font-family: 'Helvetica', sans-serif;
 }
-.demo-drawer {
-  border: none;
-}
+
 /* iOS Safari specific workaround */
-.demo-drawer .mdl-menu__container {
+.mdl-layout__drawer .mdl-menu__container {
   z-index: -1;
 }
-.demo-drawer .demo-navigation {
+.mdl-layout__drawer .mdl-navigation {
   z-index: -2;
 }
 /* END iOS Safari specific workaround */
-.demo-drawer .mdl-menu .mdl-menu__item {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.demo-drawer-header {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  padding: 16px;
-  height: 151px;
+
+.drawer-header {
+  padding: 2em 1em 1em 1em;
 }
 
-.demo-navigation {
+.mdl-navigation {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
@@ -60,7 +35,8 @@ html, body {
   color: white;
 }
 
-.demo-content {
+.content {
+  min-width: 450px;
   max-width: 1080px;
 }
 

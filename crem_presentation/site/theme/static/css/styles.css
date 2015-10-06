@@ -41,24 +41,28 @@ html, body {
 }
 
 /* dl-dd-dt - used in heading text */
-
 .mdl-components-dl {
-  padding: 0.5em;
-  width: 80%;
   color: rgb(117, 117, 117);
 }
-
 .mdl-components-dt {
-  float: left;
-  clear: left;
-  width: 150px;
   font-weight: bold;
   text-transform: uppercase;
 }
+@media (min-width: 600px) {
+  .mdl-components-dl {
+    padding: 0.5em;
+  }
 
-.mdl-components-dd {
-  margin: 0 0 0 150px;
-  padding: 0 0 0.5em 0;
+  .mdl-components-dt {
+    float: left;
+    clear: left;
+    width: 150px;
+  }
+
+  .mdl-components-dd {
+    margin: 0 0 0 150px;
+    padding: 0 0 0.5em 0;
+  }
 }
 
 /* bokeh plots */

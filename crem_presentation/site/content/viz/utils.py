@@ -14,3 +14,12 @@ def get_year_range():
 
 def get_y_range(data):
     return Range1d(data.min() * 0.80, data.max() * 1.10)
+
+
+def get_js_array(list_of_keys):
+    # See gapminder example for detailed explanation on what this is and why
+    # it works:
+    # http://nbviewer.ipython.org/github/bokeh/bokeh-notebooks/blob/master/tutorial/A1%20-%20Building%20gapminder.ipynb
+    dictionary_of_keys = dict(zip(list_of_keys, list_of_keys))
+    js_array = str(dictionary_of_keys).replace("'", "")
+    return js_array

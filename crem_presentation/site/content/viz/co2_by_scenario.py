@@ -15,8 +15,9 @@ from bokeh.properties import value
 from jinja2 import Template
 from bokeh.embed import components
 
-from .utils import get_y_range, get_year_range, get_axis
-from .scenarios import colors, names, scenarios
+from .utils import get_y_range, get_year_range, get_axis, get_js_array
+from .scenarios import colors, names, scenarios, file_names
+
 
 def _get():
     parameter = 'CO2_emi'
@@ -25,7 +26,9 @@ def _get():
     data = []
     for scenario in scenarios:
         # TODO - Use a DATADIR
-        sources[scenario] = ColumnDataSource(pd.read_csv('../cecp-cop21-data/national/%s.csv' % scenario, **read_props))
+        sources[scenario] = ColumnDataSource(
+            pd.read_csv('../cecp-cop21-data/national/%s.csv' % file_names[scenario], **read_props)
+        )
         data.extend(sources[scenario].data[parameter])
     data = np.array(data)
 
@@ -45,7 +48,8 @@ def _get():
 
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
-    renderers = []
+    hit_renderers = []
+    line_renderers = {}
     for scenario in scenarios:
         source = sources[scenario]
         line = Line(
@@ -68,27 +72,57 @@ def _get():
             text_color=colors[scenario]
         )
 
-        renderer = plot.add_glyph(source, hit_target)
-        renderers.append(renderer)
-        plot.add_glyph(source, line)
+        hit_renderer = plot.add_glyph(source, hit_target)
+        hit_renderers.append(hit_renderer)
+        line_renderer = plot.add_glyph(source, line)
+        line_renderers[scenario] = line_renderer
         plot.add_glyph(source, circle)
         plot.add_glyph(scenario_label)
 
-    plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=renderers))
-    return plot
+    plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
+    from bokeh.models import TextInput, CustomJS
+    line_array = get_js_array(scenarios)
+    code = '''
+        var lines = %s,
+            highlight = cb_obj.get('value').split(',');
+        Bokeh.$.each(lines, function(key, line) {
+            glyph = line.get('glyph');
+            glyph.set('line_alpha', 0.1);
+        });
+        Bokeh.$.each(highlight, function(i, key) {
+            line = lines[key];
+            glyph = line.get('glyph');
+            glyph.set('line_alpha', 0.8);
+        });
+    ''' % line_array
+
+    callback = CustomJS(code=code, args=line_renderers)
+
+    text = TextInput(callback=callback)
+    return (plot, text)
 
 
 def render():
-    plot = _get()
+    plot, select = _get()
 
     # Define our html template for out plots
     template = Template('''
         <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-        {{ plot_div }}
+            <div class="plotdiv" id="{{ plot_div.plot.elementid }}"></div>
+            <div class="hidden" id="{{ plot_div.select.elementid }}"></div>
         </div>
+        <script type="text/javascript">
+            Bokeh.custom = {};
+            Bokeh.custom.select_scenario = function(scenario_names) {
+                select = Bokeh.index['{{ plot_div.select.modelid }}'];
+                select.mset('value', scenario_names);
+                select.change_input();
+            };
+        </script>
         {{ plot_script }}
     ''')
 
-    script, div = components(plot)
+    script, div = components(dict(plot=plot, select=select), wrap_plot_info=False)
+    print(div)
     html = template.render(plot_script=script, plot_div=div)
     return html

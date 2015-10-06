@@ -1,7 +1,7 @@
 <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
     {% if DISPLAY_PAGES_ON_MENU %}
         {% for p in pages|sort(attribute='filename') %}
-              {% if p.title == 'Home' %}
+              {% if 'index' in p.source_path %}
               <a class="mdl-navigation__link {% if page and p.title == page.title %} active{% endif %}" href="{{ SITEURL }}/">{{ p.title }}</a>
               {% else %}
               <a class="mdl-navigation__link {% if page and p.title == page.title %} active{% endif %}" href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a>

@@ -52,9 +52,13 @@ def _get():
     line_renderers = {}
     for scenario in scenarios:
         source = sources[scenario]
+        if scenario == 'four':
+            line_alpha = 0.8
+        else:
+            line_alpha = 0.1
         line = Line(
             x='t', y=parameter, line_color=colors[scenario],
-            line_width=4, line_cap='round', line_join='round', line_alpha=0.8
+            line_width=4, line_cap='round', line_join='round', line_alpha=line_alpha
         )
         circle = Circle(
             x='t', y=parameter, size=8,
@@ -107,9 +111,31 @@ def render():
 
     # Define our html template for out plots
     template = Template('''
-        <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+        <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--9-col mdl-grid">
             <div class="plotdiv" id="{{ plot_div.plot.elementid }}"></div>
             <div class="hidden" id="{{ plot_div.select.elementid }}"></div>
+        </div>
+        <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-grid">
+            <div class="mdl-card__supporting-text">
+                <form onchange="Bokeh.custom.form_change(this)">
+                    <label for="chk_three" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                        <input type="checkbox" id="chk_three" class="mdl-checkbox__input" />
+                        <span class="mdl-checkbox__label">3%</span>
+                    </label>
+                    <label for="chk_four" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                        <input type="checkbox" id="chk_four" class="mdl-checkbox__input" checked />
+                        <span class="mdl-checkbox__label">4%</span>
+                    </label>
+                    <label for="chk_five" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                        <input type="checkbox" id="chk_five" class="mdl-checkbox__input" />
+                        <span class="mdl-checkbox__label">5%</span>
+                    </label>
+                    <label for="chk_bau" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                        <input type="checkbox" id="chk_bau" class="mdl-checkbox__input" />
+                        <span class="mdl-checkbox__label">BAU</span>
+                    </label>
+                </form>
+            </div>
         </div>
         <script type="text/javascript">
             Bokeh.custom = {};
@@ -118,11 +144,26 @@ def render():
                 select.mset('value', scenario_names);
                 select.change_input();
             };
+            Bokeh.custom.form_change = function(form) {
+                scenarios = '';
+                if ( form.chk_three.checked ) {
+                    scenarios = scenarios + 'three,';
+                }
+                if ( form.chk_four.checked ) {
+                    scenarios = scenarios + 'four,';
+                }
+                if ( form.chk_five.checked ) {
+                    scenarios = scenarios + 'five,';
+                }
+                if ( form.chk_bau.checked ) {
+                    scenarios = scenarios + 'bau,';
+                }
+                Bokeh.custom.select_scenario(scenarios);
+            };
         </script>
         {{ plot_script }}
     ''')
 
     script, div = components(dict(plot=plot, select=select), wrap_plot_info=False)
-    print(div)
     html = template.render(plot_script=script, plot_div=div)
     return html

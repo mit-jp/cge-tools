@@ -7,18 +7,23 @@ from content import viz
 
 class VizReader(MarkdownReader):
 
+    def render_viz(self, viz_name):
+        try:
+            render_function = getattr(viz, 'render_' + viz_name)
+            data = render_function()
+        except AttributeError:
+            data = '<p>Error: Viz named <code>%s</code> is not available</p>' % viz_name
+        return data
+
     def read(self, source_path):
         "Parses content and handles viz parameter"
 
         content, metadata = super(VizReader, self).read(source_path)
 
-        if metadata['viz']:
-            viz_name = metadata['viz']
-            try:
-                render_function = getattr(viz, 'render_' + viz_name)
-                metadata['viz_rendered'] = render_function()
-            except AttributeError:
-                metadata['viz_rendered'] = '<p>Error: Viz named <code>%s</code> is not available</p>' % viz_name
+        if 'viz' in metadata.keys():
+            metadata['viz_rendered'] = self.render_viz(metadata['viz'])
+        if 'viz_extra' in metadata.keys():
+            metadata['viz_extra_rendered'] = self.render_viz(metadata['viz_extra'])
 
         return content, metadata
 

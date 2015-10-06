@@ -1,5 +1,6 @@
 html, body {
   font-family: 'Helvetica', sans-serif;
+  height: 100%;
 }
 
 /* iOS Safari specific workaround */
@@ -22,6 +23,7 @@ html, body {
           flex-grow: 1;
 }
 .mdl-layout .mdl-navigation .mdl-navigation__link {
+  text-transform: uppercase;
   color: rgba(255, 255, 255, 0.56);
   font-weight: 500;
 }
@@ -65,23 +67,21 @@ html, body {
 .mdl-components-dl {
   color: rgb(117, 117, 117);
 }
-.mdl-components-dt {
-  font-weight: bold;
+
+.uppercase {
   text-transform: uppercase;
 }
+
 @media (min-width: 600px) {
   .mdl-components-dl {
-    padding: 0.5em;
+    padding: 0.5em 0.5em 0 0.5em;
   }
 
   .mdl-components-dt {
-    float: left;
-    clear: left;
-    width: 150px;
+    padding-bottom: 0.5em;
   }
 
   .mdl-components-dd {
-    margin: 0 0 0 150px;
     padding: 0 0 0.5em 0;
   }
 }

@@ -40,6 +40,27 @@ html, body {
   max-width: 1080px;
 }
 
+.drawer-button {
+  position: absolute;
+  font-size: 15px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  top: 5px;
+  left: 10px;
+  z-index: 20;
+  background-color: #37474F;
+  border-radius: 50%;
+  color: rgb(236, 239, 241);
+
+}
+
+@media (min-width: 1024px) {
+  .drawer-button {
+    display: none;
+  }
+}
+
 /* dl-dd-dt - used in heading text */
 .mdl-components-dl {
   color: rgb(117, 117, 117);

@@ -22,8 +22,9 @@
         {% endblock %}
     </head>
     <body>
+        <span class="drawer-button">&#9776;</span>
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
-          <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+          <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
             <header class="drawer-header">
               <span class="mdl-layout-title">{{ SITENAME }}</span>
               <p>{{ SITESUBTITLE }}</p>
@@ -34,5 +35,11 @@
               {% block content %}{% endblock %}
           </main>
         </div>
+        <script type="text/javascript">
+          $ = Bokeh.$;
+          $(".drawer-button").click(function(){
+            $(".drawer").toggleClass('is-visible');
+          });
+        </script>
     </body>
 </html>

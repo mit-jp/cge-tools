@@ -87,6 +87,17 @@ html, body {
 }
 
 /* bokeh plots */
+.plotwrap {
+  position: relative;
+  width: 100%;
+}
+
+.plottitle {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  z-index: 100;
+}
 
 .plotdiv {
   width: 100%;

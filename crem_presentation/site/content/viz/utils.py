@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*- #
 from bokeh.models import LinearAxis, Range1d
+
+from jinja2 import Environment, PackageLoader
+
 from .constants import AXIS_FORMATS
 
+env = Environment(loader=PackageLoader('theme', 'templates'))
 
 def get_axis(ticker=None, formatter=None, axis_label=None):
     axis = LinearAxis(axis_label=axis_label, ticker=ticker, formatter=formatter, **AXIS_FORMATS)

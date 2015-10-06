@@ -17,7 +17,8 @@
         <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-pink.min.css">
         <link rel="stylesheet" href="{{ SITEURL }}/theme/css/styles.css">
 
-        <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+        <script type="application/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+        <script type="application/javascript">Bokeh.custom = {};</script>
 
         {% endblock %}
     </head>
@@ -35,11 +36,6 @@
               {% block content %}{% endblock %}
           </main>
         </div>
-        <script type="text/javascript">
-          $ = Bokeh.$;
-          $(".drawer-button").click(function(){
-            $(".drawer").toggleClass('is-visible');
-          });
-        </script>
+        <script type="application/javascript" src="{{ SITEURL }}/theme/js/site.js"></script>
     </body>
 </html>

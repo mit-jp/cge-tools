@@ -242,7 +242,34 @@ _:-ms-input-placeholder, :root .demo-graph {
   width: 100%;
 }
 
-/* bokeh hover */ 
+/*
+ *
+ * MAIN BOKEH SETUP
+ *
+ */ 
+.bk-plot-wrapper table,
+.bk-plot-wrapper tr,
+.bk-plot-wrapper td {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.bk-canvas {
+  clear: both;
+  position: absolute;
+}
+
+.bk-canvas-wrapper {
+  position: relative;
+  float: left;
+}
+
+/*
+ *
+ * HOVER
+ *
+ */ 
 
 
 /* Bokeh - plain styling */
@@ -294,6 +321,9 @@ _:-ms-input-placeholder, :root .demo-graph {
   border-color: black;
   background-color: white;
 }
+
+
+/* Custom hover styling */
 .bk-tooltip.bk-tooltip-custom {
     background-color: black !important;
     opacity: 0.9;
@@ -304,4 +334,21 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 .bk-tooltip.bk-tooltip-custom:before {
     border: none !important;
+}
+
+.bk-tooltip.bk-tooltip-custom:after {
+    border: none !important;
+}
+
+.tooltip-text {
+    clear: both;
+    float: left;
+}
+.tooltip-text.country {
+    font-weight: bold;
+}
+.tooltip-text.value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #FFA500;
 }

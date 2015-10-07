@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[15]:
 
 # Load all the GDX files
 from collections import OrderedDict
@@ -18,7 +18,11 @@ FILES = [
     ('bau', 'result_urban_exo.gdx'),
     ('3', 'result_cint_n_3.gdx'),
     ('4', 'result_cint_n_4.gdx'),
-    ('5', 'result_cint_n_5.gdx'),    
+    ('5', 'result_cint_n_5.gdx'),
+    ('bau_lo', 'result_urban_exo_lessGDP.gdx'),
+    ('3_lo', 'result_cint_n_3_lessGDP.gdx'),
+    ('4_lo', 'result_cint_n_4_lessGDP.gdx'),
+    ('5_lo', 'result_cint_n_5_lessGDP.gdx'),
     ]
 
 raw = OrderedDict()
@@ -32,13 +36,13 @@ cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[2]:
+# In[16]:
 
 # List of all the parameters available in each file
 #CREM.parameters()
 
 
-# In[2]:
+# In[17]:
 
 arrays = {}
 
@@ -47,7 +51,7 @@ temp = [raw[case].extract('gdp_ref') for case in cases]
 arrays['GDP'] = xray.concat(temp, dim=cases).sel(rs=CREM.set('r'))                     .rename({'rs': 'r'})
 
 
-# In[3]:
+# In[18]:
 
 # CO2 emissions
 temp = []
@@ -57,7 +61,7 @@ for case in cases:
 arrays['CO2_emi'] = xray.concat(temp, dim=cases)
 
 
-# In[4]:
+# In[19]:
 
 # Air pollutant emissions
 temp = []
@@ -70,7 +74,7 @@ for u in temp['urb']:
     arrays['{}_emi'.format(u.values)] = temp.sel(urb=u).drop('urb')
 
 
-# In[8]:
+# In[20]:
 
 # CO₂ price
 temp = []
@@ -79,7 +83,7 @@ for case in cases:
 arrays['CO2_price'] = xray.concat(temp, dim=cases)
 
 
-# In[10]:
+# In[21]:
 
 # Consumption
 temp = []
@@ -88,7 +92,7 @@ for case in cases:
 arrays['Consumption'] = xray.concat(temp, dim=cases)
 
 
-# In[11]:
+# In[22]:
 
 # Primary energy
 temp = []
@@ -108,7 +112,7 @@ for ener in temp['e']:
 # From GEOS-Chem:
 # - Population-weighted PM2.5 exposure
 
-# In[12]:
+# In[23]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
@@ -117,7 +121,35 @@ national = data.sum('r')
 data
 
 
-# In[14]:
+# ## TODO: output a file with units:
+# units in gdx:
+# 
+# ----------------------------------------
+# urban emissions: 
+# parameter name in gdx: urban
+# unit: [mmt, i.e. million metric ton]
+# 
+# ----------------------------------------
+# CO2:
+# parameter name in gdx: sectcm
+# unit: [mmt]
+# 
+# ----------------------------------------
+# GDP:
+# parameter name in gdx: report('GDP', ...)
+# unit: [billion USD]
+# 
+# ----------------------------------------
+# consumption:
+# parameter name in gdx: report('c', ...)
+# unit: [billion USD]
+# 
+# ----------------------------------------
+# energy consumption
+# parameter name in gdx: egyreport2('egycons', ...)
+# unit: [mtce, i.e. million ton coal equivalent]
+
+# In[24]:
 
 # TODO: output a README file along with the data files; units.
 

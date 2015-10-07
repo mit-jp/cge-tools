@@ -19,3 +19,8 @@ def render_air_pollution_2():
 def render_health_impacts():
     from .health_impacts import render
     return render()
+
+
+def render_co2_by_province():
+    from .co2_by_province import render
+    return render()

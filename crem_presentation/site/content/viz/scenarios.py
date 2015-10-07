@@ -29,3 +29,40 @@ colors = {
     'five_nh3': deep_purple,
     'bau': grey
 }
+
+west = 'west'
+center = 'center'
+east = 'east'
+
+provinces = {
+    'BJ': east,
+    'TJ': east,
+    'HE': center,
+    'SX': center,
+    'NM': center,
+    'LN': center,
+    'JL': center,
+    'HL': center,
+    'SH': east,
+    'JS': east,
+    'ZJ': east,
+    'AH': center,
+    'FJ': east,
+    'JX': center,
+    'SD': east,
+    'HA': center,
+    'HB': center,
+    'HN': center,
+    'GD': east,
+    'GX': center,
+    'HI': east,
+    'CQ': center,
+    'SC': center,
+    'GZ': center,
+    'YN': west,
+    'SN': west,
+    'GS': west,
+    'QH': west,
+    'NX': west,
+    'XJ': west,
+}

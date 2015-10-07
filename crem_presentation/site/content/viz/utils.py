@@ -7,13 +7,14 @@ from .constants import AXIS_FORMATS
 
 env = Environment(loader=PackageLoader('theme', 'templates'))
 
+
 def get_axis(ticker=None, formatter=None, axis_label=None):
     axis = LinearAxis(axis_label=axis_label, ticker=ticker, formatter=formatter, **AXIS_FORMATS)
     return axis
 
 
-def get_year_range():
-    return Range1d(2005, 2035)
+def get_year_range(end_factor=5):
+    return Range1d(2005, 2030 + end_factor)
 
 
 def get_y_range(data):

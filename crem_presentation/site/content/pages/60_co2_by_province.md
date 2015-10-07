@@ -1,6 +1,7 @@
 Title: CO₂ by province
 SubTitle: The effects of different policy scenarios are different in different parts of the country.
 Date: 2015-10-05
+Viz: co2_by_province
 BodyTitle: We can see differences across three regions of china - the West, Center and East.
 
 Consectetur adipiscing elit. Donec a diam lectus. Sed

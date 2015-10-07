@@ -2,8 +2,6 @@
 from bokeh.embed import components
 from bokeh.models import TextInput, CustomJS
 
-from jinja2 import Template
-
 from .charts import get_national_scenario_line_plot
 from .scenarios import scenarios
 from .utils import get_js_array, env
@@ -13,7 +11,6 @@ def _get():
     plot, line_renderers = get_national_scenario_line_plot(
         parameter='CO2_emi',
         y_ticks=[7000, 10000, 13000, 16000],
-        y_label='CO₂ emissions'
     )
     line_array = get_js_array(scenarios)
     code = '''

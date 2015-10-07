@@ -11,7 +11,8 @@ class VizReader(MarkdownReader):
         try:
             render_function = getattr(viz, 'render_' + viz_name)
             data = render_function()
-        except AttributeError:
+        except AttributeError as e:
+            print(e)
             data = '<p>Error: Viz named <code>%s</code> is not available</p>' % viz_name
         return data
 

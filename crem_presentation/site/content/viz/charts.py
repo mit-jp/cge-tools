@@ -19,10 +19,9 @@ from .utils import get_y_range, get_year_range, get_axis, get_js_array
 from .scenarios import colors, names, scenarios, file_names
 
 
-def get_national_scenario_line_plot(parameter=None, y_ticks=None, y_label=None, plot_width=1200):
+def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=1200):
     assert parameter
     assert y_ticks
-    assert y_label
 
     read_props = dict(usecols=['t', parameter])
     sources = {}

@@ -1,3 +1,9 @@
+These install instructions work on OSX (and almost certainly linux) but don't 
+work exactly on windows. In particular, can't install the environment
+from the conda-requirements file and you need to install nodejs manually.
+Consult a helper to get going on windows.
+
+
 # Create a conda environment, and install the necessary packages
 
  $ conda create -n crem_presentation --file conda-requirements.txt
@@ -41,7 +47,7 @@ It is best to run `ipython notebook` from the parent directory of `crem_presenta
 Unlikely to need to do the following, but documented just in case
 
 # Build conda environment not from requirements file
-  $ conda install bokeh ipython-notebook node pytables matplotlib
+  $ conda install bokeh ipython-notebook nodejs pytables matplotlib
 
 
 # To manipulate the shape files

@@ -9,10 +9,10 @@ module.exports = function (grunt) {
 
     shell: {
       html: {
-        command: 'make html'
+        command: 'pelican content -o output'
       },
       publish: {
-        command: 'make publish'
+        command: 'pelican content -o output -s publishconf.py'
       }
     },
 

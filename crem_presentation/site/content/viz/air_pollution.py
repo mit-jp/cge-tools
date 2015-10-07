@@ -8,16 +8,42 @@ from .scenarios import colors, scenarios, file_names
 from .utils import get_js_array, env
 
 
-def _get():
+def render_1():
+    co2_plot, ap_plot, text = _get_1()
+    template = env.get_template('viz/two_plots_with_selectors.html')
+    script, div = components(
+        dict(plot1=co2_plot, plot2=ap_plot, text=text),
+        wrap_plot_info=False
+    )
+    return template.render(
+        plot_script=script, plot_div=div,
+        plot2_title="NOx emissions",
+        prefix='dual',
+    )
+
+
+def render_2():
+    plot, text = _get_2()
+    template = env.get_template('viz/one_plot_with_selectors.html')
+    script, div = components(dict(plot=plot, text=text), wrap_plot_info=False)
+    return template.render(
+        plot_script=script, plot_div=div,
+        plot_title='NOx emissions',
+        prefix='nh3',  # Adds a prefix for the checkboxes
+    )
+
+
+def _get_1():
+    plot_width = 550
     ap_plot, ap_line_renderers = get_national_scenario_line_plot(
         parameter='NOX_emi',
         y_ticks=[25, 35, 45],
-        plot_width=400,
+        plot_width=plot_width,
     )
     co2_plot, co2_line_renderers = get_national_scenario_line_plot(
         parameter='CO2_emi',
-        y_ticks=[7000, 10000, 13000, 16000],
-        plot_width=400,
+        y_ticks=[7000, 11000, 15000],
+        plot_width=plot_width,
     )
     prefixed_line_renderers = {}
     for key in scenarios:
@@ -27,7 +53,12 @@ def _get():
     line_array = get_js_array(prefixed_line_renderers.keys())
     code = '''
         var lines = %s,
-            highlight = cb_obj.get('value').split(',');
+            value = cb_obj.get('value'),
+            highlight,
+            glyph;
+
+        value = value.replace(/(,$)/g, '');
+        highlight = value.split(',');
         Bokeh.$.each(lines, function(key, line) {
             glyph = line.get('glyph');
             glyph.set('line_alpha', 0.1);
@@ -47,17 +78,7 @@ def _get():
     return (co2_plot, ap_plot, text)
 
 
-def render_1():
-    co2_plot, ap_plot, text = _get()
-    template = env.get_template('viz/two_plots_with_selectors.html')
-    script, div = components(
-        dict(plot1=co2_plot, plot2=ap_plot, text=text),
-        wrap_plot_info=False
-    )
-    return template.render(plot_script=script, plot_div=div, plot2_title="NOx emissions")
-
-
-def render_2():
+def _get_2():
     parameter = 'NOX_emi'
     plot, line_renderers = get_national_scenario_line_plot(
         parameter=parameter,
@@ -104,7 +125,12 @@ def render_2():
     line_array = get_js_array(all_scenarios)
     code = '''
         var lines = %s,
-            highlight = cb_obj.get('value').split(',');
+            value = cb_obj.get('value'),
+            highlight,
+            glyph;
+
+        value = value.replace(/(,$)/g, '');
+        highlight = value.split(',');
         Bokeh.$.each(lines, function(key, line) {
             glyph = line.get('glyph');
             glyph.set('line_alpha', 0.1);
@@ -114,6 +140,7 @@ def render_2():
                 glyph = line.get('glyph');
                 glyph.set('line_alpha', 0.8);
             }
+            console.log(key)
             set_alpha(lines[key]);
             set_alpha(lines[key + '_nh3']);
         });
@@ -121,7 +148,4 @@ def render_2():
 
     callback = CustomJS(code=code, args=line_renderers)
     text = TextInput(callback=callback)
-
-    template = env.get_template('viz/one_plot_with_selectors.html')
-    script, div = components(dict(plot=plot, text=text), wrap_plot_info=False)
-    return template.render(plot_script=script, plot_div=div, plot_title='NOx emissions')
+    return (plot, text)

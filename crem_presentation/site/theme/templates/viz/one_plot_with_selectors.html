@@ -1,4 +1,16 @@
-{# The visualization block - note the text element is hidden #}
+{# 
+  This template expects:
+  - plot_div.plot
+  - plot_div.text
+  - plot_script
+
+  Optionally:
+  - plot_title (default: CO2 emissions)
+  - prefix (default: _) - for namespacing javascript when there are multiple checkboxes on a page
+
+  Note plot_div.text is hidden as it is used in the background.
+#}
+
 <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--10-col mdl-grid">
     <div class="plotwrap">
       <div class="plottitle">{{ plot_title|default("CO₂ emissions") }}</div>
@@ -8,13 +20,5 @@
 </div>
 
 {{ plot_script }}
-
-<script type="application/javascript">
-  Bokeh.custom.select_scenario = function(scenario_names) {
-      select = Bokeh.index['{{ plot_div.text.modelid }}'];
-      select.mset('value', scenario_names);
-      select.change_input();
-  };
-</script>
 
 {% include 'viz/scenario_selectors.html' %}

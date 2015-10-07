@@ -9,7 +9,6 @@ from .utils import get_js_array, env
 
 
 def _get():
-    print('h')
     he_plot, he_line_renderers = get_national_scenario_line_plot(
         parameter='BC_emi',
         y_ticks=[1, 2],

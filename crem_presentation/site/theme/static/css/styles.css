@@ -45,16 +45,19 @@ html, body {
 .drawer-button {
   position: absolute;
   font-size: 15px;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
+  vertical-align: middle;
   top: 5px;
   left: 10px;
   z-index: 20;
   background-color: #37474F;
   border-radius: 50%;
   color: rgb(236, 239, 241);
-
+  opacity: 0.7;
+  cursor: pointer;
 }
 
 @media (min-width: 1024px) {

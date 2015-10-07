@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[24]:
+# In[1]:
 
 # Load all the GDX files
 from collections import OrderedDict
@@ -36,7 +36,7 @@ time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 #CREM.parameters()
 
 
-# In[99]:
+# In[35]:
 
 arrays = {}
 
@@ -68,16 +68,38 @@ for u in temp['urb']:
     arrays['{}_emi'.format(u.values)] = temp.sel(urb=u).drop('urb')
 
 
+# In[36]:
+
+# CO₂ price
+labels = ['ptcarb', 'CHN']
+temp = []
+for case in cases:
+    temp.append(raw[case]['report'].loc[labels, :, labels].sel(t=time)
+                                .values[0,:,1])
+arrays['CO2_price'] = xray.DataArray(np.array(temp), coords=[('case', cases),
+                                                             ('t', time)])
+
+
+# In[45]:
+
+# Consumption
+labels = ['c'] + CREM.set('r')
+temp = []
+for case in cases:
+    temp.append(xray.DataArray(raw['bau']['report'].loc[labels,:,labels]
+                               .sel(t=time).values[0,:,1:],
+                               coords=[('t', time), ('r', CREM.set('r'))]))
+arrays['Consumption'] = xray.concat(temp, dim=cases)
+
+
 # ## TODO: further variables
 # 
-# - CO2 price: `report('PTCARB',t,'CHN')`
 # - Primary energy `egyreport2('egycons',t,'COL',rs)`
-# - Consumption: `report(c,t,rs)`
 # - Population
 # - Share of coal in production inputs
 # - "(In)efficiency" of coal
 
-# In[106]:
+# In[37]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)

@@ -49,9 +49,12 @@ def _get():
 
 def render_1():
     co2_plot, ap_plot, text = _get()
-    template = env.get_template('viz/co2_plot_ap_plot_with_selectors.html')
-    script, div = components(dict(co2_plot=co2_plot, ap_plot=ap_plot, text=text), wrap_plot_info=False)
-    return template.render(plot_script=script, plot_div=div)
+    template = env.get_template('viz/two_plots_with_selectors.html')
+    script, div = components(
+        dict(plot1=co2_plot, plot2=ap_plot, text=text),
+        wrap_plot_info=False
+    )
+    return template.render(plot_script=script, plot_div=div, plot2_title="NOx emissions")
 
 
 def render_2():
@@ -96,8 +99,9 @@ def render_2():
         line_renderers[scenario] = line_renderer
         plot.add_glyph(source, circle)
 
-    scenarios.extend(nh3_scenarios)
-    line_array = get_js_array(scenarios)
+    all_scenarios = scenarios.copy()
+    all_scenarios.extend(nh3_scenarios)
+    line_array = get_js_array(all_scenarios)
     code = '''
         var lines = %s,
             highlight = cb_obj.get('value').split(',');

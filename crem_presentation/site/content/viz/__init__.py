@@ -14,3 +14,8 @@ def render_air_pollution_1():
 def render_air_pollution_2():
     from .air_pollution import render_2
     return render_2()
+
+
+def render_health_impacts():
+    from .health_impacts import render
+    return render()

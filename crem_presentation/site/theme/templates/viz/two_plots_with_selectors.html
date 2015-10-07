@@ -1,14 +1,14 @@
 {# The visualization block - note the text element is hidden #}
 <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--5-col mdl-grid">
   <div class="plotwrap">
-    <div class="plottitle">CO₂ emissions</div>
-    <div class="plotdiv" id="{{ plot_div.co2_plot.elementid }}"></div>
+    <div class="plottitle">{{ plot1_title|default("CO₂ emissions") }}</div>
+    <div class="plotdiv" id="{{ plot_div.plot1.elementid }}"></div>
   </div>
 </div>
 <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--5-col mdl-grid">
   <div class="plotwrap">
-    <div class="plottitle">NOx emissions</div>
-    <div class="plotdiv" id="{{ plot_div.ap_plot.elementid }}"></div>
+    <div class="plottitle">{{ plot2_title }}</div>
+    <div class="plotdiv" id="{{ plot_div.plot2.elementid }}"></div>
   </div>
 </div>
 

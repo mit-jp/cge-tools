@@ -6,6 +6,7 @@ bokeh=0.10.0=nppy34_1
 certifi=14.05.14=py34_0
 decorator=4.0.4=py34_0
 flask=0.10.1=py34_1
+freetype=2.5.2=2
 hdf5=1.8.15.1=1
 ipykernel=4.0.3=py34_0
 ipython=4.0.0=py34_1
@@ -16,8 +17,10 @@ jinja2=2.8=py34_0
 jsonschema=2.4.0=py34_0
 jupyter_client=4.0.0=py34_0
 jupyter_core=4.0.6=py34_0
+libpng=1.6.17=0
 libsodium=0.4.5=0
 markupsafe=0.23=py34_0
+matplotlib=1.4.3=np19py34_3
 mistune=0.7.1=py34_0
 nbconvert=4.0.0=py34_0
 nbformat=4.0.0=py34_0
@@ -33,6 +36,8 @@ pickleshare=0.5=py34_0
 pip=7.1.2=py34_0
 ptyprocess=0.4=py34_0
 pygments=2.0.2=py34_0
+pyparsing=2.0.3=py34_0
+pyqt=4.11.3=py34_0
 pytables=3.2.2=np19py34_0
 python=3.4.3=0
 python-dateutil=2.4.2=py34_0
@@ -40,10 +45,12 @@ python.app=1.2=py34_4
 pytz=2015.6=py34_0
 pyyaml=3.11=py34_1
 pyzmq=14.7.0=py34_0
+qt=4.8.6=3
 readline=6.2=2
 requests=2.7.0=py34_0
 setuptools=18.3.2=py34_0
 simplegeneric=0.8.1=py34_0
+sip=4.16.5=py34_0
 six=1.9.0=py34_0
 sqlite=3.8.4.1=1
 terminado=0.5=py34_0

@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*- #
 import pandas as pd
 import numpy as np
 
 from bokeh.models import ColumnDataSource
+from matplotlib import pyplot
+from matplotlib.colors import rgb2hex
 from .scenarios import provinces, scenarios, file_names
 
 
@@ -19,6 +22,9 @@ def get_national_data(parameter):
 
 
 def get_provincial_data(parameter):
+    """
+    Return the provincial datasets for the 4% scencario
+    """
     read_props = dict(usecols=['t', parameter])
     dfs = {}
     sources = {}
@@ -33,6 +39,36 @@ def get_provincial_data(parameter):
     return (dfs, sources, data)
 
 
+def get_delta(df, parameter):
+    df = df.set_index('t')
+    start = df[parameter][2007]
+    end = df[parameter][2030]
+    return end - start
+
+
+def normalize(df, column):
+    series = df[column]
+    norm = np.linalg.norm(series)
+    if norm == 0:
+        return series
+    return series / norm
+
+
 def get_provincial_change_map_data(parameter):
     dfs, sources, data = get_provincial_data(parameter)
+    df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
+    df['delta'] = np.NaN
+    for province in provinces.keys():
+        df['delta'][province] = get_delta(dfs[province], parameter)
 
+    df['delta_norm'] = normalize(df, 'delta')
+    colormap = pyplot.get_cmap('Greys')
+    df['delta_color'] = df['delta_norm'].apply(colormap)
+    df['delta_color'] = df['delta_color'].apply(rgb2hex)
+
+    province_info = pd.read_hdf('content/viz/province_map_data_simplified.hdf', 'df')
+    province_info = province_info.set_index('alpha')
+
+    map_df = pd.concat([df, province_info], axis=1)
+
+    return ColumnDataSource(map_df)

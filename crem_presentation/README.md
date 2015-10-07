@@ -41,7 +41,7 @@ It is best to run `ipython notebook` from the parent directory of `crem_presenta
 Unlikely to need to do the following, but documented just in case
 
 # Build conda environment not from requirements file
-  $ conda install bokeh ipython-notebook node pytables
+  $ conda install bokeh ipython-notebook node pytables matplotlib
 
 
 # To manipulate the shape files

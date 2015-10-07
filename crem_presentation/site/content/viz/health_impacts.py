@@ -8,6 +8,13 @@ from .scenarios import colors, scenarios, file_names
 from .utils import get_js_array, env
 
 
+def render():
+    co2_plot, ap_plot, text = _get()
+    template = env.get_template('viz/two_plots_with_selectors.html')
+    script, div = components(dict(plot1=co2_plot, plot2=ap_plot, text=text), wrap_plot_info=False)
+    return template.render(plot_script=script, plot_div=div, plot2_title="BC_emi")
+
+
 def _get():
     he_plot, he_line_renderers = get_national_scenario_line_plot(
         parameter='BC_emi',
@@ -45,10 +52,3 @@ def _get():
     callback = CustomJS(code=code, args=prefixed_line_renderers)
     text = TextInput(callback=callback)
     return (co2_plot, he_plot, text)
-
-
-def render():
-    co2_plot, ap_plot, text = _get()
-    template = env.get_template('viz/two_plots_with_selectors.html')
-    script, div = components(dict(plot1=co2_plot, plot2=ap_plot, text=text), wrap_plot_info=False)
-    return template.render(plot_script=script, plot_div=div, plot2_title="BC_emi")

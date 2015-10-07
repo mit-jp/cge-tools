@@ -1,11 +1,11 @@
-Title: C-REM Scenarios
+﻿Title: C-REM Scenarios
 SubTitle: With the C-REM model, we examine a number of policy scenarios to determine the impact on carbon emissions, air pollution, health, and a variety of other indicators
 Date: 2015-10-05
 Viz: co2_by_scenario
 save_as: index.html
 BodyTitle: In the 4% policy case, CO₂ emissions peak by 2030
 
-China has a goal of amet, consectetur adipiscing elit. Donec a diam lectus. Sed
+China has a goal of valerie added amet, consectetur adipiscing elit. Donec a diam lectus. Sed
 sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur
 ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas
 mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia

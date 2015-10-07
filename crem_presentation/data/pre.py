@@ -4,6 +4,7 @@
 # In[15]:
 
 # Load all the GDX files
+import csv
 from collections import OrderedDict
 from os import makedirs as mkdir
 from os.path import join
@@ -42,16 +43,25 @@ time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 #CREM.parameters()
 
 
-# In[17]:
+# In[55]:
 
 arrays = {}
+
+def label(variable, desc, unit_long, unit_short):
+    arrays[variable].attrs.update({'desc': desc, 'unit_long': unit_long,
+                                   'unit_short': unit_short})
+
+
+# In[56]:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
 arrays['GDP'] = xray.concat(temp, dim=cases).sel(rs=CREM.set('r'))                     .rename({'rs': 'r'})
+label('GDP', 'Gross domestic product',
+      'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[18]:
+# In[57]:
 
 # CO2 emissions
 temp = []
@@ -59,9 +69,11 @@ for case in cases:
     temp.append(raw[case].extract('sectem').sum('g') +
         raw[case].extract('houem'))
 arrays['CO2_emi'] = xray.concat(temp, dim=cases)
+label('CO2_emi', 'Annual CO₂ emissions',
+      'millions of tonnes of CO₂', 'Mt')
 
 
-# In[19]:
+# In[60]:
 
 # Air pollutant emissions
 temp = []
@@ -71,87 +83,136 @@ temp = xray.concat(temp, dim=cases).sel(rs=CREM.set('r')).rename({'rs': 'r'})
 for u in temp['urb']:
     if u in ['PM10', 'PM25']:
         continue
-    arrays['{}_emi'.format(u.values)] = temp.sel(urb=u).drop('urb')
+    var_name = '{}_emi'.format(u.values)
+    arrays[var_name] = temp.sel(urb=u).drop('urb')
+    u_fancy = str(u.values).translate({'2': '₂', '3': '₃'})
+    label(var_name, 'Annual {} emissions'.format(u_fancy),
+          'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[20]:
+# In[62]:
 
 # CO₂ price
 temp = []
 for case in cases:
     temp.append(extra[case].extract('ptcarb_t'))
 arrays['CO2_price'] = xray.concat(temp, dim=cases)
+label('CO2_price', 'Price of CO₂ emissions permit',
+      '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[21]:
+# In[67]:
 
 # Consumption
 temp = []
 for case in cases:
     temp.append(extra[case].extract('cons_t'))
-arrays['Consumption'] = xray.concat(temp, dim=cases)
+arrays['cons'] = xray.concat(temp, dim=cases)
+label('cons', 'Household consumption',
+      'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[22]:
+# In[72]:
 
 # Primary energy
 temp = []
 for case in cases:
     temp.append(extra[case].extract('pe_t'))
 temp = xray.concat(temp, dim=cases).sel(t=time)
+e_name = {
+    'COL': 'Coal',
+    'GAS': 'Natural gas',
+    'OIL': 'Crude oil',
+    'NUC': 'Nuclear',
+    'WND': 'Wind',
+    'SOL': 'Solar',
+    'HYD': 'Hydroelectricity',
+    }
 for ener in temp['e']:
-    arrays['{}_energy'.format(ener.values)] = temp.sel(e=ener).drop('e')
+    var_name = '{}_energy'.format(ener.values)
+    arrays[var_name] = temp.sel(e=ener).drop('e')
+    label(var_name, 'Primary energy from {}'.format(e_name[str(ener.values)]),
+          'Millions of tonnes of coal equivalent', 'Mtce')
 
 
-# ## TODO: further variables
-# 
-# From C-REM:
-# - Population
-# - Share of coal in production inputs
-# 
-# From GEOS-Chem:
-# - Population-weighted PM2.5 exposure
+# In[102]:
 
-# In[23]:
+# TODO population
+# FIXME this is a placeholder
+arrays['pop'] = arrays['GDP']
+label('pop', 'Population', 'Millions', '10⁶')
+
+
+# In[103]:
+
+# TODO share of coal in production inputs
+# FIXME this is a placeholder
+arrays['COL_share'] = arrays['COL_energy'] / arrays['GDP']
+label('COL_share', 'Value share of coal in industrial production',
+      '(unitless)', '0')
+
+
+# In[104]:
+
+# TODO population-weighted PM2.5 exposure
+arrays['PM2.5_exposure'] = arrays['GDP']
+label('PM2.5_exposure', 'Population-weighted exposure to PM2.5',
+      'micrograms per cubic metre', 'μg/m³')
+
+
+# In[105]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
+
+data['scenarios'] = (('case',), (
+    'BAU: Business-as-usual',
+    'Policy: Reduce carbon-intensity of GDP by 3%/year from BAU',
+    'Policy: Reduce carbon-intensity of GDP by 4%/year from BAU',
+    'Policy: Reduce carbon-intensity of GDP by 5%/year from BAU',
+    'LO: BAU with 1% lower annual GDP growth',
+    'Policy: Reduce carbon-intensity of GDP by 3%/year from LO',
+    'Policy: Reduce carbon-intensity of GDP by 4%/year from LO',
+    'Policy: Reduce carbon-intensity of GDP by 5%/year from LO',
+    ))
+
+# TODO construct data for low-ammonia cases
+base_cases = [str(name.values) for name in data['case']] 
+nh3_cases = [name + '_nh3' for name in base_cases]
+d = xray.Dataset(coords={'case': nh3_cases})
+data.merge(d, join='outer', inplace=True)
+
 # National totals
 national = data.sum('r')
-data
 
 
-# ## TODO: output a file with units:
-# units in gdx:
-# 
-# ----------------------------------------
-# urban emissions: 
-# parameter name in gdx: urban
-# unit: [mmt, i.e. million metric ton]
-# 
-# ----------------------------------------
-# CO2:
-# parameter name in gdx: sectcm
-# unit: [mmt]
-# 
-# ----------------------------------------
-# GDP:
-# parameter name in gdx: report('GDP', ...)
-# unit: [billion USD]
-# 
-# ----------------------------------------
-# consumption:
-# parameter name in gdx: report('c', ...)
-# unit: [billion USD]
-# 
-# ----------------------------------------
-# energy consumption
-# parameter name in gdx: egyreport2('egycons', ...)
-# unit: [mtce, i.e. million ton coal equivalent]
+# In[106]:
 
-# In[24]:
+# Output a file with scenario information
+data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),
+                                        header=['description'],
+                                        quoting=csv.QUOTE_ALL)
 
-# TODO: output a README file along with the data files; units.
+
+# In[107]:
+
+# Output a file with variable information
+var_info = pd.DataFrame(index=[d for d in data.data_vars if d != 'scenarios'],
+                        columns=['desc', 'unit_long', 'unit_short'],
+                       dtype=str)
+print('Missing dimension info:')
+for name, _ in var_info.iterrows():
+    try:
+        row = [data[name].attrs[k] for k in var_info.columns]
+    except KeyError:
+        print(' ', name)
+        continue
+    var_info.loc[name,:] = row
+var_info.to_csv(join(OUT_DIR, 'variables.csv'), index_label='Variable',
+                quoting=csv.QUOTE_ALL)
+
+
+# In[108]:
 
 # Create directories
 for r in CREM.set('r'):

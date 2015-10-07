@@ -96,7 +96,7 @@ html, body {
   position: absolute;
   top: 10px;
   left: 0;
-  z-index: 100;
+  z-index: 2000; /* above all bokeh items */
 }
 
 .plotdiv {

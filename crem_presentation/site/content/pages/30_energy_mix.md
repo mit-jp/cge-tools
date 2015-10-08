@@ -1,6 +1,7 @@
 ﻿Title: Energy mix
 SubTitle: China's target of 20% of energy from non-fossil sources is met in the 4% scenario. 
 Date: 2015-10-05
+Viz: energy_mix
 BodyTitle: All CO₂ policies have a beneficial impact on health
 
 By comparing the energy mix under the three scenarios, the non-fossil energy

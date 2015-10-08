@@ -24,3 +24,8 @@ def render_health_impacts():
 def render_co2_by_province():
     from .co2_by_province import render
     return render()
+
+
+def render_energy_mix():
+    from .energy_mix import render
+    return render()

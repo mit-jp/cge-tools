@@ -14,7 +14,7 @@ def get_axis(ticker=None, formatter=None, axis_label=None):
 
 
 def get_year_range(end_factor=5):
-    return Range1d(2005, 2030 + end_factor)
+    return Range1d(2009, 2030 + end_factor)
 
 
 def get_y_range(data):

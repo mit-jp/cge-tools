@@ -33,6 +33,7 @@ def _get():
         prefixed_renderers['text_%s' % province] = text_renderers[province]
 
     province_map = _add_province_callback(province_map, prefixed_renderers, source)
+    col_province_map = _add_province_callback(col_province_map, prefixed_renderers, source)
     region_map = _add_region_callback(region_map, prefixed_renderers, source)
     return (plot, col_province_map, province_map, region_map)
 
@@ -52,15 +53,17 @@ def _add_province_callback(province_map, prefixed_renderers, source):
                 glyph.set('text_font_style', 'normal');
             }
         });
-        Bokeh.$.each(selected, function(i, index) {
-            var key = source.get('data')['index'][index];
-            glyph = renderers['line_' + key].get('glyph');
-            glyph.set('line_alpha', 0.9);
-            glyph.set('line_width', 4);
-            glyph = renderers['text_' + key].get('glyph');
-            glyph.set('text_alpha', 0.9);
-            glyph.set('text_font_style', 'bold');
-        });
+        window.setTimeout(function(){
+            Bokeh.$.each(selected, function(i, index) {
+                var key = source.get('data')['index'][index];
+                glyph = renderers['line_' + key].get('glyph');
+                glyph.set('line_alpha', 0.9);
+                glyph.set('line_width', 4);
+                glyph = renderers['text_' + key].get('glyph');
+                glyph.set('text_alpha', 0.9);
+                glyph.set('text_font_style', 'bold');
+            });
+        }, 20);
     ''' % js_array
 
     callback = CustomJS(code=code, args=prefixed_renderers)
@@ -68,6 +71,7 @@ def _add_province_callback(province_map, prefixed_renderers, source):
     tap = province_map.select({'type': TapTool})
     tap.callback = callback
     return province_map
+
 
 def _add_region_callback(region_map, prefixed_renderers, source):
     js_array = get_js_array(prefixed_renderers.keys())

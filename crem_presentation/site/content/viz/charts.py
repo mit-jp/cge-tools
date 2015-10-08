@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- #
 from bokeh.models import (
     # Core
-    Plot, Range1d,
+    Plot, Range1d, Grid,
     # Glyph
     Line, Text, Circle,
     # Axes
@@ -14,9 +14,11 @@ from bokeh.properties import value
 from .data import get_provincial_data, get_national_data
 from .utils import get_y_range, get_year_range, get_axis
 from .scenarios import colors, names, scenarios, provinces
+from .constants import grey
 
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
+
 
 def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
     assert parameter
@@ -34,12 +36,19 @@ def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600
     y_ticker = FixedTicker(ticks=y_ticks)
     y_formatter = NumeralTickFormatter(format="0,0")
     y_axis = get_axis(ticker=y_ticker, formatter=y_formatter)
-    x_ticker = FixedTicker(ticks=[2007, 2030])
+    x_ticker = FixedTicker(ticks=[2010, 2030])
+    five_year_ticker = FixedTicker(ticks=[2010, 2015, 2020, 2025, 2030])
     x_formatter = NumeralTickFormatter(format="0")
     x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='')
+    x_grid = Grid(
+        band_fill_alpha=0.1, band_fill_color=grey,
+        dimension=0, ticker=five_year_ticker,
+        grid_line_color=None,
+    )
 
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
+    plot.add_layout(x_grid)
     hit_renderers = []
     line_renderers = {}
     for scenario in scenarios:
@@ -98,12 +107,19 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     y_ticker = FixedTicker(ticks=y_ticks)
     y_formatter = NumeralTickFormatter(format="0,0")
     y_axis = get_axis(ticker=y_ticker, formatter=y_formatter)
-    x_ticker = FixedTicker(ticks=[2007, 2030])
+    x_ticker = FixedTicker(ticks=[2010, 2030])
+    five_year_ticker = FixedTicker(ticks=[2010, 2015, 2020, 2025, 2030])
     x_formatter = NumeralTickFormatter(format="0")
     x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='')
+    x_grid = Grid(
+        band_fill_alpha=0.1, band_fill_color=grey,
+        dimension=0, ticker=five_year_ticker,
+        grid_line_color=None,
+    )
 
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
+    plot.add_layout(x_grid)
     line_renderers = {}
     text_renderers = {}
     y_offset = data.max() * 0.01

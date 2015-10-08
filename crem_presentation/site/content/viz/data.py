@@ -13,9 +13,9 @@ def get_national_data(parameter):
     sources = {}
     data = []
     for scenario in scenarios:
-        sources[scenario] = ColumnDataSource(
-            pd.read_csv('../cecp-cop21-data/national/%s.csv' % file_names[scenario], **read_props)
-        )
+        df = pd.read_csv('../cecp-cop21-data/national/%s.csv' % file_names[scenario], **read_props)
+        df = df[df.t != 2007]
+        sources[scenario] = ColumnDataSource(df)
         data.extend(sources[scenario].data[parameter])
     data = np.array(data)
     return (sources, data)
@@ -32,6 +32,7 @@ def get_provincial_data(parameter):
     col_share_2010 = []
     for province in provinces.keys():
         df = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
+        df = df[df.t != 2007]
         df['region'] = provinces[province]
         col_share_2010.append(df['COL_share'][1])
         dfs[province] = df
@@ -43,7 +44,7 @@ def get_provincial_data(parameter):
 
 def get_delta(df, parameter):
     df = df.set_index('t')
-    start = df[parameter][2007]
+    start = df[parameter][2010]
     end = df[parameter][2030]
     return end - start
 

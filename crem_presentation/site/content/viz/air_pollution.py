@@ -34,10 +34,10 @@ def render_2():
 
 
 def _get_1():
-    plot_width = 550
+    plot_width = 800
     ap_plot, ap_line_renderers = get_national_scenario_line_plot(
         parameter='NOX_emi',
-        y_ticks=[25, 35, 45],
+        y_ticks=[20, 30, 40],
         plot_width=plot_width,
     )
     co2_plot, co2_line_renderers = get_national_scenario_line_plot(

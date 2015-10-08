@@ -11,6 +11,7 @@ def _get():
     plot, line_renderers = get_national_scenario_line_plot(
         parameter='CO2_emi',
         y_ticks=[7000, 10000, 13000, 16000],
+        plot_width=1200,
     )
     line_array = get_js_array(scenarios)
     code = '''

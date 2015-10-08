@@ -27,7 +27,7 @@ AXIS_FORMATS = dict(
     axis_line_width=1,
 
     major_tick_line_width=1,
-    major_tick_line_color=dark_grey,
+    major_tick_line_color=None,
     major_tick_line_cap="round",
 
     # Ticks

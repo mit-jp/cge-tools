@@ -5,6 +5,9 @@ from .data import (
     get_provincial_dataframe_with_colored_parameter_delta,
     convert_provincial_dataframe_to_map_datasource,
     get_coal_share_in_2010_by_province,
+    get_population_in_2030_by_province,
+    get_pm25_conc_in_2030_by_province,
+    get_pm25_exposure_in_2030_by_province,
 )
 from .constants import deep_orange
 from .utils import get_map_plot, get_js_array
@@ -38,6 +41,25 @@ def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
     col_province_map.add_tools(HoverTool(tooltips=col_province_tooltips))
 
     return region_map, province_map, col_province_map, source
+
+
+def get_provincial_pop_2030_map(plot_width=600):
+    pop_df = get_population_in_2030_by_province(prefix='pop_2030', cmap_name='Greens')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(pop_df)
+    pop_map = _get_provincial_map(plot_width, source, tibet_source, fill_color='pop_2030_color')
+    return pop_map
+
+
+def get_provincial_pm25_conc_2030_map(plot_width=600):
+    df = get_pm25_conc_in_2030_by_province(prefix='pm25_conc_2030', cmap_name='Reds')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25_conc_2030_color')
+
+
+def get_provincial_pm25_exp_2030_map(plot_width=600):
+    df = get_pm25_exposure_in_2030_by_province(prefix='pm25_exp_2030', cmap_name='Greys')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25_exp_2030_color')
 
 
 def _add_province_callback(province_map, prefixed_renderers, source):

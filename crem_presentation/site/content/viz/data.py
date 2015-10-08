@@ -98,8 +98,22 @@ def convert_provincial_dataframe_to_map_datasource(df):
 
 
 def get_coal_share_in_2010_by_province(prefix, cmap_name='Blues'):
-    parameter = 'COL_share'
-    row_index = 2010
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'COL_share', 2010)
+
+
+def get_population_in_2030_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2030)
+
+
+def get_pm25_conc_in_2030_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_conc', 2030)
+
+
+def get_pm25_exposure_in_2030_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030)
+
+
+def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix

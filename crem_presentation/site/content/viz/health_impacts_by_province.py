@@ -2,13 +2,28 @@
 from bokeh.embed import components
 
 from .charts import get_provincial_scenario_line_plot
-from .maps import get_province_maps_by_parameter, _add_province_callback, _add_region_callback
+from .maps import (
+    get_province_maps_by_parameter,
+    get_provincial_pop_2030_map,
+    get_provincial_pm25_conc_2030_map,
+    get_provincial_pm25_exp_2030_map,
+    _add_province_callback,
+    _add_region_callback
+)
 from .constants import provinces
 from .utils import env
 
 
 def render_he_maps():
-    return 'hello'
+    pop_map = get_provincial_pop_2030_map()
+    pm25_conc_map = get_provincial_pm25_conc_2030_map()
+    pm25_exp_map = get_provincial_pm25_exp_2030_map()
+    template = env.get_template('viz/health_impacts_maps.html')
+    script, div = components(
+        dict(pop_map=pop_map, conc_map=pm25_conc_map, exp_map=pm25_exp_map),
+        wrap_plot_info=False
+    )
+    return template.render(plot_script=script, plot_div=div)
 
 
 def render_col_map():

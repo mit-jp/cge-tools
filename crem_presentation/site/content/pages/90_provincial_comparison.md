@@ -1,6 +1,7 @@
 Title: Provincial comparison
 SubTitle: The effects of different policy scenarios are different in different parts of the country.
 Date: 2015-10-05
+Viz: comparison_provincial
 BodyTitle: We can see differences across three regions of china - the West, Center and East.
 
 Comparing effects under the 4% policy across provinces/regions shows how 

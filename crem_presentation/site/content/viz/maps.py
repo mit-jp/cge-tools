@@ -8,6 +8,10 @@ from .data import (
     get_population_in_2030_by_province,
     get_pm25_conc_in_2030_by_province,
     get_pm25_exposure_in_2030_by_province,
+    get_gdp_per_capita_in_2010_by_province,
+    get_gdp_delta_change_by_province,
+    get_co2_change_by_province,
+    get_pm25_exposure_change_by_province,
 )
 from .constants import deep_orange
 from .utils import get_map_plot, get_js_array
@@ -60,6 +64,36 @@ def get_provincial_pm25_exp_2030_map(plot_width=600):
     df = get_pm25_exposure_in_2030_by_province(prefix='pm25_exp_2030', cmap_name='Greys')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
     return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25_exp_2030_color')
+
+
+def get_col_2010_map(plot_width=600):
+    df = get_coal_share_in_2010_by_province(prefix='col_2010')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='col_2010_color')
+
+
+def get_gdp_per_capita_2010_map(plot_width=600):
+    df = get_gdp_per_capita_in_2010_by_province(prefix='gdppercap_2010', cmap_name='Purples')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='gdppercap_2010_color')
+
+
+def get_co2_change_map(plot_width=600):
+    df = get_co2_change_by_province(prefix='co2_change', cmap_name='Oranges')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='co2_change_color')
+
+
+def get_pm25_exposure_change_map(plot_width=600):
+    df = get_pm25_exposure_change_by_province(prefix='pm25_exp_change', cmap_name='Blues')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25_exp_change_color')
+
+
+def get_gdp_delta_change_map(plot_width=600):
+    df = get_gdp_delta_change_by_province(prefix='gdp_delta_change', cmap_name='Purples')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='gdp_delta_change_color')
 
 
 def _add_province_callback(province_map, prefixed_renderers, source):

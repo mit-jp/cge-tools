@@ -59,7 +59,8 @@ def get_delta(df, parameter):
 
 
 def normalize_and_color(df, key_value, key_color, cmap_name):
-    norm_array = df[key_value] / np.linalg.norm(df[key_value])
+    norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
+    norm_array = norm_array * 5  # Beef up the color
     colormap = pyplot.get_cmap(cmap_name)
     norm_map = norm_array.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
@@ -74,7 +75,6 @@ def get_provincial_dataframe_with_colored_parameter_delta(parameter):
     for province in provinces.keys():
         df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
     df['region_val'] = df.groupby('region').delta.transform('mean')
-
 
     # Get colors for the normalized deltas
     df = normalize_and_color(df, 'delta', 'delta_color', 'Greys')
@@ -113,6 +113,22 @@ def get_pm25_exposure_in_2030_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030)
 
 
+def get_gdp_per_capita_in_2010_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
+
+
+def get_co2_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'GDP')
+
+
+def get_pm25_exposure_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'PM25_exposure')
+
+
+def get_gdp_delta_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'GDP_delta')
+
+
 def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
@@ -128,6 +144,27 @@ def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_
         four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
+
+    df = normalize_and_color(df, key_value, key_color, cmap_name)
+    df.loc['XZ', key_value] = 'No Data'
+    df.loc['XZ', key_color] = 'white'
+    return df
+
+
+def get_dataframe_of_change_in_provincial_data(prefix, cmap_name, parameter):
+    read_props = dict(usecols=['t', parameter])
+    key_value = '%s_val' % prefix
+    key_color = '%s_color' % prefix
+
+    province_list = provinces.keys()
+    n = len(province_list)
+    # Create a null dataframe
+    df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
+
+    # Populate the values
+    for province in province_list:
+        four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
+        df[key_value][province] = get_delta(four, parameter)
 
     df = normalize_and_color(df, key_value, key_color, cmap_name)
     df.loc['XZ', key_value] = 'No Data'

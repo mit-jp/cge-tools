@@ -39,3 +39,12 @@ def render_health_impacts_by_province_col():
 def render_energy_mix():
     from .energy_mix import render
     return render()
+
+
+def render_comparison_provincial():
+    from .comparison_provincial import render
+    return render()
+
+def render_comparison_national():
+    from .comparison_national import render
+    return render()

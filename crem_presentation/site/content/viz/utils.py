@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*- #
-from bokeh.models import LinearAxis, Range1d
+from bokeh.models import LinearAxis, Range1d, Grid, FixedTicker, NumeralTickFormatter
 
 from jinja2 import Environment, PackageLoader
 
-from .constants import AXIS_FORMATS
+from .constants import AXIS_FORMATS, grey
 
 env = Environment(loader=PackageLoader('theme', 'templates'))
 
@@ -11,6 +11,26 @@ env = Environment(loader=PackageLoader('theme', 'templates'))
 def get_axis(ticker=None, formatter=None, axis_label=None):
     axis = LinearAxis(axis_label=axis_label, ticker=ticker, formatter=formatter, **AXIS_FORMATS)
     return axis
+
+
+def add_axes(plot, y_ticks):
+    y_ticker = FixedTicker(ticks=y_ticks)
+    y_formatter = NumeralTickFormatter(format="0,0")
+    y_axis = get_axis(ticker=y_ticker, formatter=y_formatter)
+    x_ticker = FixedTicker(ticks=[2010, 2030])
+    five_year_ticker = FixedTicker(ticks=[2010, 2015, 2020, 2025, 2030])
+    x_formatter = NumeralTickFormatter(format="0")
+    x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='')
+    x_grid = Grid(
+        band_fill_alpha=0.1, band_fill_color=grey,
+        dimension=0, ticker=five_year_ticker,
+        grid_line_color=None,
+    )
+
+    plot.add_layout(y_axis, 'left')
+    plot.add_layout(x_axis, 'below')
+    plot.add_layout(x_grid)
+    return plot
 
 
 def get_year_range(end_factor=5):

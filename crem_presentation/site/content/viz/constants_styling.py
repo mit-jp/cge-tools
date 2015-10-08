@@ -35,3 +35,10 @@ AXIS_FORMATS = dict(
     minor_tick_out=None,
     major_tick_in=None,
 )
+
+PLOT_FORMATS = dict(
+    responsive=True,
+    toolbar_location=None,
+    outline_line_color=None,
+    min_border=0
+)

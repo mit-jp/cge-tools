@@ -38,19 +38,14 @@ def _add_province_callback(province_map, prefixed_renderers, source):
     js_array = get_js_array(prefixed_renderers.keys())
     code = '''
         var renderers = %s,
-            selected = cb_obj.get('selected'),
-            highlight_indexes = selected['1d']['indices'],
-            alpha = 0.2,
+            selected = cb_obj.get('selected')['1d']['indices'],
             glyph = null;
-        if ( highlight_indexes.length == 0 ) {
-            alpha = 0.8;
-        }
         Bokeh.$.each(renderers, function(key, r) {
             glyph = r.get('glyph');
-            glyph.set('line_alpha', alpha);
-            glyph.set('text_alpha', alpha);
+            glyph.set('line_alpha', 0.2);
+            glyph.set('text_alpha', 0.2);
         });
-        Bokeh.$.each(highlight_indexes, function(i, index) {
+        Bokeh.$.each(selected, function(i, index) {
             var key = source.get('data')['index'][index];
             glyph = renderers['line_' + key].get('glyph');
             glyph.set('line_alpha', 0.8);
@@ -70,16 +65,38 @@ def _add_region_callback(region_map, prefixed_renderers, source):
     code = '''
         var renderers = %s,
             selected = cb_obj.get('selected')['1d']['indices'],
+            glyph = null,
             selected_region = source.get('data')['region'][selected],
             regions = source.get('data')['region'],
             indices = [],
             idx = regions.indexOf(selected_region);
+
         while (idx != -1) {
             indices.push(idx);
             idx = regions.indexOf(selected_region, idx + 1);
         }
         cb_obj.get('selected')['1d']['indices'] = indices;
         source.trigger('change');
+
+        Bokeh.$.each(renderers, function(key, r) {
+            glyph = r.get('glyph');
+            if ( !Bokeh._.isUndefined(glyph) ) {
+                glyph.set('line_alpha', 0.2);
+                glyph.set('text_alpha', 0.2);
+            }
+        });
+
+        window.setTimeout(function(){
+            Bokeh.$.each(indices, function(i, index) {
+                var key = source.get('data')['index'][index];
+                glyph = renderers['line_' + key].get('glyph');
+                glyph.set('line_alpha', 0.9);
+                glyph = renderers['text_' + key].get('glyph');
+                glyph.set('text_alpha', 0.9);
+            });
+        }, 20);
+
+
     ''' % js_array
 
     callback = CustomJS(code=code, args=prefixed_renderers)

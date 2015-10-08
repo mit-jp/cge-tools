@@ -102,7 +102,7 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
             text=value(province),
             text_color=col_color,
             text_font_size='8pt',
-            text_alpha=0.2,
+            text_alpha=0.8,
         )
 
         # TODO - Add province name to hover

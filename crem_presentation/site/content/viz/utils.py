@@ -1,11 +1,29 @@
 # -*- coding: utf-8 -*- #
-from bokeh.models import LinearAxis, Range1d, Grid, FixedTicker, NumeralTickFormatter
+from bokeh.models import LinearAxis, Range1d, Grid, FixedTicker, NumeralTickFormatter, Plot
 
 from jinja2 import Environment, PackageLoader
 
-from .constants import AXIS_FORMATS, grey
+from .constants import AXIS_FORMATS, grey, PLOT_FORMATS
 
 env = Environment(loader=PackageLoader('theme', 'templates'))
+
+
+def get_map_plot(plot_width):
+    x_range = [73, 135]
+    y_range = [18, 54]
+    aspect_ratio = (x_range[1] - x_range[0]) / (y_range[1] - y_range[0])
+    plot_height = int(plot_width / aspect_ratio)
+    x_range = Range1d(x_range[0], x_range[1])
+    y_range = Range1d(y_range[0], y_range[1])
+    map_params = dict(
+        x_range=x_range,
+        y_range=y_range,
+        title=None,
+        plot_width=plot_width,
+        plot_height=plot_height,
+        **PLOT_FORMATS
+    )
+    return Plot(**map_params)
 
 
 def get_axis(ticker=None, formatter=None, axis_label=None):

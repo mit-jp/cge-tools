@@ -3,7 +3,7 @@ from bokeh.embed import components
 from bokeh.models import CustomJS, TapTool
 
 from .charts import get_provincial_scenario_line_plot
-from .maps import get_provincial_regional_map
+from .maps import get_co2_by_province_maps
 from .constants import provinces
 from .utils import get_js_array, env
 
@@ -25,7 +25,7 @@ def _get():
         y_ticks=[0, 450, 900],
         plot_width=600,
     )
-    region_map, province_map, col_province_map, source = get_provincial_regional_map(parameter=parameter)
+    region_map, province_map, col_province_map, source = get_co2_by_province_maps(parameter=parameter)
 
     prefixed_renderers = {}
     for province in provinces.keys():

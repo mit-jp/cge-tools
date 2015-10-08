@@ -49,14 +49,6 @@ def get_delta(df, parameter):
     return end - start
 
 
-def normalize(df, column):
-    series = df[column]
-    norm = np.linalg.norm(series)
-    if norm == 0:
-        return series
-    return series / norm
-
-
 def get_provincial_change_map_data(parameter):
     dfs, sources, data, col_change = get_provincial_data(parameter)
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
@@ -64,7 +56,7 @@ def get_provincial_change_map_data(parameter):
     for province in provinces.keys():
         df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
         df.loc[province, 'col_2010_val'] = dfs[province]['COL_share'][1]
-    df['delta_norm'] = normalize(df, 'delta')
+    df['delta_norm'] = df['delta'] / np.linalg.norm(df['delta'])
     df['region_norm'] = df.groupby('region').delta_norm.transform('mean')
 
     # Add in a 'No Data' row for tibet

@@ -9,9 +9,12 @@ from .utils import get_js_array, env
 
 
 def render():
-    plot, province_map, region_map = _get()
+    plot, col_province_map, province_map, region_map = _get()
     template = env.get_template('viz/co2_by_province.html')
-    script, div = components(dict(plot=plot, province_map=province_map, region_map=region_map), wrap_plot_info=False)
+    script, div = components(
+        dict(plot=plot, col_province_map=col_province_map, province_map=province_map, region_map=region_map),
+        wrap_plot_info=False
+    )
     return template.render(plot_script=script, plot_div=div)
 
 
@@ -22,7 +25,7 @@ def _get():
         y_ticks=[0, 450, 900],
         plot_width=600,
     )
-    region_map, province_map, source = get_provincial_regional_map(parameter=parameter)
+    region_map, province_map, col_province_map, source = get_provincial_regional_map(parameter=parameter)
 
     prefixed_renderers = {}
     for province in provinces.keys():
@@ -31,7 +34,7 @@ def _get():
 
     province_map = _add_province_callback(province_map, prefixed_renderers, source)
     region_map = _add_region_callback(region_map, prefixed_renderers, source)
-    return (plot, province_map, region_map)
+    return (plot, col_province_map, province_map, region_map)
 
 
 def _add_province_callback(province_map, prefixed_renderers, source):

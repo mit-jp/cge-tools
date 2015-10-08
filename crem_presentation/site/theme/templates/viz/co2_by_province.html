@@ -1,15 +1,31 @@
 {# 
   This template expects:
 #}
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--7-col mdl-grid">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-grid">
   <div class="plotwrap">
     <div class="plottitle">{{ plot_title|default("CO₂ emissions by province") }}</div>
     <div class="plotdiv" id="{{ plot_div.plot.elementid }}"></div>
   </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
+    <figcaption class="mdl-typography--caption">All data shown is for the 4%/year policy scenario</figcaption> 
+  </div>
 </div>
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--5-col mdl-grid">
-  <div class="plotdiv" id="{{ plot_div.province_map.elementid }}"></div>
-  <div class="plotdiv" id="{{ plot_div.region_map.elementid }}"></div>
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-grid">
+  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
+  <figcaption class="mdl-typography--caption">Click on provinces to highlight, and outside map to deselect.</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--6-col">
+    <div class="plotdiv" id="{{ plot_div.region_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Regional change in CO₂</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--6-col">
+    <div class="plotdiv" id="{{ plot_div.col_province_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Coal share in 2010</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="plotdiv" id="{{ plot_div.province_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Provincial change in CO₂</figcaption> 
+  </div>
 </div>
 
 {{ plot_script }}

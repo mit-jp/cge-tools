@@ -30,9 +30,9 @@ scenarios_colors = {
     'bau': grey
 }
 
-west = 'west'
-center = 'center'
-east = 'east'
+west = 'West'
+center = 'Center'
+east = 'East'
 
 provinces = {
     'BJ': east,

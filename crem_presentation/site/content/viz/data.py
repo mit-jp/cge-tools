@@ -5,7 +5,7 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .constants import provinces, scenarios, file_names
+from .constants import provinces, scenarios, file_names, west
 
 
 def get_df_and_strip_2007(filename, read_props):
@@ -58,26 +58,32 @@ def get_delta(df, parameter):
     return end - start
 
 
+def normalize_and_color(df, key_value, key_color, cmap_name):
+    norm_array = df[key_value] / np.linalg.norm(df[key_value])
+    colormap = pyplot.get_cmap(cmap_name)
+    norm_map = norm_array.apply(colormap)
+    norm_hex = norm_map.apply(rgb2hex)
+    df[key_color] = norm_hex
+    return df
+
+
 def get_provincial_dataframe_with_colored_parameter_delta(parameter):
     dfs = get_provincial_dataframes(parameter)
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
     df['delta'] = np.NaN
     for province in provinces.keys():
         df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
+    df['region_val'] = df.groupby('region').delta.transform('mean')
 
-    df['delta_norm'] = df['delta'] / np.linalg.norm(df['delta'])
-    df['region_norm'] = df.groupby('region').delta_norm.transform('mean')
+
+    # Get colors for the normalized deltas
+    df = normalize_and_color(df, 'delta', 'delta_color', 'Greys')
+    df = normalize_and_color(df, 'region_val', 'region_color', 'Greys')
 
     # Add in a 'No Data' row for tibet
     df.loc['XZ', 'delta'] = 'No Data'
-    df.loc['XZ', 'region'] = 'west'
+    df.loc['XZ', 'region'] = west
 
-    # Get colors for the normalized deltas
-    colormap = pyplot.get_cmap('Greys')
-    df['delta_color'] = df['delta_norm'].apply(colormap)
-    df['delta_color'] = df['delta_color'].apply(rgb2hex)
-    df['region_color'] = df['region_norm'].apply(colormap)
-    df['region_color'] = df['region_color'].apply(rgb2hex)
     return df
 
 
@@ -91,7 +97,7 @@ def convert_provincial_dataframe_to_map_datasource(df):
     return (ColumnDataSource(df), ColumnDataSource(tibet_df))
 
 
-def get_coal_share_in_2010_by_province(prefix):
+def get_coal_share_in_2010_by_province(prefix, cmap_name='Blues'):
     parameter = 'COL_share'
     row_index = 2010
     read_props = dict(usecols=['t', parameter])
@@ -109,12 +115,7 @@ def get_coal_share_in_2010_by_province(prefix):
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 
-    # Normalize
-    norm_array = df[key_value] / np.linalg.norm(df[key_value])
-
-    colormap = pyplot.get_cmap('Blues')
-    norm_map = norm_array.apply(colormap)
-    norm_hex = norm_map.apply(rgb2hex)
-
-    df[key_color] = norm_hex
+    df = normalize_and_color(df, key_value, key_color, cmap_name)
+    df.loc['XZ', key_value] = 'No Data'
+    df.loc['XZ', key_color] = 'white'
     return df

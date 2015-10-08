@@ -17,7 +17,7 @@ def render_1():
     )
     return template.render(
         plot_script=script, plot_div=div,
-        plot2_title="NOx emissions",
+        plot2_title="PM2.5 concentrations",
         prefix='dual',
     )
 
@@ -28,7 +28,7 @@ def render_2():
     script, div = components(dict(plot=plot, text=text), wrap_plot_info=False)
     return template.render(
         plot_script=script, plot_div=div,
-        plot_title='NOx emissions',
+        plot_title="PM2.5 concentrations",
         prefix='nh3',  # Adds a prefix for the checkboxes
     )
 
@@ -36,7 +36,7 @@ def render_2():
 def _get_1():
     plot_width = 800
     ap_plot, ap_line_renderers = get_national_scenario_line_plot(
-        parameter='NOX_emi',
+        parameter='PM25_conc',
         y_ticks=[20, 30, 40],
         plot_width=plot_width,
     )
@@ -79,7 +79,7 @@ def _get_1():
 
 
 def _get_2():
-    parameter = 'NOX_emi'
+    parameter = 'PM25_conc'
     plot, line_renderers = get_national_scenario_line_plot(
         parameter=parameter,
         y_ticks=[25, 35, 45],

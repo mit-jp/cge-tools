@@ -12,13 +12,13 @@ def render():
     co2_plot, ap_plot, text = _get()
     template = env.get_template('viz/two_plots_with_selectors.html')
     script, div = components(dict(plot1=co2_plot, plot2=ap_plot, text=text), wrap_plot_info=False)
-    return template.render(plot_script=script, plot_div=div, plot2_title="Pop weighted PM2.5 exposure")
+    return template.render(plot_script=script, plot_div=div, plot2_title="Population weighted PM2.5 exposure")
 
 
 def _get():
     plot_width = 800
     he_plot, he_line_renderers = get_national_scenario_line_plot(
-        parameter='pop',
+        parameter='PM25_exposure',
         y_ticks=[5000, 12000],
         plot_width=plot_width,
     )

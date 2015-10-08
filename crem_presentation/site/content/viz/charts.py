@@ -7,6 +7,7 @@ from bokeh.properties import value
 from .data import (
     get_provincial_sources_and_yaxis_data,
     get_national_data,
+    get_lo_national_data,
     get_coal_share_in_2010_by_province
 )
 from .utils import get_y_range, get_year_range, add_axes
@@ -14,19 +15,30 @@ from .constants import scenarios_colors as colors, names, scenarios, provinces
 from .constants_styling import PLOT_FORMATS
 
 
-def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
+def get_lo_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
+    assert parameter
+    assert y_ticks
+
+    sources, data = get_lo_national_data(parameter)
+    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor)
+
+
+def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
     assert parameter
     assert y_ticks
 
     sources, data = get_national_data(parameter)
+    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor)
 
+
+def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
     plot = Plot(
-        x_range=get_year_range(),
+        x_range=get_year_range(end_factor),
         y_range=get_y_range(data),
         plot_width=plot_width,
         **PLOT_FORMATS
     )
-    plot = add_axes(plot, y_ticks)
+    plot = add_axes(plot, y_ticks, grid=grid)
     hit_renderers = []
     line_renderers = {}
     for scenario in scenarios:

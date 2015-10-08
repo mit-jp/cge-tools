@@ -45,6 +45,12 @@ def render_comparison_provincial():
     from .comparison_provincial import render
     return render()
 
+
 def render_comparison_national():
     from .comparison_national import render
+    return render()
+
+
+def render_comparison_national_lo_growth():
+    from .comparison_national_lo_growth import render
     return render()

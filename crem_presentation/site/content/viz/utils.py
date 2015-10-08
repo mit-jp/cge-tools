@@ -31,7 +31,7 @@ def get_axis(ticker=None, formatter=None, axis_label=None):
     return axis
 
 
-def add_axes(plot, y_ticks):
+def add_axes(plot, y_ticks, grid=True):
     y_ticker = FixedTicker(ticks=y_ticks)
     y_formatter = NumeralTickFormatter(format="0,0")
     y_axis = get_axis(ticker=y_ticker, formatter=y_formatter)
@@ -39,19 +39,21 @@ def add_axes(plot, y_ticks):
     five_year_ticker = FixedTicker(ticks=[2010, 2015, 2020, 2025, 2030])
     x_formatter = NumeralTickFormatter(format="0")
     x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='')
-    x_grid = Grid(
-        band_fill_alpha=0.1, band_fill_color=grey,
-        dimension=0, ticker=five_year_ticker,
-        grid_line_color=None,
-    )
-
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
-    plot.add_layout(x_grid)
+    if grid:
+        x_grid = Grid(
+            band_fill_alpha=0.1, band_fill_color=grey,
+            dimension=0, ticker=five_year_ticker,
+            grid_line_color=None,
+        )
+        plot.add_layout(x_grid)
     return plot
 
 
-def get_year_range(end_factor=5):
+def get_year_range(end_factor=None):
+    if not end_factor:
+        end_factor = 5
     return Range1d(2009, 2030 + end_factor)
 
 

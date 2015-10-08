@@ -6,7 +6,7 @@ BodyTitle: Comparing across the policy scenarios
 
 Taken together, we can see how in the 4% scenario, China's climate pledge is
 achieved, with substantial co-benefits for local pollution and human health.
-To achieve near-term air quality goals, a CO2 price will need to be accompanied 
+To achieve near-term air quality goals, a CO₂ price will need to be accompanied 
 by complementary measures to address air pollution formation, such as ammonia 
 controls and end-of-pipe cleanup on remaining coal-fired power stations.
 

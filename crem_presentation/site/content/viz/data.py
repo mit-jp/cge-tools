@@ -14,12 +14,20 @@ def get_df_and_strip_2007(filename, read_props):
     return df
 
 
+def get_lo_national_data(parameter):
+    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv')
+
+
 def get_national_data(parameter):
+    return _get_national_data(parameter, '../cecp-cop21-data/national/%s.csv')
+
+
+def _get_national_data(parameter, filepath):
     read_props = dict(usecols=['t', parameter])
     sources = {}
     data = []
     for scenario in scenarios:
-        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
+        df = get_df_and_strip_2007(filepath % file_names[scenario], read_props)
         sources[scenario] = ColumnDataSource(df)
         data.extend(sources[scenario].data[parameter])
     data = np.array(data)

@@ -4,13 +4,14 @@ from bokeh.models import (
 )
 from bokeh.properties import value
 
-from .data import get_provincial_data, get_national_data
+from .data import (
+    get_provincial_sources_and_yaxis_data,
+    get_national_data,
+    get_coal_share_in_2010_by_province
+)
 from .utils import get_y_range, get_year_range, add_axes
 from .constants import scenarios_colors as colors, names, scenarios, provinces
 from .constants_styling import PLOT_FORMATS
-
-from matplotlib import pyplot
-from matplotlib.colors import rgb2hex
 
 
 def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
@@ -69,7 +70,8 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     assert parameter
     assert y_ticks
 
-    dfs, sources, data, col_share = get_provincial_data(parameter)
+    sources, data = get_provincial_sources_and_yaxis_data(parameter)
+    coal_df = get_coal_share_in_2010_by_province('col_2010')
 
     plot = Plot(
         x_range=get_year_range(end_factor=2),
@@ -82,15 +84,14 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     line_renderers = {}
     text_renderers = {}
     y_offset = data.max() * 0.01
-    colormap = pyplot.get_cmap('Blues')
 
-    for i, province in enumerate(provinces.keys()):
-        col_color = rgb2hex(colormap(col_share[i]))
+    for province in provinces.keys():
+        coal_color = coal_df['col_2010_color'][province]
         source = sources[province]
         line = Line(
             x='t',
             y=parameter,
-            line_color=col_color,
+            line_color=coal_color,
             line_width=2,
             line_cap='round',
             line_join='round',
@@ -100,21 +101,11 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
             x=value(source.data['t'][-1] + 0.2),
             y=value(source.data[parameter][-1] - y_offset),
             text=value(province),
-            text_color=col_color,
+            text_color=coal_color,
             text_font_size='8pt',
             text_alpha=0.8,
         )
 
-        # TODO - Add province name to hover
-        #label_hit = Circle(
-        #    x=value(source.data['t'][-1] + 0.5),
-        #    y=value(source.data[parameter][-1]),
-        #    line_color=None,
-        #    fill_color='pink',
-        #    size=20,
-        #)
-        #hit_renderer = plot.add_glyph(source, label_hit)
-        #plot.add_tools(HoverTool(tooltips='@', renderers=[hit_renderer]))
         line_renderer = plot.add_glyph(source, line)
         line_renderers[province] = line_renderer
         text_renderer = plot.add_glyph(province_label)

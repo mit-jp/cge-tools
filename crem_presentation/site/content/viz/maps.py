@@ -1,63 +1,32 @@
 # -*- coding: utf-8 -*- #
+import pandas as pd
 from bokeh.models import HoverTool, TapTool, Patches, CustomJS
-from .data import get_provincial_change_map_data
+from .data import (
+    get_provincial_dataframe_with_colored_parameter_delta,
+    convert_provincial_dataframe_to_map_datasource,
+    get_coal_share_in_2010_by_province,
+)
 from .constants import deep_orange
 from .utils import get_map_plot, get_js_array
 
 
-def get_provincial_map(
-    plot_width, source, tibet_source, fill_color,
-    selected_fill_color=None, background=False,
-    line_color='black', line_width=0.5,
-    selected_line_color=deep_orange, selected_line_width=1,
-):
-    assert plot_width
-    assert source
-    assert tibet_source
-    assert fill_color
-
-    if not selected_fill_color:
-        selected_fill_color = fill_color
-
-    p_map = get_map_plot(plot_width)
-
-    if background:
-        bg = Patches(
-            xs='xs', ys='ys', fill_color='black', line_color='black', line_width=1
-        )
-        p_map.add_glyph(source, bg, selection_glyph=bg, nonselection_glyph=bg)
-
-    provinces = Patches(
-        xs='xs', ys='ys', fill_color=fill_color, line_color=line_color, line_width=line_width, line_join='round',
-    )
-    provinces_selected = Patches(
-        xs='xs', ys='ys', fill_color=selected_fill_color, line_color=selected_line_color, line_width=selected_line_width, line_join='round',
-    )
-
-    patches_renderer = p_map.add_glyph(
-        source, provinces, nonselection_glyph=provinces, selection_glyph=provinces_selected
-    )
-
-    tibet = Patches(
-        xs='xs', ys='ys', fill_color='white', line_color='gray', line_dash='dashed', line_width=0.5,
-    )
-    p_map.add_glyph(tibet_source, tibet)
-    p_map.add_tools(TapTool(renderers=[patches_renderer]))
-    return p_map
-
-
 def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
-    source, tibet_source = get_provincial_change_map_data(parameter)
+    parameter_df = get_provincial_dataframe_with_colored_parameter_delta(parameter)
+    coal_df = get_coal_share_in_2010_by_province(prefix='col_2010')
+    df = pd.concat([parameter_df, coal_df], axis=1)
 
-    province_map = get_provincial_map(
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+
+    province_map = _get_provincial_map(
         plot_width, source, tibet_source, fill_color='delta_color'
     )
-    region_map = get_provincial_map(
+    region_map = _get_provincial_map(
         plot_width, source, tibet_source, fill_color='region_color', selected_line_color=None,
         selected_fill_color=deep_orange, background=True, line_color=None
     )
-    col_province_map = get_provincial_map(
-        plot_width, source, tibet_source, fill_color='col_2010_color', selected_line_color='white')
+    col_province_map = _get_provincial_map(
+        plot_width, source, tibet_source, fill_color='col_2010_color', selected_line_color='white'
+    )
 
     # Add Tools
     tooltips = "<span class='tooltip-text country'>@name_en</span>"
@@ -154,3 +123,44 @@ def _add_region_callback(region_map, prefixed_renderers, source):
     tap = region_map.select({'type': TapTool})
     tap.callback = callback
     return region_map
+
+
+def _get_provincial_map(
+    plot_width, source, tibet_source, fill_color,
+    selected_fill_color=None, background=False,
+    line_color='black', line_width=0.5,
+    selected_line_color=deep_orange, selected_line_width=1,
+):
+    assert plot_width
+    assert source
+    assert tibet_source
+    assert fill_color
+
+    if not selected_fill_color:
+        selected_fill_color = fill_color
+
+    p_map = get_map_plot(plot_width)
+
+    if background:
+        bg = Patches(
+            xs='xs', ys='ys', fill_color='black', line_color='black', line_width=1
+        )
+        p_map.add_glyph(source, bg, selection_glyph=bg, nonselection_glyph=bg)
+
+    provinces = Patches(
+        xs='xs', ys='ys', fill_color=fill_color, line_color=line_color, line_width=line_width, line_join='round',
+    )
+    provinces_selected = Patches(
+        xs='xs', ys='ys', fill_color=selected_fill_color, line_color=selected_line_color, line_width=selected_line_width, line_join='round',
+    )
+
+    patches_renderer = p_map.add_glyph(
+        source, provinces, nonselection_glyph=provinces, selection_glyph=provinces_selected
+    )
+
+    tibet = Patches(
+        xs='xs', ys='ys', fill_color='white', line_color='gray', line_dash='dashed', line_width=0.5,
+    )
+    p_map.add_glyph(tibet_source, tibet)
+    p_map.add_tools(TapTool(renderers=[patches_renderer]))
+    return p_map

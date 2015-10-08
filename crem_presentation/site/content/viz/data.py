@@ -21,25 +21,30 @@ def get_national_data(parameter):
     return (sources, data)
 
 
-def get_provincial_data(parameter):
+def get_provincial_dataframes(parameter):
     """
     Return the provincial datasets for the 4% scencario
     """
-    read_props = dict(usecols=['t', 'COL_share', parameter])
+    read_props = dict(usecols=['t', parameter])
     dfs = {}
-    sources = {}
-    data = []
-    col_share_2010 = []
     for province in provinces.keys():
         df = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
         df = df[df.t != 2007]
         df['region'] = provinces[province]
-        col_share_2010.append(df['COL_share'][1])
         dfs[province] = df
+    return dfs
+
+
+def get_provincial_sources_and_yaxis_data(parameter):
+    dfs = get_provincial_dataframes(parameter)
+    sources = {}
+    data = []
+    for province in provinces.keys():
+        df = dfs[province]
         data.extend(df[parameter])
         sources[province] = ColumnDataSource(df)
     data = np.array(data)
-    return (dfs, sources, data, col_share_2010)
+    return sources, data
 
 
 def get_delta(df, parameter):
@@ -49,13 +54,13 @@ def get_delta(df, parameter):
     return end - start
 
 
-def get_provincial_change_map_data(parameter):
-    dfs, sources, data, col_change = get_provincial_data(parameter)
+def get_provincial_dataframe_with_colored_parameter_delta(parameter):
+    dfs = get_provincial_dataframes(parameter)
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
     df['delta'] = np.NaN
     for province in provinces.keys():
         df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
-        df.loc[province, 'col_2010_val'] = dfs[province]['COL_share'][1]
+
     df['delta_norm'] = df['delta'] / np.linalg.norm(df['delta'])
     df['region_norm'] = df.groupby('region').delta_norm.transform('mean')
 
@@ -69,12 +74,10 @@ def get_provincial_change_map_data(parameter):
     df['delta_color'] = df['delta_color'].apply(rgb2hex)
     df['region_color'] = df['region_norm'].apply(colormap)
     df['region_color'] = df['region_color'].apply(rgb2hex)
+    return df
 
-    col_change = np.array(col_change)
-    colormap = pyplot.get_cmap('Blues')
-    df['col_2010_color'] = df['col_2010_val'].apply(colormap)
-    df['col_2010_color'] = df['col_2010_color'].apply(rgb2hex)
 
+def convert_provincial_dataframe_to_map_datasource(df):
     province_info = pd.read_hdf('content/viz/province_map_data_simplified.hdf', 'df')
     province_info = province_info.set_index('alpha')
 
@@ -82,3 +85,32 @@ def get_provincial_change_map_data(parameter):
     df = map_df[map_df.index != 'XZ']
     tibet_df = map_df[map_df.index == 'XZ']
     return (ColumnDataSource(df), ColumnDataSource(tibet_df))
+
+
+def get_coal_share_in_2010_by_province(prefix):
+    parameter = 'COL_share'
+    row_index = 2010
+    read_props = dict(usecols=['t', parameter])
+    key_value = '%s_val' % prefix
+    key_color = '%s_color' % prefix
+
+    province_list = provinces.keys()
+    n = len(province_list)
+    # Create a null dataframe
+    df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
+
+    # Populate the values
+    for province in province_list:
+        four = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
+        four = four.set_index('t')
+        df[key_value][province] = four[parameter][row_index]
+
+    # Normalize
+    norm_array = df[key_value] / np.linalg.norm(df[key_value])
+
+    colormap = pyplot.get_cmap('Blues')
+    norm_map = norm_array.apply(colormap)
+    norm_hex = norm_map.apply(rgb2hex)
+
+    df[key_color] = norm_hex
+    return df

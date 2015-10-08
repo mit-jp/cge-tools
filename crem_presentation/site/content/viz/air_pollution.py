@@ -6,6 +6,7 @@ from bokeh.models import TextInput, CustomJS, ColumnDataSource, Line, Circle
 from .charts import get_national_scenario_line_plot
 from .constants import scenarios_colors as colors, scenarios, file_names
 from .utils import get_js_array, env
+from .data import get_df_and_strip_2007
 
 
 def render_1():
@@ -91,7 +92,7 @@ def _get_2():
     nh3_scenarios = ['three_nh3', 'four_nh3', 'five_nh3']
     for scenario in nh3_scenarios:
         sources[scenario] = ColumnDataSource(
-            pd.read_csv('../cecp-cop21-data/national/%s.csv' % file_names[scenario], **read_props)
+            get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
         )
     for scenario in nh3_scenarios:
         source = sources[scenario]

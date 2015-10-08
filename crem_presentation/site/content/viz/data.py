@@ -8,13 +8,18 @@ from matplotlib.colors import rgb2hex
 from .constants import provinces, scenarios, file_names
 
 
+def get_df_and_strip_2007(filename, read_props):
+    df = pd.read_csv(filename, **read_props)
+    df = df[df.t != 2007]
+    return df
+
+
 def get_national_data(parameter):
     read_props = dict(usecols=['t', parameter])
     sources = {}
     data = []
     for scenario in scenarios:
-        df = pd.read_csv('../cecp-cop21-data/national/%s.csv' % file_names[scenario], **read_props)
-        df = df[df.t != 2007]
+        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
         sources[scenario] = ColumnDataSource(df)
         data.extend(sources[scenario].data[parameter])
     data = np.array(data)
@@ -28,8 +33,7 @@ def get_provincial_dataframes(parameter):
     read_props = dict(usecols=['t', parameter])
     dfs = {}
     for province in provinces.keys():
-        df = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
-        df = df[df.t != 2007]
+        df = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
         df['region'] = provinces[province]
         dfs[province] = df
     return dfs
@@ -101,7 +105,7 @@ def get_coal_share_in_2010_by_province(prefix):
 
     # Populate the values
     for province in province_list:
-        four = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
+        four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 

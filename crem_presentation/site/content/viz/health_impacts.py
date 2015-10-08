@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*- #
-import pandas as pd
 from bokeh.embed import components
-from bokeh.models import TextInput, CustomJS, ColumnDataSource, Line, Circle
+from bokeh.models import TextInput, CustomJS
 
 from .charts import get_national_scenario_line_plot
-from .constants import colors, scenarios, file_names
+from .constants import scenarios
 from .utils import get_js_array, env
 
 

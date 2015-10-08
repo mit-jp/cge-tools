@@ -20,7 +20,7 @@ file_names = {
     'bau': 'BAU'
 }
 
-colors = {
+scenarios_colors = {
     'three': teal,
     'three_nh3': teal,
     'four': deep_orange,

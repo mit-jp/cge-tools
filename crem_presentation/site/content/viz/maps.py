@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*- #
-from bokeh.models import HoverTool, TapTool, Patches
+from bokeh.models import HoverTool, TapTool, Patches, CustomJS
 from .data import get_provincial_change_map_data
 from .constants import deep_orange
-from .utils import get_map_plot
+from .utils import get_map_plot, get_js_array
 
 
 def get_provincial_map(
@@ -46,7 +46,7 @@ def get_provincial_map(
     return p_map
 
 
-def get_co2_by_province_maps(parameter, plot_width=600):
+def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
     source, tibet_source = get_provincial_change_map_data(parameter)
 
     province_map = get_provincial_map(
@@ -61,7 +61,7 @@ def get_co2_by_province_maps(parameter, plot_width=600):
 
     # Add Tools
     tooltips = "<span class='tooltip-text country'>@name_en</span>"
-    province_tooltips = tooltips + "<span class='tooltip-text year'>Change in CO₂: @delta</span>"
+    province_tooltips = tooltips + "<span class='tooltip-text year'>Change in %s: @delta</span>" % parameter_name
     province_map.add_tools(HoverTool(tooltips=province_tooltips))
     region_tooltips = tooltips + "<span class='tooltip-text year'>@region</span>"
     region_map.add_tools(HoverTool(tooltips=region_tooltips))
@@ -69,3 +69,88 @@ def get_co2_by_province_maps(parameter, plot_width=600):
     col_province_map.add_tools(HoverTool(tooltips=col_province_tooltips))
 
     return region_map, province_map, col_province_map, source
+
+
+def _add_province_callback(province_map, prefixed_renderers, source):
+    js_array = get_js_array(prefixed_renderers.keys())
+    code = '''
+        var renderers = %s,
+            selected = cb_obj.get('selected')['1d']['indices'],
+            glyph = null;
+        Bokeh.$.each(renderers, function(key, r) {
+            glyph = r.get('glyph');
+            if ( !Bokeh._.isUndefined(glyph) ) {
+                glyph.set('line_alpha', 0.5);
+                glyph.set('line_width', 1);
+                glyph.set('text_alpha', 0.2);
+                glyph.set('text_font_style', 'normal');
+            }
+        });
+        window.setTimeout(function(){
+            Bokeh.$.each(selected, function(i, index) {
+                var key = source.get('data')['index'][index];
+                glyph = renderers['line_' + key].get('glyph');
+                glyph.set('line_alpha', 0.9);
+                glyph.set('line_width', 4);
+                glyph = renderers['text_' + key].get('glyph');
+                glyph.set('text_alpha', 0.9);
+                glyph.set('text_font_style', 'bold');
+            });
+        }, 20);
+    ''' % js_array
+
+    callback = CustomJS(code=code, args=prefixed_renderers)
+    callback.args['source'] = source
+    tap = province_map.select({'type': TapTool})
+    tap.callback = callback
+    return province_map
+
+
+def _add_region_callback(region_map, prefixed_renderers, source):
+    js_array = get_js_array(prefixed_renderers.keys())
+    code = '''
+        var renderers = %s,
+            selected = cb_obj.get('selected')['1d']['indices'],
+            glyph = null,
+            selected_region = source.get('data')['region'][selected],
+            regions = source.get('data')['region'],
+            indices = [],
+            idx = regions.indexOf(selected_region);
+
+        while (idx != -1) {
+            indices.push(idx);
+            idx = regions.indexOf(selected_region, idx + 1);
+        }
+        cb_obj.get('selected')['1d']['indices'] = indices;
+        source.trigger('change');
+
+        Bokeh.$.each(renderers, function(key, r) {
+            glyph = r.get('glyph');
+            if ( !Bokeh._.isUndefined(glyph) ) {
+                glyph.set('line_alpha', 0.5);
+                glyph.set('line_width', 1);
+                glyph.set('text_alpha', 0.2);
+                glyph.set('text_font_style', 'normal');
+            }
+        });
+
+        window.setTimeout(function(){
+            Bokeh.$.each(indices, function(i, index) {
+                var key = source.get('data')['index'][index];
+                glyph = renderers['line_' + key].get('glyph');
+                glyph.set('line_alpha', 0.9);
+                glyph.set('line_width', 4);
+                glyph = renderers['text_' + key].get('glyph');
+                glyph.set('text_alpha', 0.9);
+                glyph.set('text_font_style', 'bold');
+            });
+        }, 20);
+
+
+    ''' % js_array
+
+    callback = CustomJS(code=code, args=prefixed_renderers)
+    callback.args['source'] = source
+    tap = region_map.select({'type': TapTool})
+    tap.callback = callback
+    return region_map

@@ -1,6 +1,8 @@
 Title: Health impacts by province
 SubTitle: The health impacts vary across the country and are a combination of the spread of air pollution and population
 Date: 2015-10-05
+Viz: health_impacts_by_province
+Viz_extra: health_impacts_by_province_col
 BodyTitle: Where there are people and pollution there are high health impacts.
 
 

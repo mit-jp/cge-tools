@@ -26,6 +26,16 @@ def render_co2_by_province():
     return render()
 
 
+def render_health_impacts_by_province():
+    from .health_impacts_by_province import render_he_maps
+    return render_he_maps()
+
+
+def render_health_impacts_by_province_col():
+    from .health_impacts_by_province import render_col_map
+    return render_col_map()
+
+
 def render_energy_mix():
     from .energy_mix import render
     return render()

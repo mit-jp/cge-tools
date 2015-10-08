@@ -1,11 +1,11 @@
-Title: Energy mix
+﻿Title: Energy mix
 SubTitle: China's target of 20% of energy from non-fossil sources is met in the 4% scenario. 
 Date: 2015-10-05
 BodyTitle: All CO₂ policies have a beneficial impact on health
 
-Consectetur adipiscing elit. Donec a diam lectus. Sed
-sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur
-ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas
-mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia
-
-
+By comparing the energy mix under the three scenarios, the non-fossil energy
+target is met in all scenarios. Both a feed-in tariff for renewable energy and 
+the CO2 price mean that low carbon energy deployment is a 
+relatively stable feature of all scenarios, while the fossil energy requirement
+is far less certain. In particular, the role of natural gas is very sensitive
+to the level of simulated policy effort.

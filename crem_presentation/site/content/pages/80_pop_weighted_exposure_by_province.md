@@ -3,9 +3,9 @@ SubTitle: The health impacts vary across the country and are a combination of th
 Date: 2015-10-05
 BodyTitle: Where there are people and pollution there are high health impacts.
 
-Consectetur adipiscing elit. Donec a diam lectus. Sed
-sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur
-ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas
-mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia
 
+Provinces also differ in terms of health impacts, which are a function of 
+pollution levels and population. In particular, the XX provinces
+benefit significantly from co-benefits of climate policy, given that these provinces
+deliver relatively large reductions in coal over populated regions.
 

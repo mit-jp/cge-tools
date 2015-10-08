@@ -5,12 +5,8 @@ Viz: co2_by_scenario
 save_as: index.html
 BodyTitle: In the 4% policy case, CO₂ emissions peak by 2030
 
-China has a goal of valerie added amet, consectetur adipiscing elit. Donec a diam lectus. Sed
-sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur
-ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas
-mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia
-consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem
-ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut
-turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor
-nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra
-tincidunt feugiat nisl imperdiet. 
+In its climate pledge, policymakers in China aim to halt the rise in the nation's 
+CO2 emissions trajectory at latest by 2030, and increase the share of non-fossil 
+energy in the primary energy mix to 20% by the same year. Here we consider 
+multiple scenarios for annual CO2 intensity reduction, and find that a 4%/year
+reduction is consistent with peaking emissions at latest by 2030.

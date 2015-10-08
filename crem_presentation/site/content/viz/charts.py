@@ -105,12 +105,18 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
     line_renderers = {}
+    text_renderers = {}
     y_offset = data.max() * 0.01
     for province in provinces.keys():
         source = sources[province]
         line = Line(
-            x='t', y=parameter,
-            line_color='grey', line_width=1, line_cap='round', line_join='round', line_alpha=0.5
+            x='t',
+            y=parameter,
+            line_color='grey',
+            line_width=2,
+            line_cap='round',
+            line_join='round',
+            line_alpha=0.2,
         )
         province_label = Text(
             x=value(source.data['t'][-1] + 0.2),
@@ -118,11 +124,12 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
             text=value(province),
             text_color='grey',
             text_font_size='8pt',
-            text_alpha=0.5,
+            text_alpha=0.2,
         )
 
         line_renderer = plot.add_glyph(source, line)
         line_renderers[province] = line_renderer
-        plot.add_glyph(province_label)
+        text_renderer = plot.add_glyph(province_label)
+        text_renderers[province] = text_renderer
 
-    return (plot, line_renderers)
+    return (plot, line_renderers, text_renderers)

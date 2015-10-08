@@ -1,15 +1,15 @@
 {# 
   This template expects:
 #}
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--8-col mdl-grid">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--7-col mdl-grid">
   <div class="plotwrap">
     <div class="plottitle">{{ plot_title|default("CO₂ emissions by province") }}</div>
     <div class="plotdiv" id="{{ plot_div.plot.elementid }}"></div>
   </div>
 </div>
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-grid">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--5-col mdl-grid">
   <div class="plotdiv" id="{{ plot_div.province_map.elementid }}"></div>
+  <div class="plotdiv" id="{{ plot_div.region_map.elementid }}"></div>
 </div>
 
-<div class="hidden" id="{{ plot_div.text.elementid }}"></div>
 {{ plot_script }}

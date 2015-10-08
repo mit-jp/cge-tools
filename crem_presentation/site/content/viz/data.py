@@ -59,16 +59,25 @@ def get_provincial_change_map_data(parameter):
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
     df['delta'] = np.NaN
     for province in provinces.keys():
-        df['delta'][province] = get_delta(dfs[province], parameter)
-
+        df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
     df['delta_norm'] = normalize(df, 'delta')
+    df['region_norm'] = df.groupby('region').delta_norm.transform('mean')
+
+    # Add in a 'No Data' row for tibet
+    df.loc['XZ', 'delta'] = 'No Data'
+    df.loc['XZ', 'region'] = 'west'
+
+    # Get colors for the normalized deltas
     colormap = pyplot.get_cmap('Greys')
     df['delta_color'] = df['delta_norm'].apply(colormap)
     df['delta_color'] = df['delta_color'].apply(rgb2hex)
+    df['region_color'] = df['region_norm'].apply(colormap)
+    df['region_color'] = df['region_color'].apply(rgb2hex)
 
     province_info = pd.read_hdf('content/viz/province_map_data_simplified.hdf', 'df')
     province_info = province_info.set_index('alpha')
 
     map_df = pd.concat([df, province_info], axis=1)
-
-    return ColumnDataSource(map_df)
+    df = map_df[map_df.index != 'XZ']
+    tibet_df = map_df[map_df.index == 'XZ']
+    return (ColumnDataSource(df), ColumnDataSource(tibet_df))

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*- #
-import pandas as pd
-import numpy as np
 from bokeh.models import (
     # Core
-    Plot, ColumnDataSource, Range1d,
+    Plot, Range1d,
     # Glyph
     Line, Text, Circle,
     # Axes
@@ -15,7 +13,7 @@ from bokeh.properties import value
 
 from .data import get_provincial_data, get_national_data
 from .utils import get_y_range, get_year_range, get_axis
-from .scenarios import colors, names, scenarios, file_names, provinces
+from .scenarios import colors, names, scenarios, provinces
 
 
 def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
@@ -113,10 +111,10 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
             x='t',
             y=parameter,
             line_color='grey',
-            line_width=2,
+            line_width=1,
             line_cap='round',
             line_join='round',
-            line_alpha=0.2,
+            line_alpha=0.5,
         )
         province_label = Text(
             x=value(source.data['t'][-1] + 0.2),
@@ -127,6 +125,15 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
             text_alpha=0.2,
         )
 
+        #label_hit = Circle(
+        #    x=value(source.data['t'][-1] + 0.5),
+        #    y=value(source.data[parameter][-1]),
+        #    line_color=None,
+        #    fill_color='pink',
+        #    size=20,
+        #)
+        #hit_renderer = plot.add_glyph(source, label_hit)
+        #plot.add_tools(HoverTool(tooltips='@', renderers=[hit_renderer]))
         line_renderer = plot.add_glyph(source, line)
         line_renderers[province] = line_renderer
         text_renderer = plot.add_glyph(province_label)

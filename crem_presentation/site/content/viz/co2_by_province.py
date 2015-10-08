@@ -81,8 +81,10 @@ def _add_region_callback(region_map, prefixed_renderers, source):
         Bokeh.$.each(renderers, function(key, r) {
             glyph = r.get('glyph');
             if ( !Bokeh._.isUndefined(glyph) ) {
-                glyph.set('line_alpha', 0.2);
+                glyph.set('line_alpha', 0.5);
+                glyph.set('line_width', 1);
                 glyph.set('text_alpha', 0.2);
+                glyph.set('text_font_style', 'normal');
             }
         });
 
@@ -91,8 +93,10 @@ def _add_region_callback(region_map, prefixed_renderers, source):
                 var key = source.get('data')['index'][index];
                 glyph = renderers['line_' + key].get('glyph');
                 glyph.set('line_alpha', 0.9);
+                glyph.set('line_width', 4);
                 glyph = renderers['text_' + key].get('glyph');
                 glyph.set('text_alpha', 0.9);
+                glyph.set('text_font_style', 'bold');
             });
         }, 20);
 

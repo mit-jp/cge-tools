@@ -5,7 +5,7 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .scenarios import provinces, scenarios, file_names
+from .constants import provinces, scenarios, file_names
 
 
 def get_national_data(parameter):

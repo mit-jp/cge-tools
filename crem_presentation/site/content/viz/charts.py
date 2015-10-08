@@ -13,7 +13,7 @@ from bokeh.properties import value
 
 from .data import get_provincial_data, get_national_data
 from .utils import get_y_range, get_year_range, get_axis
-from .scenarios import colors, names, scenarios, provinces
+from .constants import colors, names, scenarios, provinces
 from .constants import grey
 
 from matplotlib import pyplot

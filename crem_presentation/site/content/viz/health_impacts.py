@@ -4,7 +4,7 @@ from bokeh.embed import components
 from bokeh.models import TextInput, CustomJS, ColumnDataSource, Line, Circle
 
 from .charts import get_national_scenario_line_plot
-from .scenarios import colors, scenarios, file_names
+from .constants import colors, scenarios, file_names
 from .utils import get_js_array, env
 
 

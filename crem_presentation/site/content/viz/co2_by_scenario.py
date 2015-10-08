@@ -3,7 +3,7 @@ from bokeh.embed import components
 from bokeh.models import TextInput, CustomJS
 
 from .charts import get_national_scenario_line_plot
-from .scenarios import scenarios
+from .constants import scenarios
 from .utils import get_js_array, env
 
 

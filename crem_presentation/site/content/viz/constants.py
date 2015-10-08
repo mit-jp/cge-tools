@@ -1,37 +1,68 @@
 # -*- coding: utf-8 -*- #
-teal = '#009688'
-green = '#4CAF50'
-orange = '#FF9800'
-deep_orange = '#FF5722'
-purple = '#9C27B0'
-deep_purple = '#673AB7'
-grey = '#9E9E9E'
-indigo = '#3F51B5'
-dark_grey = '#212121'
+from .constants_styling import *
 
-AXIS_FORMATS = dict(
-    # This is the tick labels (numbers)
-    # major_label_text_font=FONT,
-    major_label_text_font_size="10pt",
-    major_label_text_color=dark_grey,
+scenarios = ['three', 'four', 'five', 'bau']
 
+names = {
+    'three': '3%',
+    'four': '4%',
+    'five': '5%',
+    'bau': 'BAU'
+}
 
-    # This is this axis label
-    # axis_label_text_font=FONT,
-    axis_label_text_font_size="12pt",
-    axis_label_standoff=30,
+file_names = {
+    'three': '3',
+    'four': '4',
+    'five': '5',
+    'three_nh3': '3_nh3',
+    'four_nh3': '4_nh3',
+    'five_nh3': '5_nh3',
+    'bau': 'BAU'
+}
 
-    # Lines
-    axis_line_color=None,
-    axis_line_cap="round",
-    axis_line_width=1,
+colors = {
+    'three': teal,
+    'three_nh3': teal,
+    'four': deep_orange,
+    'four_nh3': deep_orange,
+    'five': deep_purple,
+    'five_nh3': deep_purple,
+    'bau': grey
+}
 
-    major_tick_line_width=1,
-    major_tick_line_color=None,
-    major_tick_line_cap="round",
+west = 'west'
+center = 'center'
+east = 'east'
 
-    # Ticks
-    minor_tick_in=None,
-    minor_tick_out=None,
-    major_tick_in=None,
-)
+provinces = {
+    'BJ': east,
+    'TJ': east,
+    'HE': center,
+    'SX': center,
+    'NM': center,
+    'LN': center,
+    'JL': center,
+    'HL': center,
+    'SH': east,
+    'JS': east,
+    'ZJ': east,
+    'AH': center,
+    'FJ': east,
+    'JX': center,
+    'SD': east,
+    'HA': center,
+    'HB': center,
+    'HN': center,
+    'GD': east,
+    'GX': center,
+    'HI': east,
+    'CQ': center,
+    'SC': center,
+    'GZ': center,
+    'YN': west,
+    'SN': west,
+    'GS': west,
+    'QH': west,
+    'NX': west,
+    'XJ': west,
+}

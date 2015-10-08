@@ -4,7 +4,7 @@ from bokeh.models import CustomJS, TapTool
 
 from .charts import get_provincial_scenario_line_plot
 from .maps import get_provincial_regional_map
-from .scenarios import provinces
+from .constants import provinces
 from .utils import get_js_array, env
 
 

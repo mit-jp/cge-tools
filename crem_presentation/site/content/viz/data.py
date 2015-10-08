@@ -25,18 +25,20 @@ def get_provincial_data(parameter):
     """
     Return the provincial datasets for the 4% scencario
     """
-    read_props = dict(usecols=['t', parameter])
+    read_props = dict(usecols=['t', 'COL_share', parameter])
     dfs = {}
     sources = {}
     data = []
+    col_share_2010 = []
     for province in provinces.keys():
         df = pd.read_csv('../cecp-cop21-data/%s/4.csv' % province, **read_props)
         df['region'] = provinces[province]
+        col_share_2010.append(df['COL_share'][1])
         dfs[province] = df
         data.extend(df[parameter])
         sources[province] = ColumnDataSource(df)
     data = np.array(data)
-    return (dfs, sources, data)
+    return (dfs, sources, data, col_share_2010)
 
 
 def get_delta(df, parameter):
@@ -55,7 +57,7 @@ def normalize(df, column):
 
 
 def get_provincial_change_map_data(parameter):
-    dfs, sources, data = get_provincial_data(parameter)
+    dfs, sources, data, col_change = get_provincial_data(parameter)
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
     df['delta'] = np.NaN
     for province in provinces.keys():

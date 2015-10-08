@@ -15,6 +15,8 @@ from .data import get_provincial_data, get_national_data
 from .utils import get_y_range, get_year_range, get_axis
 from .scenarios import colors, names, scenarios, provinces
 
+from matplotlib import pyplot
+from matplotlib.colors import rgb2hex
 
 def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
     assert parameter
@@ -81,7 +83,7 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     assert parameter
     assert y_ticks
 
-    dfs, sources, data = get_provincial_data(parameter)
+    dfs, sources, data, col_share = get_provincial_data(parameter)
 
     plot = Plot(
         x_range=get_year_range(end_factor=2),
@@ -105,26 +107,30 @@ def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=6
     line_renderers = {}
     text_renderers = {}
     y_offset = data.max() * 0.01
-    for province in provinces.keys():
+    colormap = pyplot.get_cmap('Blues')
+
+    for i, province in enumerate(provinces.keys()):
+        col_color = rgb2hex(colormap(col_share[i]))
         source = sources[province]
         line = Line(
             x='t',
             y=parameter,
-            line_color='grey',
-            line_width=1,
+            line_color=col_color,
+            line_width=2,
             line_cap='round',
             line_join='round',
-            line_alpha=0.5,
+            line_alpha=0.8,
         )
         province_label = Text(
             x=value(source.data['t'][-1] + 0.2),
             y=value(source.data[parameter][-1] - y_offset),
             text=value(province),
-            text_color='grey',
+            text_color=col_color,
             text_font_size='8pt',
             text_alpha=0.2,
         )
 
+        # TODO - Add province name to hover
         #label_hit = Circle(
         #    x=value(source.data['t'][-1] + 0.5),
         #    y=value(source.data[parameter][-1]),

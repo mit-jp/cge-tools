@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[15]:
+# In[1]:
 
 # Load all the GDX files
 import csv
@@ -37,13 +37,13 @@ cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[16]:
+# In[2]:
 
 # List of all the parameters available in each file
 #CREM.parameters()
 
 
-# In[55]:
+# In[3]:
 
 arrays = {}
 
@@ -52,16 +52,19 @@ def label(variable, desc, unit_long, unit_short):
                                    'unit_short': unit_short})
 
 
-# In[56]:
+# In[5]:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
 arrays['GDP'] = xray.concat(temp, dim=cases).sel(rs=CREM.set('r'))                     .rename({'rs': 'r'})
 label('GDP', 'Gross domestic product',
       'billions of U.S. dollars, constant at 2007', '10⁹ USD')
+arrays['GDP_delta'] = 1 - (arrays['GDP'] / arrays['GDP'].sel(case='bau')) * 100
+label('GDP_delta', 'Change in gross domestic product relative to BAU',
+      'percent', '%')
 
 
-# In[57]:
+# In[6]:
 
 # CO2 emissions
 temp = []
@@ -73,7 +76,7 @@ label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
 
 
-# In[60]:
+# In[7]:
 
 # Air pollutant emissions
 temp = []
@@ -90,7 +93,7 @@ for u in temp['urb']:
           'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[62]:
+# In[8]:
 
 # CO₂ price
 temp = []
@@ -101,7 +104,7 @@ label('CO2_price', 'Price of CO₂ emissions permit',
       '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[67]:
+# In[9]:
 
 # Consumption
 temp = []
@@ -112,7 +115,7 @@ label('cons', 'Household consumption',
       'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[72]:
+# In[17]:
 
 # Primary energy
 temp = []
@@ -134,8 +137,26 @@ for ener in temp['e']:
     label(var_name, 'Primary energy from {}'.format(e_name[str(ener.values)]),
           'Millions of tonnes of coal equivalent', 'Mtce')
 
+# Sums and shares 
+arrays['energy_total'] = temp.sum('e')
+label('energy_total', 'Primary energy, total',
+      'Millions of tonnes of coal equivalent', 'Mtce')
 
-# In[102]:
+arrays['energy_fossil'] = temp.sel(e=['COL', 'GAS', 'OIL']).sum('e')
+label('energy_fossil', 'Primary energy from fossil fuels',
+      'Millions of tonnes of coal equivalent', 'Mtce')
+
+arrays['energy_nonfossil'] = temp.sel(e=['NUC', 'WND', 'SOL', 'HYD']).sum('e')
+label('energy_nonfossil', 'Primary energy from non-fossil sources',
+      'Millions of tonnes of coal equivalent', 'Mtce')
+
+arrays['energy_nonfossil_share'] = (arrays['energy_nonfossil'] /
+    arrays['energy_total'])
+label('energy_nonfossil_share', 'Share of non-fossil sources in primary energy',
+      'Millions of tonnes of coal equivalent', 'Mtce')
+
+
+# In[18]:
 
 # TODO population
 # FIXME this is a placeholder
@@ -143,7 +164,7 @@ arrays['pop'] = arrays['GDP']
 label('pop', 'Population', 'Millions', '10⁶')
 
 
-# In[103]:
+# In[19]:
 
 # TODO share of coal in production inputs
 # FIXME this is a placeholder
@@ -152,15 +173,21 @@ label('COL_share', 'Value share of coal in industrial production',
       '(unitless)', '0')
 
 
-# In[104]:
+# In[20]:
 
-# TODO population-weighted PM2.5 exposure
-arrays['PM2.5_exposure'] = arrays['GDP']
-label('PM2.5_exposure', 'Population-weighted exposure to PM2.5',
+# TODO PM2.5 concentrations and population-weighted exposure
+# FIXME this is a placeholder
+arrays['PM25_conc'] = arrays['GDP']
+label('PM25_conc', 'Province-wide average PM2.5',
+      'micrograms per cubic metre', 'μg/m³')
+
+# FIXME this is a placeholder
+arrays['PM25_exposure'] = arrays['GDP']
+label('PM25_exposure', 'Population-weighted exposure to PM2.5',
       'micrograms per cubic metre', 'μg/m³')
 
 
-# In[105]:
+# In[21]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
@@ -186,7 +213,7 @@ data.merge(d, join='outer', inplace=True)
 national = data.sum('r')
 
 
-# In[106]:
+# In[22]:
 
 # Output a file with scenario information
 data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),
@@ -194,7 +221,7 @@ data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),
                                         quoting=csv.QUOTE_ALL)
 
 
-# In[107]:
+# In[23]:
 
 # Output a file with variable information
 var_info = pd.DataFrame(index=[d for d in data.data_vars if d != 'scenarios'],
@@ -212,7 +239,7 @@ var_info.to_csv(join(OUT_DIR, 'variables.csv'), index_label='Variable',
                 quoting=csv.QUOTE_ALL)
 
 
-# In[108]:
+# In[24]:
 
 # Create directories
 for r in CREM.set('r'):

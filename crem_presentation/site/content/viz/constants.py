@@ -66,3 +66,5 @@ provinces = {
     'NX': west,
     'XJ': west,
 }
+
+energy_mix_columns = ['NUC_energy', 'HYD_energy', 'WND_energy', 'OIL_energy', 'COL_energy', 'SOL_energy']

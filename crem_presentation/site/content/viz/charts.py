@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*- #
+import numpy as np
 from bokeh.models import (
-    Plot, Range1d, Line, Text, Circle, HoverTool,
+    Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource
 )
 from bokeh.properties import value
 
@@ -11,7 +12,7 @@ from .data import (
     get_coal_share_in_2010_by_province
 )
 from .utils import get_y_range, get_year_range, add_axes
-from .constants import scenarios_colors as colors, names, scenarios, provinces
+from .constants import scenarios_colors as colors, names, scenarios, provinces, energy_mix_columns
 from .constants_styling import PLOT_FORMATS
 
 
@@ -76,6 +77,57 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
 
     plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
     return (plot, line_renderers)
+
+
+def get_energy_mix_by_scenario(df, scenario, plot_width=700):
+    data = []
+    for energy_mix_column in energy_mix_columns:
+        data.extend(df['%s_%s' % (scenario, energy_mix_column)])
+    data = np.array(data)
+    plot = Plot(
+        x_range=get_year_range(end_factor=None),
+        y_range=get_y_range(data),
+        plot_width=plot_width,
+        **PLOT_FORMATS
+    )
+    plot = add_axes(plot, [100, 1e400])
+    source = ColumnDataSource(df)
+
+    hit_renderers = []
+    line_renderers = {}
+
+    for energy_mix_column in energy_mix_columns:
+        parameter = '%s_%s' % (scenario, energy_mix_column)
+        line = Line(
+            x='t', y=parameter, line_color='grey',
+            line_width=4, line_cap='round', line_join='round', line_alpha=0.8
+        )
+        circle = Circle(
+            x='t', y=parameter, size=8,
+            line_color=colors[scenario], line_width=2,
+            fill_color='white'
+        )
+        # invisible circle used for hovering
+        hit_target = Circle(
+            x='t', y=parameter, size=20,
+            line_color=None,
+            fill_color=None
+        )
+        scenario_label = Text(
+            x=value(source.data['t'][-1] + 0.5), y=value(source.data[parameter][-1]), text=value(energy_mix_column),
+            text_color='grey'
+        )
+
+        hit_renderer = plot.add_glyph(source, hit_target)
+        hit_renderers.append(hit_renderer)
+        line_renderer = plot.add_glyph(source, line)
+        line_renderers[scenario] = line_renderer
+        plot.add_glyph(source, circle)
+        plot.add_glyph(scenario_label)
+
+    plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
+    return plot
+
 
 
 def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):

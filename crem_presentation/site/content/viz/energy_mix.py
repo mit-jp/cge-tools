@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*- #
-from bokeh.models import (
-    # Core
-    Plot, Range1d, Grid,
-    # Glyph
-    Line, Text, Circle,
-    # Axes
-    FixedTicker, NumeralTickFormatter,
-    # Tools
-    HoverTool,
-)
-from bokeh.properties import value
+from bokeh.embed import components
 
-from .utils import get_y_range, get_year_range, get_axis
-from .constants import scenarios_colors as colors, names, scenarios, provinces
+from .data import get_energy_mix_for_all_scenarios
+from .charts import get_energy_mix_by_scenario
+from .utils import env
+
 
 def render():
-    return 'hello world'
+    df = get_energy_mix_for_all_scenarios()
+    three = get_energy_mix_by_scenario(df, 'three')
+    four = get_energy_mix_by_scenario(df, 'four')
+    five = get_energy_mix_by_scenario(df, 'five')
+    template = env.get_template('viz/energy_mix.html')
+    script, div = components(
+        dict(three=three, four=four, five=five),
+        wrap_plot_info=False
+    )
+    return template.render(plot_script=script, plot_div=div)

@@ -5,7 +5,7 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .constants import provinces, scenarios, file_names, west
+from .constants import provinces, scenarios, file_names, west, energy_mix_columns
 
 
 def get_df_and_strip_2007(filename, read_props):
@@ -32,6 +32,19 @@ def _get_national_data(parameter, filepath):
         data.extend(sources[scenario].data[parameter])
     data = np.array(data)
     return (sources, data)
+
+
+def get_energy_mix_for_all_scenarios():
+    usecols = ['t']
+    usecols.extend(energy_mix_columns)
+    read_props = dict(usecols=usecols)
+    all_scenarios = pd.DataFrame()
+    for scenario in scenarios:
+        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
+        all_scenarios['t'] = df['t']
+        for energy_mix_column in energy_mix_columns:
+            all_scenarios['%s_%s' % (scenario, energy_mix_column)] = df[energy_mix_column]
+    return all_scenarios
 
 
 def get_provincial_dataframes(parameter):

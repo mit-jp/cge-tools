@@ -9,6 +9,8 @@ grey = '#9E9E9E'
 indigo = '#3F51B5'
 dark_grey = '#212121'
 
+deselected_alpha = 0.3
+
 AXIS_FORMATS = dict(
     # This is the tick labels (numbers)
     # major_label_text_font=FONT,

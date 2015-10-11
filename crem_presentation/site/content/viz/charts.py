@@ -13,7 +13,7 @@ from .data import (
 )
 from .utils import get_y_range, get_year_range, add_axes
 from .constants import scenarios_colors as colors, names, scenarios, provinces, energy_mix_columns
-from .constants_styling import PLOT_FORMATS
+from .constants_styling import PLOT_FORMATS, deselected_alpha
 
 
 def get_lo_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
@@ -47,25 +47,24 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
         if scenario == 'four':
             line_alpha = 0.8
         else:
-            line_alpha = 0.1
+            line_alpha = deselected_alpha
         line = Line(
             x='t', y=parameter, line_color=colors[scenario],
-            line_width=4, line_cap='round', line_join='round', line_alpha=line_alpha
+            line_width=2, line_cap='round', line_join='round', line_alpha=line_alpha
         )
         circle = Circle(
-            x='t', y=parameter, size=8,
-            line_color=colors[scenario], line_width=2,
-            fill_color='white'
+            x='t', y=parameter, size=4,
+            line_color=colors[scenario], line_width=0.5, line_alpha=deselected_alpha,
+            fill_color=colors[scenario], fill_alpha=0.6
         )
         # invisible circle used for hovering
         hit_target = Circle(
             x='t', y=parameter, size=20,
-            line_color=None,
-            fill_color=None
+            line_color=None, fill_color=None
         )
         scenario_label = Text(
-            x=value(source.data['t'][-1] + 0.5), y=value(source.data[parameter][-1]), text=value(names[scenario]),
-            text_color=colors[scenario]
+            x=value(source.data['t'][-1] + 1), y=value(source.data[parameter][-1]), text=value(names[scenario]),
+            text_color=colors[scenario], text_font_size="8pt",
         )
 
         hit_renderer = plot.add_glyph(source, hit_target)

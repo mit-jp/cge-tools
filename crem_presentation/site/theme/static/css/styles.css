@@ -1,6 +1,13 @@
 html, body {
   font-family: 'Helvetica', sans-serif;
   height: 100%;
+  font-size: 12pt;
+}
+
+@media (max-width: 400px) {
+  html, body {
+    font-size: 9pt;
+  }
 }
 
 /* iOS Safari specific workaround */
@@ -38,7 +45,7 @@ html, body {
 }
 
 .content {
-  min-width: 450px;
+  min-width: 360px;
   max-width: 1080px;
 }
 
@@ -66,9 +73,26 @@ html, body {
   }
 }
 
+.mdl-checkbox__label {
+  font-size: inherit;
+}
+
 /* dl-dd-dt - used in heading text */
 .mdl-components-dl {
   color: rgb(117, 117, 117);
+}
+
+.mdl-components-dt {
+  padding-left: 0.5em;
+}
+
+.mdl-components-dd {
+  padding: 0 0.5em 0 0;
+}
+
+.mdl-components-dd p {
+  line-height: 20px;
+  font-size: inherit;
 }
 
 .uppercase {
@@ -96,14 +120,11 @@ html, body {
 }
 
 .plottitle {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  z-index: 2000; /* above all bokeh items */
+  padding: 1em 0em 0em 1em;
 }
 
 .plotdiv {
-  width: 100%;
+  width: 98%;
 }
 
 /*

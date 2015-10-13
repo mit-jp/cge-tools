@@ -2,8 +2,7 @@
 from bokeh.embed import components
 
 from .charts import get_provincial_scenario_line_plot
-from .maps import get_province_maps_by_parameter, _add_province_callback, _add_region_callback
-from .constants import provinces
+from .maps import get_province_maps_by_parameter, _add_region_callback
 from .utils import env
 
 
@@ -19,21 +18,11 @@ def render():
 
 def _get():
     parameter = 'CO2_emi'
-    plot, line_renderers, text_renderers = get_provincial_scenario_line_plot(
-        parameter=parameter,
-        y_ticks=[0, 450, 900],
-        plot_width=600,
-    )
-    region_map, province_map, col_province_map, source = get_province_maps_by_parameter(
+    region_map, province_map, col_province_map, source, data = get_province_maps_by_parameter(
         parameter=parameter, parameter_name="CO₂"
     )
-
-    prefixed_renderers = {}
-    for province in provinces.keys():
-        prefixed_renderers['line_%s' % province] = line_renderers[province]
-        prefixed_renderers['text_%s' % province] = text_renderers[province]
-
-    province_map = _add_province_callback(province_map, prefixed_renderers, source)
-    col_province_map = _add_province_callback(col_province_map, prefixed_renderers, source)
-    region_map = _add_region_callback(region_map, prefixed_renderers, source)
+    plot, source = get_provincial_scenario_line_plot(
+        parameter=parameter, y_ticks=[0, 450, 900], plot_width=600, source=source, data=data,
+    )
+    region_map = _add_region_callback(region_map, source)
     return (plot, col_province_map, province_map, region_map)

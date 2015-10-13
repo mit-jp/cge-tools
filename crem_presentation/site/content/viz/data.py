@@ -89,12 +89,32 @@ def normalize_and_color(df, key_value, key_color, cmap_name):
     return df
 
 
+def get_empty_column():
+    return np.zeros((len(provinces.keys()), 1), dtype=object)
+
+
 def get_provincial_dataframe_with_colored_parameter_delta(parameter):
     dfs = get_provincial_dataframes(parameter)
     df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
+    data = []
+
     df['delta'] = np.NaN
+
+    df['t'] = get_empty_column()
+    df[parameter] = get_empty_column()
+    df['text_x'] = get_empty_column()
+    df['text_y'] = get_empty_column()
     for province in provinces.keys():
-        df.loc[province, 'delta'] = get_delta(dfs[province], parameter)
+        data.extend(dfs[province][parameter])
+
+        df.set_value(province, 'delta', get_delta(dfs[province], parameter))
+        df.set_value(province, 't', list(dfs[province].t.values))
+        df.set_value(province, parameter, list(dfs[province][parameter].values))
+        df.set_value(province, 'text_x', 2030.2)
+        df.set_value(province, 'text_y', list(dfs[province][parameter].values)[-1])
+
+    data = np.array(data)
+
     df['region_val'] = df.groupby('region').delta.transform('mean')
 
     # Get colors for the normalized deltas
@@ -105,7 +125,7 @@ def get_provincial_dataframe_with_colored_parameter_delta(parameter):
     df.loc['XZ', 'delta'] = 'No Data'
     df.loc['XZ', 'region'] = west
 
-    return df
+    return df, data
 
 
 def convert_provincial_dataframe_to_map_datasource(df):

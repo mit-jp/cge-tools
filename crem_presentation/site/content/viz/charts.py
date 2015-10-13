@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*- #
 import numpy as np
 from bokeh.models import (
-    Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource
+    Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource, MultiLine,
 )
 from bokeh.properties import value
 
 from .data import (
-    get_provincial_sources_and_yaxis_data,
     get_national_data,
     get_lo_national_data,
-    get_coal_share_in_2010_by_province
 )
 from .utils import get_y_range, get_year_range, add_axes
-from .constants import scenarios_colors as colors, names, scenarios, provinces, energy_mix_columns
+from .constants import scenarios_colors as colors, names, scenarios, energy_mix_columns
 from .constants_styling import PLOT_FORMATS, deselected_alpha
 
 
@@ -128,50 +126,20 @@ def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     return plot
 
 
-
-def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600):
-    assert parameter
-    assert y_ticks
-
-    sources, data = get_provincial_sources_and_yaxis_data(parameter)
-    coal_df = get_coal_share_in_2010_by_province('col_2010')
-
+def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, source=None, data=None):
     plot = Plot(
-        x_range=get_year_range(end_factor=2),
-        y_range=Range1d(0, data.max() * 1.10),
-        plot_width=plot_width,
-        **PLOT_FORMATS
+        x_range=get_year_range(end_factor=2), y_range=Range1d(0, data.max() * 1.10),
+        plot_width=plot_width, **PLOT_FORMATS
     )
     plot = add_axes(plot, y_ticks)
-
-    line_renderers = {}
-    text_renderers = {}
-    y_offset = data.max() * 0.01
-
-    for province in provinces.keys():
-        coal_color = coal_df['col_2010_color'][province]
-        source = sources[province]
-        line = Line(
-            x='t',
-            y=parameter,
-            line_color=coal_color,
-            line_width=2,
-            line_cap='round',
-            line_join='round',
-            line_alpha=0.8,
-        )
-        province_label = Text(
-            x=value(source.data['t'][-1] + 0.2),
-            y=value(source.data[parameter][-1] - y_offset),
-            text=value(province),
-            text_color=coal_color,
-            text_font_size='8pt',
-            text_alpha=0.8,
-        )
-
-        line_renderer = plot.add_glyph(source, line)
-        line_renderers[province] = line_renderer
-        text_renderer = plot.add_glyph(province_label)
-        text_renderers[province] = text_renderer
-
-    return (plot, line_renderers, text_renderers)
+    line = MultiLine(
+        xs='t', ys=parameter, line_color='col_2010_color',
+        line_width=2, line_cap='round', line_join='round', line_alpha=0.8,
+    )
+    province_label = Text(
+        x='text_x', y='text_y', text='index', text_color='col_2010_color',
+        text_font_size='8pt', text_alpha=0.8,
+    )
+    plot.add_glyph(source, line)
+    plot.add_glyph(source, province_label)
+    return (plot, source)

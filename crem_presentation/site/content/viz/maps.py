@@ -18,7 +18,7 @@ from .utils import get_map_plot, get_js_array
 
 
 def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
-    parameter_df = get_provincial_dataframe_with_colored_parameter_delta(parameter)
+    parameter_df, data = get_provincial_dataframe_with_colored_parameter_delta(parameter)
     coal_df = get_coal_share_in_2010_by_province(prefix='col_2010')
     df = pd.concat([parameter_df, coal_df], axis=1)
 
@@ -44,7 +44,7 @@ def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
     col_province_tooltips = tooltips + "<span class='tooltip-text year'>Coal share in 2010: @col_2010_val</span>"
     col_province_map.add_tools(HoverTool(tooltips=col_province_tooltips))
 
-    return region_map, province_map, col_province_map, source
+    return region_map, province_map, col_province_map, source, data
 
 
 def get_provincial_pop_2030_map(plot_width=600):
@@ -131,51 +131,21 @@ def _add_province_callback(province_map, prefixed_renderers, source):
     return province_map
 
 
-def _add_region_callback(region_map, prefixed_renderers, source):
-    js_array = get_js_array(prefixed_renderers.keys())
+def _add_region_callback(region_map, source):
     code = '''
-        var renderers = %s,
+        var indices = [],
             selected = cb_obj.get('selected')['1d']['indices'],
-            glyph = null,
             selected_region = source.get('data')['region'][selected],
             regions = source.get('data')['region'],
-            indices = [],
             idx = regions.indexOf(selected_region);
-
         while (idx != -1) {
             indices.push(idx);
             idx = regions.indexOf(selected_region, idx + 1);
         }
         cb_obj.get('selected')['1d']['indices'] = indices;
         source.trigger('change');
-
-        Bokeh.$.each(renderers, function(key, r) {
-            glyph = r.get('glyph');
-            if ( !Bokeh._.isUndefined(glyph) ) {
-                glyph.set('line_alpha', 0.5);
-                glyph.set('line_width', 1);
-                glyph.set('text_alpha', 0.2);
-                glyph.set('text_font_style', 'normal');
-            }
-        });
-
-        window.setTimeout(function(){
-            Bokeh.$.each(indices, function(i, index) {
-                var key = source.get('data')['index'][index];
-                glyph = renderers['line_' + key].get('glyph');
-                glyph.set('line_alpha', 0.9);
-                glyph.set('line_width', 4);
-                glyph = renderers['text_' + key].get('glyph');
-                glyph.set('text_alpha', 0.9);
-                glyph.set('text_font_style', 'bold');
-            });
-        }, 20);
-
-
-    ''' % js_array
-
-    callback = CustomJS(code=code, args=prefixed_renderers)
-    callback.args['source'] = source
+    '''
+    callback = CustomJS(code=code, args=dict(source=source))
     tap = region_map.select({'type': TapTool})
     tap.callback = callback
     return region_map

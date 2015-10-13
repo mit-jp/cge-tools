@@ -15,7 +15,7 @@ AXIS_FORMATS = dict(
     # This is the tick labels (numbers)
     # major_label_text_font=FONT,
     major_label_text_font_size="10pt",
-    major_label_text_color=dark_grey,
+    #major_label_text_color=dark_grey,  # Now set on a method
 
 
     # This is this axis label

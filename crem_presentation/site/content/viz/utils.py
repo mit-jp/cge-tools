@@ -3,7 +3,7 @@ from bokeh.models import LinearAxis, Range1d, Grid, FixedTicker, NumeralTickForm
 
 from jinja2 import Environment, PackageLoader
 
-from .constants import AXIS_FORMATS, grey, PLOT_FORMATS
+from .constants import AXIS_FORMATS, PLOT_FORMATS, grey, dark_grey
 
 env = Environment(loader=PackageLoader('theme', 'templates'))
 
@@ -26,19 +26,22 @@ def get_map_plot(plot_width):
     return Plot(**map_params)
 
 
-def get_axis(ticker=None, formatter=None, axis_label=None):
-    axis = LinearAxis(axis_label=axis_label, ticker=ticker, formatter=formatter, **AXIS_FORMATS)
+def get_axis(ticker=None, formatter=None, axis_label=None, color=dark_grey):
+    axis = LinearAxis(
+        axis_label=axis_label, ticker=ticker, formatter=formatter, major_label_text_color=color,
+        **AXIS_FORMATS
+    )
     return axis
 
 
-def add_axes(plot, y_ticks, grid=True):
+def add_axes(plot, y_ticks, grid=True, color=None):
     y_ticker = FixedTicker(ticks=y_ticks)
     y_formatter = NumeralTickFormatter(format="0,0")
-    y_axis = get_axis(ticker=y_ticker, formatter=y_formatter)
+    y_axis = get_axis(ticker=y_ticker, formatter=y_formatter, color=color)
     x_ticker = FixedTicker(ticks=[2010, 2030])
     five_year_ticker = FixedTicker(ticks=[2010, 2015, 2020, 2025, 2030])
     x_formatter = NumeralTickFormatter(format="0")
-    x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='')
+    x_axis = get_axis(ticker=x_ticker, formatter=x_formatter, axis_label='', color=color)
     plot.add_layout(y_axis, 'left')
     plot.add_layout(x_axis, 'below')
     if grid:

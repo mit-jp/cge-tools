@@ -10,7 +10,7 @@ from .data import (
     get_lo_national_data,
 )
 from .utils import get_y_range, get_year_range, add_axes
-from .constants import scenarios_colors as colors, names, scenarios, energy_mix_columns
+from .constants import scenarios_colors, names, scenarios, energy_mix_columns
 from .constants_styling import PLOT_FORMATS, deselected_alpha
 
 
@@ -47,13 +47,13 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
         else:
             line_alpha = deselected_alpha
         line = Line(
-            x='t', y=parameter, line_color=colors[scenario],
+            x='t', y=parameter, line_color=scenarios_colors[scenario],
             line_width=2, line_cap='round', line_join='round', line_alpha=line_alpha
         )
         circle = Circle(
             x='t', y=parameter, size=4,
-            line_color=colors[scenario], line_width=0.5, line_alpha=deselected_alpha,
-            fill_color=colors[scenario], fill_alpha=0.6
+            line_color=scenarios_colors[scenario], line_width=0.5, line_alpha=deselected_alpha,
+            fill_color=scenarios_colors[scenario], fill_alpha=0.6
         )
         # invisible circle used for hovering
         hit_target = Circle(
@@ -62,7 +62,7 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
         )
         scenario_label = Text(
             x=value(source.data['t'][-1] + 1), y=value(source.data[parameter][-1]), text=value(names[scenario]),
-            text_color=colors[scenario], text_font_size="8pt",
+            text_color=scenarios_colors[scenario], text_font_size="8pt",
         )
 
         hit_renderer = plot.add_glyph(source, hit_target)
@@ -77,42 +77,34 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
 
 
 def get_energy_mix_by_scenario(df, scenario, plot_width=700):
-    data = []
-    for energy_mix_column in energy_mix_columns:
-        data.extend(df['%s_%s' % (scenario, energy_mix_column)])
-    data = np.array(data)
     plot = Plot(
-        x_range=get_year_range(end_factor=None),
-        y_range=get_y_range(data),
+        x_range=get_year_range(end_factor=15),
+        y_range=Range1d(0, 5000),
         plot_width=plot_width,
         **PLOT_FORMATS
     )
-    plot = add_axes(plot, [100, 1e400])
+    plot = add_axes(plot, [500, 2500, 4500], color=scenarios_colors[scenario])
     source = ColumnDataSource(df)
 
     hit_renderers = []
     line_renderers = {}
 
-    for energy_mix_column in energy_mix_columns:
+    for energy_mix_column in energy_mix_columns.keys():
         parameter = '%s_%s' % (scenario, energy_mix_column)
         line = Line(
-            x='t', y=parameter, line_color='grey',
-            line_width=4, line_cap='round', line_join='round', line_alpha=0.8
+            x='t', y=parameter, line_color='black',
+            line_width=2, line_cap='round', line_join='round', line_alpha=0.8
         )
         circle = Circle(
-            x='t', y=parameter, size=8,
-            line_color=colors[scenario], line_width=2,
-            fill_color='white'
+            x='t', y=parameter, size=4, fill_color='black', fill_alpha=0.6
         )
         # invisible circle used for hovering
         hit_target = Circle(
-            x='t', y=parameter, size=20,
-            line_color=None,
-            fill_color=None
+            x='t', y=parameter, size=20, line_color=None, fill_color=None
         )
         scenario_label = Text(
-            x=value(source.data['t'][-1] + 0.5), y=value(source.data[parameter][-1]), text=value(energy_mix_column),
-            text_color='grey'
+            x=value(source.data['t'][-1] + 2), y=value(source.data[parameter][-1] - 200),
+            text=value(energy_mix_columns[energy_mix_column]), text_color='grey', text_font_size='8pt',
         )
 
         hit_renderer = plot.add_glyph(source, hit_target)

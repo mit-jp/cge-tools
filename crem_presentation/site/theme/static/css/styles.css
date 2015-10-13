@@ -237,3 +237,9 @@ html, body {
     font-weight: bold;
     color: #FFA500;
 }
+
+.mdl-card__title-text {
+  font-weight: 400;
+  font-size: 0.8em;
+  color: white;
+}

@@ -60,18 +60,6 @@ def get_provincial_dataframes(parameter):
     return dfs
 
 
-def get_provincial_sources_and_yaxis_data(parameter):
-    dfs = get_provincial_dataframes(parameter)
-    sources = {}
-    data = []
-    for province in provinces.keys():
-        df = dfs[province]
-        data.extend(df[parameter])
-        sources[province] = ColumnDataSource(df)
-    data = np.array(data)
-    return sources, data
-
-
 def get_delta(df, parameter):
     df = df.set_index('t')
     start = df[parameter][2010]

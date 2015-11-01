@@ -1,6 +1,19 @@
 
 # coding: utf-8
 
+# In[ ]:
+
+get_ipython().system('crem gdx/bau -- --case=default')
+get_ipython().system('crem gdx/3 -- --t_max=2010 --case=cint_n --cint_n_rate=3')
+get_ipython().system('crem gdx/4 -- --t_max=2010 --case=cint_n --cint_n_rate=4')
+get_ipython().system('crem gdx/5 -- --t_max=2010 --case=cint_n --cint_n_rate=5')
+# Low-growth cases
+get_ipython().system('crem gdx/bau -- --case=default')
+get_ipython().system('crem gdx/3 -- --t_max=2010 --case=cint_n --cint_n_rate=3')
+get_ipython().system('crem gdx/4 -- --t_max=2010 --case=cint_n --cint_n_rate=4')
+get_ipython().system('crem gdx/5 -- --t_max=2010 --case=cint_n --cint_n_rate=5')
+
+
 # In[1]:
 
 # Load all the GDX files

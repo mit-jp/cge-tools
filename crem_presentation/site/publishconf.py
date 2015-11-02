@@ -12,6 +12,7 @@ from pelicanconf import *
 import private_settings
 
 SITEURL = private_settings.SITEURL
+GOOGLE_ANALYTICS = private_settings.GOOGLE_ANALYTICS
 RELATIVE_URLS = False
 
 #FEED_ALL_ATOM = 'feeds/all.atom.xml'

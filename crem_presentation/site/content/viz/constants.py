@@ -17,7 +17,7 @@ file_names = {
     'three_nh3': '3_nh3',
     'four_nh3': '4_nh3',
     'five_nh3': '5_nh3',
-    'bau': 'BAU'
+    'bau': 'bau'
 }
 
 scenarios_colors = {

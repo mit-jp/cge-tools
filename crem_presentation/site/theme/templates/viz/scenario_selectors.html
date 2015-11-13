@@ -1,0 +1,49 @@
+{# The checkbox block #}
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+    <div class="mdl-card__supporting-text">
+      <form onchange="Bokeh.custom.{{ prefix|default('_') }}form_change(this)">
+            <label for="{{ prefix|default("_") }}chk_three" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input type="checkbox" id="{{ prefix|default("_") }}chk_three" class="mdl-checkbox__input" />
+                <span class="mdl-checkbox__label">3%</span>
+            </label>
+            <label for="{{ prefix|default("_") }}chk_four" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input type="checkbox" id="{{ prefix|default("_") }}chk_four" class="mdl-checkbox__input" checked />
+                <span class="mdl-checkbox__label">4%</span>
+            </label>
+            <label for="{{ prefix|default("_") }}chk_five" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input type="checkbox" id="{{ prefix|default("_") }}chk_five" class="mdl-checkbox__input" />
+                <span class="mdl-checkbox__label">5%</span>
+            </label>
+            <label for="{{ prefix|default("_") }}chk_bau" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input type="checkbox" id="{{ prefix|default("_") }}chk_bau" class="mdl-checkbox__input" />
+                <span class="mdl-checkbox__label">BAU</span>
+            </label>
+        </form>
+    </div>
+</div>
+<script type="application/javascript">
+
+  Bokeh.custom.{{ prefix|default("_") }}select_scenario = function(scenario_names) {
+      var select = Bokeh.index['{{ plot_div.text.modelid }}'];
+      select.mset('value', scenario_names);
+      select.change_input();
+  };
+
+  Bokeh.custom.{{ prefix|default("_") }}form_change = function(form) {
+      var scenarios = '';
+      if ( form.{{ prefix|default("_") }}chk_three.checked ) {
+          scenarios = scenarios + 'three,';
+      }
+      if ( form.{{ prefix|default("_") }}chk_four.checked ) {
+          scenarios = scenarios + 'four,';
+      }
+      if ( form.{{ prefix|default("_") }}chk_five.checked ) {
+          scenarios = scenarios + 'five,';
+      }
+      if ( form.{{ prefix|default("_") }}chk_bau.checked ) {
+          scenarios = scenarios + 'bau,';
+      }
+      Bokeh.custom.{{ prefix|default("_") }}select_scenario(scenarios);
+  };
+
+</script>

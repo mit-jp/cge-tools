@@ -1,0 +1,245 @@
+html, body {
+  font-family: 'Helvetica', sans-serif;
+  height: 100%;
+  font-size: 12pt;
+}
+
+@media (max-width: 400px) {
+  html, body {
+    font-size: 9pt;
+  }
+}
+
+/* iOS Safari specific workaround */
+.mdl-layout__drawer .mdl-menu__container {
+  z-index: -1;
+}
+.mdl-layout__drawer .mdl-navigation {
+  z-index: -2;
+}
+/* END iOS Safari specific workaround */
+
+.drawer-header {
+  padding: 2em 1em 1em 1em;
+}
+
+.mdl-navigation {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.mdl-layout .mdl-navigation .mdl-navigation__link {
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.56);
+  font-weight: 500;
+}
+
+.mdl-layout .mdl-navigation .mdl-navigation__link.active,
+.mdl-layout .mdl-navigation .mdl-navigation__link:hover {
+  background-color: #00BCD4;
+  color: #37474F;
+}
+.mdl-layout .mdl-navigation .mdl-navigation__link:hover {
+  color: white;
+}
+
+.content {
+  min-width: 360px;
+  max-width: 1080px;
+}
+
+.drawer-button {
+  position: absolute;
+  font-size: 15px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  top: 5px;
+  left: 10px;
+  z-index: 20;
+  background-color: #37474F;
+  border-radius: 50%;
+  color: rgb(236, 239, 241);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .drawer-button {
+    display: none;
+  }
+}
+
+.mdl-checkbox__label {
+  font-size: inherit;
+}
+
+/* dl-dd-dt - used in heading text */
+.mdl-components-dl {
+  color: rgb(117, 117, 117);
+}
+
+.mdl-components-dt {
+  padding-left: 0.5em;
+}
+
+.mdl-components-dd {
+  padding: 0 0.5em 0 0;
+}
+
+.mdl-components-dd p {
+  line-height: 20px;
+  font-size: inherit;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+@media (min-width: 600px) {
+  .mdl-components-dl {
+    padding: 0.5em 0.5em 0 0.5em;
+  }
+
+  .mdl-components-dt {
+    padding-bottom: 0.5em;
+  }
+
+  .mdl-components-dd {
+    padding: 0 0 0.5em 0;
+  }
+}
+
+/* bokeh plots */
+.plotwrap {
+  position: relative;
+  width: 100%;
+}
+
+.plottitle {
+  padding: 1em 0em 0em 1em;
+}
+
+.plotdiv {
+  width: 98%;
+}
+
+/*
+ *
+ * MAIN BOKEH SETUP
+ *
+ */ 
+.bk-plot-wrapper table,
+.bk-plot-wrapper tr,
+.bk-plot-wrapper td {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.bk-canvas {
+  clear: both;
+  position: absolute;
+}
+
+.bk-canvas-wrapper {
+  position: relative;
+  float: left;
+}
+
+/*
+ *
+ * HOVER
+ *
+ */ 
+
+
+/* Bokeh - plain styling */
+.bk-tooltip {
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #1e4b6c;
+  background-color: #1e4b6c;
+  border-radius: 5px;
+  pointer-events: none;
+}
+.bk-tooltip.bk-left::before {
+  position: absolute;
+  margin: -7px 0 0 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 0;
+  border-color: transparent;
+  content: " ";
+  display: block;
+  left: -10px;
+  border-right-width: 10px;
+  border-right-color: #1e4b6c;
+}
+.bk-tooltip.bk-right::after {
+  position: absolute;
+  margin: -7px 0 0 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 0;
+  border-color: transparent;
+  content: " ";
+  display: block;
+  right: -10px;
+  border-left-width: 10px;
+  border-left-color: #1e4b6c;
+}
+.bk-tooltip.bk-tooltip-custom.bk-left::before {
+  border-right-color: black;
+}
+.bk-tooltip.bk-tooltip-custom.bk-right::after {
+  border-left-color: black;
+}
+.bk-tooltip.bk-tooltip-custom {
+  border-color: black;
+  background-color: white;
+}
+
+
+/* Custom hover styling */
+.bk-tooltip.bk-tooltip-custom {
+    background-color: black !important;
+    opacity: 0.9;
+    color: white;
+    font-size: 0.8em;
+    padding: 0.5em 1.5em;
+}
+
+.bk-tooltip.bk-tooltip-custom:before {
+    border: none !important;
+}
+
+.bk-tooltip.bk-tooltip-custom:after {
+    border: none !important;
+}
+
+.tooltip-text {
+    clear: both;
+    float: left;
+}
+.tooltip-text.country {
+    font-weight: bold;
+}
+.tooltip-text.value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #FFA500;
+}
+
+.mdl-card__title-text {
+  font-weight: 400;
+  font-size: 0.8em;
+  color: white;
+}

@@ -1,0 +1,36 @@
+{# 
+  This template expects:
+#}
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+  <h4 class="mdl-cell mdl-cell--12-col">Factors</h4>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.pop_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Population by province in 2030</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.col_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Share of coal in 2010</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.gdppercap_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">GDP per capita in 2010</figcaption> 
+  </div>
+</div>
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+  <h4 class="mdl-cell mdl-cell--12-col">Outcomes</h4>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.co2_delta_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Change in CO₂ emissions</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.exp_delta_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Change in population weighted PM2.5 exposure</figcaption> 
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <div class="plotdiv" id="{{ plot_div.gdp_delta_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Change in GDP</figcaption> 
+  </div>
+</div>
+
+{{ plot_script }}
+

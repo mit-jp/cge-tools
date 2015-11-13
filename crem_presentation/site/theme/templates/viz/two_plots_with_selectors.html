@@ -1,0 +1,31 @@
+{# 
+  This template expects:
+  - plot_div.plot1
+  - plot_div.plot2
+  - plot_div.text
+  - plot2_title
+  - plot_script
+
+  Optionally:
+  - plot1_title (default: CO2 emissions)
+  - prefix (default: _) - for namespacing javascript when there are multiple checkboxes on a page
+
+  Note plot_div.text is hidden as it is used in the background.
+#}
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--2-col-phone mdl-cell--3-col-tablet mdl-cell--5-col">
+  <div class="plotwrap">
+    <div class="plottitle">{{ plot1_title|default("CO₂ emissions") }}</div>
+    <div class="plotdiv" id="{{ plot_div.plot1.elementid }}"></div>
+  </div>
+</div>
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--1-col-phone mdl-cell--3-col-tablet mdl-cell--5-col">
+  <div class="plotwrap">
+    <div class="plottitle">{{ plot2_title }}</div>
+    <div class="plotdiv" id="{{ plot_div.plot2.elementid }}"></div>
+  </div>
+</div>
+
+<div class="hidden" id="{{ plot_div.text.elementid }}"></div>
+{{ plot_script }}
+
+{% include 'viz/scenario_selectors.html' %}

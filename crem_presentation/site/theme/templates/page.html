@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ SITENAME }} | {{ page.title|title }}{% endblock %}
+{% block section_title %}{{ page.title }}{% endblock %}
+{% block content %}        
+<div class="mdl-grid content">
+  <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+    <dl class="mdl-components-dl">
+            <dt class="mdl-components-dt uppercase">{{ page.title }}</dt>
+            <dd class="mdl-components-dd">{{ page.subtitle }}</dd>
+    </dl>
+  </div>
+
+  {# Note that viz_render method need to put its own divs in to encapsulate plot #}
+  {% if page.viz_rendered %}
+  {{ page.viz_rendered }}
+  {% endif %}
+
+  <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+    <dl class="mdl-components-dl">
+      <dt class="mdl-components-dt">
+        {{ page.bodytitle }}
+      </dt>
+      <dd class="mdl-components-dd">
+        {{ page.content }}
+      </dd>
+    </dl>
+  </div>
+
+  {# Note that viz_extra_render method need to put its own divs in to encapsulate plot #}
+  {% if page.viz_extra_rendered %}
+  {{ page.viz_extra_rendered }}
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -36,26 +36,26 @@ help:
 	@echo '                                                                       '
 
 html:
-	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
+	$(PELICAN) "$(INPUTDIR)" -o "$(OUTPUTDIR)" -s "$(CONFFILE)" $(PELICANOPTS)
 
 clean:
-	[ ! -d $(OUTPUTDIR) ] || rm -rf $(OUTPUTDIR)
+	[ ! -d "$(OUTPUTDIR)" ] || rm -rf "$(OUTPUTDIR)"
 
 regenerate:
-	$(PELICAN) -r $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
+	$(PELICAN) -r "$(INPUTDIR)" -o "$(OUTPUTDIR)" -s "$(CONFFILE)" $(PELICANOPTS)
 
 serve:
 ifdef PORT
-	cd $(OUTPUTDIR) && $(PY) -m pelican.server $(PORT)
+	cd "$(OUTPUTDIR)" && $(PY) -m pelican.server $(PORT)
 else
-	cd $(OUTPUTDIR) && $(PY) -m pelican.server
+	cd "$(OUTPUTDIR)" && $(PY) -m pelican.server
 endif
 
 devserver:
 ifdef PORT
-	$(BASEDIR)/develop_server.sh restart $(PORT)
+	"$(BASEDIR)/develop_server.sh" restart $(PORT)
 else
-	$(BASEDIR)/develop_server.sh restart
+	"$(BASEDIR)/develop_server.sh" restart
 endif
 
 stopserver:
@@ -64,13 +64,13 @@ stopserver:
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
 publish:
-	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
+	$(PELICAN) "$(INPUTDIR)" -o "$(OUTPUTDIR)" -s "$(PUBLISHCONF)" $(PELICANOPTS)
 
 ssh_upload: publish
-	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
-	scp -P $(SSH_PORT) $(OUTPUTDIR)/.htaccess $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	scp -P $(SSH_PORT) -r "$(OUTPUTDIR)/*" $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	scp -P $(SSH_PORT) "$(OUTPUTDIR)/.htaccess" $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
 athena_upload: publish
-	scp -o 'GSSAPIDelegateCredentials yes' -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	scp -o 'GSSAPIDelegateCredentials yes' -P $(SSH_PORT) -r "$(OUTPUTDIR)/*" $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload athena_upload

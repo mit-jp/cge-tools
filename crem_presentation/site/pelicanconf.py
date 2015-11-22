@@ -5,7 +5,8 @@ from __future__ import unicode_literals
 AUTHOR = 'CECP'
 SITENAME = 'C-REM'
 SITEURL = ''
-SITESUBTITLE = "Exploring the results of MIT's China Regional Energy Model (C-REM)."
+SITESUBTITLE = ("Exploring China’s future energy system—and its "
+    "environmental impacts")
 
 PATH = 'content'
 

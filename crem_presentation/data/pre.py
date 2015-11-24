@@ -32,7 +32,7 @@ get_ipython().run_cell_magic('bash', '', 'gams pre.gms --file=gdx/result_urban_e
 
 # ## 3. Read the GDX files
 
-# In[12]:
+# In[2]:
 
 # Load all the GDX files
 import csv
@@ -68,7 +68,7 @@ cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[13]:
+# In[3]:
 
 # List all the parameters available in each file
 #CREM.parameters()
@@ -82,7 +82,7 @@ def label(variable, desc, unit_long, unit_short):
                                    'unit_short': unit_short})
 
 
-# In[14]:
+# In[4]:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
@@ -100,7 +100,7 @@ label('GDP_delta', 'Change in gross domestic product relative to BAU',
       'percent', '%')
 
 
-# In[15]:
+# In[5]:
 
 # CO2 emissions
 temp = []
@@ -112,7 +112,7 @@ label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
 
 
-# In[16]:
+# In[6]:
 
 # Air pollutant emissions
 temp = []
@@ -129,7 +129,7 @@ for u in temp['urb']:
           'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[17]:
+# In[7]:
 
 # CO₂ price
 temp = []
@@ -140,7 +140,7 @@ label('CO2_price', 'Price of CO₂ emissions permit',
       '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[18]:
+# In[8]:
 
 # Consumption
 temp = []
@@ -170,31 +170,36 @@ e_name = {
     }
 for ener in temp['e']:
     var_name = '{}_energy'.format(ener.values)
-    arrays[var_name] = temp.sel(e=ener).drop('e')
+    # Convert non-fossil electrical energy to the raw quantity of coal needed
+    # to generate such amount of electricity:
+    arrays[var_name] = temp.sel(e=ener).drop('e') * (1. if ener in
+                                                     ['COL', 'GAS', 'OIL'] else
+                                                     0.356 / 0.12)
     label(var_name, 'Primary energy from {}'.format(e_name[str(ener.values)]),
           'millions of tonnes of coal equivalent', 'Mtce')
 
 # Sums and shares 
-arrays['energy_total'] = temp.sum('e')
-label('energy_total', 'Primary energy, total',
-      'millions of tonnes of coal equivalent', 'Mtce')
-
 arrays['energy_fossil'] = temp.sel(e=['COL', 'GAS', 'OIL']).sum('e')
 label('energy_fossil', 'Primary energy from fossil fuels',
       'millions of tonnes of coal equivalent', 'Mtce')
 
-arrays['energy_nonfossil'] = temp.sel(e=['NUC', 'WND', 'SOL', 'HYD']).sum('e')
+arrays['energy_nonfossil'] = (temp.sel(e=['NUC', 'WND', 'SOL', 'HYD']).sum('e')
+                              * 0.356 / 0.12)
 label('energy_nonfossil', 'Primary energy from non-fossil sources',
+      'millions of tonnes of coal equivalent', 'Mtce')
+
+arrays['energy_total'] = arrays['energy_fossil'] + arrays['energy_nonfossil']
+label('energy_total', 'Primary energy, total',
       'millions of tonnes of coal equivalent', 'Mtce')
 
 arrays['penergy_nonfossil_share'] = (arrays['energy_nonfossil'] /
     arrays['energy_total']) * 100
 label('penergy_nonfossil_share',
-      'Share of non-fossil sources in primary energy',
+      'Share of non-fossil sources in final energy',
       'percent', '%')
 
 
-# In[20]:
+# In[10]:
 
 # Reported share of NHW
 temp1 = []
@@ -209,7 +214,7 @@ label('energy_nonfossil_share',
 nhw_share = 100 * xray.concat(temp2, dim=cases)
 
 
-# In[21]:
+# In[11]:
 
 # Population
 temp = []
@@ -220,7 +225,7 @@ arrays['pop'] = xray.concat(temp, dim=cases).drop('g').sel(rs=CREM.set('r'))    
 label('pop', 'Population', 'millions', '10⁶')
 
 
-# In[22]:
+# In[12]:
 
 # Share of coal in production inputs
 temp = []
@@ -241,7 +246,7 @@ label('COL_share', 'Value share of coal in industrial production',
 # ### 3.1. PM2.5 concentrations & population-weighted exposure
 # **Note:** these are contained in a separate XLSX file, pm.xslx.
 
-# In[23]:
+# In[13]:
 
 # Open the workbook and worksheet
 wb = load_workbook('pm.xlsx', read_only=True)
@@ -291,7 +296,7 @@ for ws in wb:
         pm_extra[ws.title] = da
 
 
-# In[25]:
+# In[14]:
 
 df = pd.DataFrame([
     ['bau', '2010', 66.37],
@@ -314,7 +319,7 @@ label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
 
 # ### 3.2. Finish preprocessing
 
-# In[26]:
+# In[22]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
@@ -357,6 +362,8 @@ for nh3_case, base_case in zip(nh3_cases, base_cases):
 
 # National totals
 national = data.sum('r')
+national['penergy_nonfossil_share'] = (national['energy_nonfossil'] /
+                                       national['energy_total']) * 100
 national['energy_nonfossil_share'] = nhw_share
 national['PM25_exposed_frac'] = PM25_exposed_frac
 # FIXME use a proper national average
@@ -367,7 +374,7 @@ national['PM25_conc'] = data.PM25_conc.mean(dim='r')
 
 # ## 4. Output data
 
-# In[29]:
+# In[23]:
 
 # Output a file with scenario information
 data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),

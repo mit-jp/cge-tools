@@ -70,6 +70,5 @@ provinces = {
 energy_mix_columns = {
     'OIL_energy': 'Oil',
     'COL_energy': 'Coal',
-    'GAS_energy': 'Gas',
-    'energy_nonfossil': 'Non-fossil',
+    # 'NUC_energy' ...
 }

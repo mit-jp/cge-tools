@@ -4,7 +4,7 @@
 # # Data preparation for CECP CoP21 website
 # File locations:
 
-# In[136]:
+# In[1]:
 
 GDX_DIR = 'gdx'
 OUT_DIR = '../cecp-cop21-data'
@@ -25,14 +25,14 @@ get_ipython().run_cell_magic('bash', '', '# C-REM runs\ncrem gdx/result_urban_ex
 # ## 2. Preprocess the GDX files
 # Some of the quantities used below are stored in the GAMS parameters `report(*,*,*)` and `egyreport2(*,*,*,*)`, which pyGDX cannot handle. The cell below runs the simple GAMS script `pre.gms` to produce a new file named `*foo*_extra.gdx` with the pyGDX-friendly variables `ptcarb_t(t)`, `pe_t(e,r,t)` and `cons_t(r,t)`.
 
-# In[80]:
+# In[11]:
 
 get_ipython().run_cell_magic('bash', '', 'gams pre.gms --file=gdx/result_urban_exo\ngams pre.gms --file=gdx/result_cint_n_3\ngams pre.gms --file=gdx/result_cint_n_4\ngams pre.gms --file=gdx/result_cint_n_5\ngams pre.gms --file=gdx/result_urban_exo_lessGDP\ngams pre.gms --file=gdx/result_cint_n_3_lessGDP\ngams pre.gms --file=gdx/result_cint_n_4_lessGDP\ngams pre.gms --file=gdx/result_cint_n_5_lessGDP')
 
 
 # ## 3. Read the GDX files
 
-# In[147]:
+# In[12]:
 
 # Load all the GDX files
 import csv
@@ -41,6 +41,7 @@ from os import makedirs as mkdir
 from os.path import join
 
 import gdx
+from numpy import nan
 from openpyxl import load_workbook
 import pandas as pd
 import xray
@@ -67,7 +68,7 @@ cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[3]:
+# In[13]:
 
 # List all the parameters available in each file
 #CREM.parameters()
@@ -81,7 +82,7 @@ def label(variable, desc, unit_long, unit_short):
                                    'unit_short': unit_short})
 
 
-# In[138]:
+# In[14]:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
@@ -99,7 +100,7 @@ label('GDP_delta', 'Change in gross domestic product relative to BAU',
       'percent', '%')
 
 
-# In[139]:
+# In[15]:
 
 # CO2 emissions
 temp = []
@@ -111,7 +112,7 @@ label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
 
 
-# In[140]:
+# In[16]:
 
 # Air pollutant emissions
 temp = []
@@ -128,7 +129,7 @@ for u in temp['urb']:
           'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[141]:
+# In[17]:
 
 # CO₂ price
 temp = []
@@ -139,7 +140,7 @@ label('CO2_price', 'Price of CO₂ emissions permit',
       '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[142]:
+# In[18]:
 
 # Consumption
 temp = []
@@ -150,7 +151,7 @@ label('cons', 'Household consumption',
       'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[143]:
+# In[19]:
 
 # Primary energy
 temp = []
@@ -193,7 +194,7 @@ label('penergy_nonfossil_share',
       'percent', '%')
 
 
-# In[148]:
+# In[20]:
 
 # Reported share of NHW
 temp1 = []
@@ -208,7 +209,7 @@ label('energy_nonfossil_share',
 nhw_share = 100 * xray.concat(temp2, dim=cases)
 
 
-# In[10]:
+# In[21]:
 
 # Population
 temp = []
@@ -219,7 +220,7 @@ arrays['pop'] = xray.concat(temp, dim=cases).drop('g').sel(rs=CREM.set('r'))    
 label('pop', 'Population', 'millions', '10⁶')
 
 
-# In[11]:
+# In[22]:
 
 # Share of coal in production inputs
 temp = []
@@ -237,10 +238,10 @@ label('COL_share', 'Value share of coal in industrial production',
       '(unitless)', '0')
 
 
-# ### 3.1. PM2.5 concetrations & population-weighted exposure
+# ### 3.1. PM2.5 concentrations & population-weighted exposure
 # **Note:** these are contained in a separate XLSX file, pm.xslx.
 
-# In[128]:
+# In[23]:
 
 # Open the workbook and worksheet
 wb = load_workbook('pm.xlsx', read_only=True)
@@ -290,7 +291,7 @@ for ws in wb:
         pm_extra[ws.title] = da
 
 
-# In[129]:
+# In[25]:
 
 df = pd.DataFrame([
     ['bau', '2010', 66.37],
@@ -313,7 +314,7 @@ label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
 
 # ### 3.2. Finish preprocessing
 
-# In[150]:
+# In[26]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
@@ -356,8 +357,7 @@ for nh3_case, base_case in zip(nh3_cases, base_cases):
 
 # National totals
 national = data.sum('r')
-national['energy_nonfossil_share'] = (national.energy_nonfossil /
-    national.energy_total) * 100
+national['energy_nonfossil_share'] = nhw_share
 national['PM25_exposed_frac'] = PM25_exposed_frac
 # FIXME use a proper national average
 # Unweighted average across provincial averages
@@ -367,7 +367,7 @@ national['PM25_conc'] = data.PM25_conc.mean(dim='r')
 
 # ## 4. Output data
 
-# In[151]:
+# In[29]:
 
 # Output a file with scenario information
 data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),

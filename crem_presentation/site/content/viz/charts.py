@@ -73,17 +73,18 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
     plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
     return (plot, line_renderers)
 
+
 def get_nonfossil():
-    plot, line_renderers = get_national_scenario_line_plot(
+    plot, _ = get_national_scenario_line_plot(
         parameter='energy_nonfossil_share',
         y_ticks=[0, 20, 40],
-        plot_width=700,
+        plot_width=750,
         y_range=Range1d(0, 50),
         end_factor=5,
         include_bau=False
     )
-    print(line_renderers)
     return plot
+
 
 def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     plot = Plot(

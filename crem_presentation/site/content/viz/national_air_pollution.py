@@ -2,9 +2,9 @@
 from bokeh.embed import components
 from bokeh.models import CustomJS, TextInput
 
-from .charts import get_pm25_national_plot, get_co2_national_plot
 from .constants import scenarios
-from .utils import get_js_array, env
+from ._charts import get_pm25_national_plot, get_co2_national_plot
+from .__utils import get_js_array, env
 
 
 def render():

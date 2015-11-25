@@ -4,12 +4,8 @@ from bokeh.models import (
 )
 from bokeh.properties import value
 
-from .data import (
-    get_national_data,
-    get_lo_national_data,
-    get_pm25_national_data,
-)
-from .utils import get_y_range, get_year_range, add_axes
+from ._data import get_national_data, get_lo_national_data, get_pm25_national_data
+from .__utils import get_y_range, get_year_range, add_axes
 from .constants import scenarios_colors, names, scenarios_no_bau, scenarios, energy_mix_columns
 from .constants_styling import PLOT_FORMATS, deselected_alpha, dark_grey
 

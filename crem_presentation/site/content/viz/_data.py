@@ -169,5 +169,3 @@ def get_df_and_strip_2007_15_20_25(filename, read_props):
     df = pd.read_csv(filename, **read_props)
     df = df[(df.t == 2010) | (df.t == 2030)]
     return df
-
-

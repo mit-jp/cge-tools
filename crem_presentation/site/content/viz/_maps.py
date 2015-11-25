@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- #
 from bokeh.models import HoverTool, Patches
-from .data import (
+from ._data import (
     convert_provincial_dataframe_to_map_datasource,
     get_coal_share_in_2010_by_province,
     get_population_in_2030_by_province,
@@ -11,7 +11,7 @@ from .data import (
     get_pm25_2030_4_vs_bau_change_by_province,
 )
 from .constants import deep_orange
-from .utils import get_map_plot
+from .__utils import get_map_plot
 
 
 def get_co2_2030_4_vs_bau_change_map(plot_width=600):

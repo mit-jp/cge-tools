@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .data import get_energy_mix_for_all_scenarios
-from .charts import get_energy_mix_by_scenario, get_nonfossil
-from .utils import env
+from ._data import get_energy_mix_for_all_scenarios
+from ._charts import get_energy_mix_by_scenario, get_nonfossil
+from .__utils import env
 
 
 def render():

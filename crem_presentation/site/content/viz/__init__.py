@@ -2,35 +2,35 @@
 
 
 def render_air_pollution():
-    from .air_pollution import render
-    return render()
-
-
-def render_co2_by_province():
-    from .co2_by_province import render
-    return render()
-
-
-def render_health_impacts_by_province():
-    from .health_impacts_by_province import render
+    from .national_air_pollution import render
     return render()
 
 
 def render_energy_mix():
-    from .energy_mix import render
-    return render()
-
-
-def render_comparison_provincial():
-    from .comparison_provincial import render
+    from .national_energy_mix import render
     return render()
 
 
 def render_comparison_national():
-    from .comparison_national import render
+    from .national_comparison import render
     return render()
 
 
 def render_comparison_national_lo_growth():
-    from .comparison_national_lo_growth import render
+    from .national_comparison_economic import render
+    return render()
+
+
+def render_co2_by_province():
+    from .by_province_co2 import render
+    return render()
+
+
+def render_health_impacts_by_province():
+    from .by_province_health_impacts import render
+    return render()
+
+
+def render_comparison_provincial():
+    from .by_province_comparison import render
     return render()

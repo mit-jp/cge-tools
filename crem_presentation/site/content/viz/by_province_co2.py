@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .maps import get_co2_2030_4_vs_bau_change_map, get_col_2010_map
-from .utils import env
+from ._maps import get_co2_2030_4_vs_bau_change_map, get_col_2010_map
+from .__utils import env
 
 
 def render():

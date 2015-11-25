@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .maps import (
+from ._maps import (
     get_pm25_2030_4_vs_bau_change_map,
     get_2030_pm25_exposure_map,
 )
-from .utils import env
+from .__utils import env
 
 
 def render():

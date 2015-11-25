@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .maps import (
+from ._maps import (
     get_provincial_pop_2030_map,
     get_col_2010_map,
     get_gdp_2010_map,
@@ -9,7 +9,7 @@ from .maps import (
     get_pm25_2030_4_vs_bau_change_map,
     get_gdp_delta_in_2030_map,
 )
-from .utils import env
+from .__utils import env
 
 
 def render():

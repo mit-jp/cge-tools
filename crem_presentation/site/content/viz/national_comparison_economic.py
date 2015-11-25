@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .charts import (
+from ._charts import (
     get_pm25_national_plot,
     get_co2_national_plot,
     get_nonfossil,
     add_lo_economic_growth_lines,
 )
-from .utils import env
+from .__utils import env
 
 
 def render():

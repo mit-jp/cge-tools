@@ -2,6 +2,7 @@
 from .constants_styling import *
 
 scenarios = ['three', 'four', 'five', 'bau']
+scenarios_no_bau = ['three', 'four', 'five']
 
 names = {
     'three': '3%',

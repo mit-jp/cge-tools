@@ -5,12 +5,18 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .constants import provinces, scenarios, file_names, west, energy_mix_columns
+from .constants import provinces, scenarios, scenarios_no_bau, file_names, west, energy_mix_columns
 
 
 def get_df_and_strip_2007(filename, read_props):
     df = pd.read_csv(filename, **read_props)
     df = df[df.t != 2007]
+    return df
+
+
+def get_df_and_strip_2007_15_20_25(filename, read_props):
+    df = pd.read_csv(filename, **read_props)
+    df = df[(df.t == 2010) | (df.t == 2030)]
     return df
 
 
@@ -22,13 +28,29 @@ def get_national_data(parameter, include_bau):
     return _get_national_data(parameter, '../cecp-cop21-data/national/%s.csv', include_bau)
 
 
+def get_pm25_national_data():
+    filepath = '../cecp-cop21-data/national/%s.csv'
+    parameter = 'PM25_conc'
+    read_props = dict(usecols=['t', parameter])
+    sources = {}
+    data = []
+    for scenario in scenarios:
+        df = get_df_and_strip_2007_15_20_25(filepath % file_names[scenario], read_props)
+        sources[scenario] = ColumnDataSource(df)
+        data.extend(sources[scenario].data[parameter])
+    data = np.array(data)
+    return (sources, data)
+
+
 def _get_national_data(parameter, filepath, include_bau):
     read_props = dict(usecols=['t', parameter])
     sources = {}
     data = []
-    if not include_bau:
-        scenarios.pop(scenarios.index('bau'))
-    for scenario in scenarios:
+    if include_bau:
+        sc = scenarios
+    else:
+        sc = scenarios_no_bau
+    for scenario in sc:
         df = get_df_and_strip_2007(filepath % file_names[scenario], read_props)
         sources[scenario] = ColumnDataSource(df)
         data.extend(sources[scenario].data[parameter])
@@ -46,17 +68,6 @@ def get_energy_mix_for_all_scenarios():
         all_scenarios['t'] = df['t']
         for energy_mix_column in energy_mix_columns:
             all_scenarios['%s_%s' % (scenario, energy_mix_column)] = df[energy_mix_column]
-    return all_scenarios
-
-
-def get_nonfossil_energy_for_all_scenarios():
-    usecols = ['t', 'energy_nonfossil_share']
-    read_props = dict(usecols=usecols)
-    all_scenarios = pd.DataFrame()
-    for scenario in scenarios:
-        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
-        all_scenarios['t'] = df['t']
-        all_scenarios[scenario] = df['energy_nonfossil_share']
     return all_scenarios
 
 

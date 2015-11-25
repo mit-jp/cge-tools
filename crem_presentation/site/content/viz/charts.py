@@ -7,9 +7,10 @@ from bokeh.properties import value
 from .data import (
     get_national_data,
     get_lo_national_data,
+    get_pm25_national_data,
 )
 from .utils import get_y_range, get_year_range, add_axes
-from .constants import scenarios_colors, names, scenarios, energy_mix_columns
+from .constants import scenarios_colors, names, scenarios_no_bau, scenarios, energy_mix_columns
 from .constants_styling import PLOT_FORMATS, deselected_alpha, dark_grey
 
 
@@ -26,10 +27,10 @@ def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600
     assert y_ticks
 
     sources, data = get_national_data(parameter, include_bau)
-    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor, y_range)
+    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor, y_range, include_bau)
 
 
-def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None, y_range=None):
+def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None, y_range=None, include_bau=True):
     if not y_range:
         y_range = get_y_range(data)
 
@@ -42,7 +43,11 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
     plot = add_axes(plot, y_ticks, color=dark_grey, grid=grid)
     hit_renderers = []
     line_renderers = {}
-    for scenario in scenarios:
+    if include_bau:
+        sc = scenarios
+    else:
+        sc = scenarios_no_bau
+    for scenario in sc:
         source = sources[scenario]
         line = Line(
             x='t', y=parameter, line_color=scenarios_colors[scenario],
@@ -74,14 +79,25 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
     return (plot, line_renderers)
 
 
-def get_nonfossil():
+def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
+    sources, data = get_pm25_national_data()
+    y_ticks = [30, 40, 50, 60]
+    y_range = Range1d(30, 62)
+    return _get_national_scenario_line_plot(
+        sources, data, 'PM25_conc',
+        y_ticks=y_ticks, plot_width=plot_width, grid=grid, end_factor=end_factor, y_range=y_range
+    )
+
+
+def get_nonfossil(plot_width=750, end_factor=5, grid=True, include_bau=False):
     plot, _ = get_national_scenario_line_plot(
         parameter='energy_nonfossil_share',
         y_ticks=[0, 20, 40],
-        plot_width=750,
-        y_range=Range1d(0, 50),
-        end_factor=5,
-        include_bau=False
+        plot_width=plot_width,
+        y_range=Range1d(0, 45),
+        grid=grid,
+        end_factor=end_factor,
+        include_bau=include_bau
     )
     return plot
 

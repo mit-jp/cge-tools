@@ -256,7 +256,8 @@ html, body {
 }
 
 .energy-mix .unit {
-  margin-top: 8px;
+  margin-top: 10px;
+  margin-bottom: 5px;
   padding-left: 8px;
-  line-height: 1em;
+  line-height: 1.1em;
 }

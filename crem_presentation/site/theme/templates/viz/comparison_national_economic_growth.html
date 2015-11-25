@@ -2,9 +2,6 @@
   This template expects:
 #}
 <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
-    <div class="legend"><span class="legend-item"><span class="solid-line">------</span>  normal scenarios</span><span class="legend-item"> ---- 1% slower economic growth</span></div>
-  </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
     <div class="plotwrap">
       <div class="plottitle">CO₂ emissions, Mt</div>
@@ -22,6 +19,9 @@
       <div class="plottitle">Share of non-fossil sources in final energy, %</div>
       <div class="plotdiv" id="{{ plot_div.nonfossil.elementid }}"></div>
     </div>
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="legend"><span class="legend-item"><span class="solid-line">------</span>  normal scenarios</span><span class="legend-item"> ---- 1% slower economic growth</span></div>
   </div>
 </div>
 {{ plot_script }}

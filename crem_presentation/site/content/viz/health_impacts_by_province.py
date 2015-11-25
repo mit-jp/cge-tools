@@ -3,7 +3,6 @@ from bokeh.embed import components
 
 from .charts import get_provincial_scenario_line_plot
 from .maps import (
-    get_province_maps_by_parameter,
     get_provincial_pop_2030_map,
     get_provincial_pm25_conc_2030_map,
     get_provincial_pm25_exp_2030_map,

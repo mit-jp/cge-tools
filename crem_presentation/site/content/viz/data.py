@@ -5,7 +5,7 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .constants import provinces, scenarios, scenarios_no_bau, file_names, west, energy_mix_columns
+from .constants import provinces, scenarios, scenarios_no_bau, file_names, energy_mix_columns
 
 
 def get_df_and_strip_2007(filename, read_props):
@@ -84,16 +84,24 @@ def get_provincial_dataframes(parameter):
     return dfs
 
 
-def get_delta(df, parameter):
+def get_2010_to_2030_delta(df, parameter):
     df = df.set_index('t')
     start = df[parameter][2010]
     end = df[parameter][2030]
     return end - start
 
 
+def get_2030_4_vs_bau_delta(four, bau, parameter):
+    four = four.set_index('t')
+    bau = bau.set_index('t')
+    four = four[parameter][2030]
+    bau = bau[parameter][2030]
+    return bau - four
+
+
 def normalize_and_color(df, key_value, key_color, cmap_name):
     norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
-    norm_array = norm_array * 5  # Beef up the color
+    norm_array = norm_array * 2  # Beef up the color
     colormap = pyplot.get_cmap(cmap_name)
     norm_map = norm_array.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
@@ -103,41 +111,6 @@ def normalize_and_color(df, key_value, key_color, cmap_name):
 
 def get_empty_column():
     return np.zeros((len(provinces.keys()), 1), dtype=object)
-
-
-def get_provincial_dataframe_with_colored_parameter_delta(parameter):
-    dfs = get_provincial_dataframes(parameter)
-    df = pd.DataFrame({'region': list(provinces.values())}, index=provinces.keys())
-    data = []
-
-    df['delta'] = np.NaN
-
-    df['t'] = get_empty_column()
-    df[parameter] = get_empty_column()
-    df['text_x'] = get_empty_column()
-    df['text_y'] = get_empty_column()
-    for province in provinces.keys():
-        data.extend(dfs[province][parameter])
-
-        df.set_value(province, 'delta', get_delta(dfs[province], parameter))
-        df.set_value(province, 't', list(dfs[province].t.values))
-        df.set_value(province, parameter, list(dfs[province][parameter].values))
-        df.set_value(province, 'text_x', 2030.2)
-        df.set_value(province, 'text_y', list(dfs[province][parameter].values)[-1])
-
-    data = np.array(data)
-
-    df['region_val'] = df.groupby('region').delta.transform('mean')
-
-    # Get colors for the normalized deltas
-    df = normalize_and_color(df, 'delta', 'delta_color', 'Greys')
-    df = normalize_and_color(df, 'region_val', 'region_color', 'Greys')
-
-    # Add in a 'No Data' row for tibet
-    df.loc['XZ', 'delta'] = 'No Data'
-    df.loc['XZ', 'region'] = west
-
-    return df, data
 
 
 def convert_provincial_dataframe_to_map_datasource(df):
@@ -170,16 +143,20 @@ def get_gdp_per_capita_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
 
 
-def get_co2_change_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'GDP')
+def get_co2_2010_to_2030_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'CO2_emi')
+
+
+def get_co2_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'CO2_emi')
 
 
 def get_pm25_exposure_change_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'PM25_exposure')
+    return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'PM25_exposure')
 
 
 def get_gdp_delta_change_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_change_in_provincial_data(prefix, cmap_name, 'GDP_delta')
+    return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'GDP_delta')
 
 
 def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index):
@@ -204,7 +181,7 @@ def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_
     return df
 
 
-def get_dataframe_of_change_in_provincial_data(prefix, cmap_name, parameter):
+def get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, parameter):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -217,7 +194,29 @@ def get_dataframe_of_change_in_provincial_data(prefix, cmap_name, parameter):
     # Populate the values
     for province in province_list:
         four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
-        df[key_value][province] = get_delta(four, parameter)
+        df[key_value][province] = get_2010_to_2030_delta(four, parameter)
+
+    df = normalize_and_color(df, key_value, key_color, cmap_name)
+    df.loc['XZ', key_value] = 'No Data'
+    df.loc['XZ', key_color] = 'white'
+    return df
+
+
+def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, parameter):
+    read_props = dict(usecols=['t', parameter])
+    key_value = '%s_val' % prefix
+    key_color = '%s_color' % prefix
+
+    province_list = provinces.keys()
+    n = len(province_list)
+    # Create a null dataframe
+    df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
+
+    # Populate the values
+    for province in province_list:
+        four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
+        bau = get_df_and_strip_2007('../cecp-cop21-data/%s/bau.csv' % province, read_props)
+        df[key_value][province] = get_2030_4_vs_bau_delta(four, bau, parameter)
 
     df = normalize_and_color(df, key_value, key_color, cmap_name)
     df.loc['XZ', key_value] = 'No Data'

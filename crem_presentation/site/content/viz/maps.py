@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*- #
-import pandas as pd
 from bokeh.models import HoverTool, TapTool, Patches, CustomJS
 from .data import (
-    get_provincial_dataframe_with_colored_parameter_delta,
     convert_provincial_dataframe_to_map_datasource,
     get_coal_share_in_2010_by_province,
     get_population_in_2030_by_province,
@@ -10,41 +8,12 @@ from .data import (
     get_pm25_exposure_in_2030_by_province,
     get_gdp_per_capita_in_2010_by_province,
     get_gdp_delta_change_by_province,
-    get_co2_change_by_province,
+    get_co2_2010_to_2030_change_by_province,
+    get_co2_2030_4_vs_bau_change_by_province,
     get_pm25_exposure_change_by_province,
 )
 from .constants import deep_orange
 from .utils import get_map_plot, get_js_array
-
-
-def get_province_maps_by_parameter(parameter, parameter_name, plot_width=600):
-    parameter_df, data = get_provincial_dataframe_with_colored_parameter_delta(parameter)
-    coal_df = get_coal_share_in_2010_by_province(prefix='col_2010')
-    df = pd.concat([parameter_df, coal_df], axis=1)
-
-    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-
-    province_map = _get_provincial_map(
-        plot_width, source, tibet_source, fill_color='delta_color'
-    )
-    region_map = _get_provincial_map(
-        plot_width, source, tibet_source, fill_color='region_color', selected_line_color=None,
-        selected_fill_color=deep_orange, background=True, line_color=None
-    )
-    col_province_map = _get_provincial_map(
-        plot_width, source, tibet_source, fill_color='col_2010_color', selected_line_color='white'
-    )
-
-    # Add Tools
-    tooltips = "<span class='tooltip-text country'>@name_en</span>"
-    province_tooltips = tooltips + "<span class='tooltip-text year'>Change in %s: @delta</span>" % parameter_name
-    province_map.add_tools(HoverTool(tooltips=province_tooltips))
-    region_tooltips = tooltips + "<span class='tooltip-text year'>@region</span>"
-    region_map.add_tools(HoverTool(tooltips=region_tooltips))
-    col_province_tooltips = tooltips + "<span class='tooltip-text year'>Coal share in 2010: @col_2010_val</span>"
-    col_province_map.add_tools(HoverTool(tooltips=col_province_tooltips))
-
-    return region_map, province_map, col_province_map, source, data
 
 
 def get_provincial_pop_2030_map(plot_width=600):
@@ -69,7 +38,7 @@ def get_provincial_pm25_exp_2030_map(plot_width=600):
 def get_col_2010_map(plot_width=600):
     df = get_coal_share_in_2010_by_province(prefix='col_2010')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, fill_color='col_2010_color')
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='col_2010_color', tooltip_text='Coal share: @col_2010_val')
 
 
 def get_gdp_per_capita_2010_map(plot_width=600):
@@ -78,10 +47,16 @@ def get_gdp_per_capita_2010_map(plot_width=600):
     return _get_provincial_map(plot_width, source, tibet_source, fill_color='gdppercap_2010_color')
 
 
-def get_co2_change_map(plot_width=600):
-    df = get_co2_change_by_province(prefix='co2_change', cmap_name='Oranges')
+def get_co2_2010_to_2030_change_map(plot_width=600):
+    df = get_co2_2010_to_2030_change_by_province(prefix='co2_change', cmap_name='Oranges')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, fill_color='co2_change_color')
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val')
+
+
+def get_co2_2030_4_vs_bau_change_map(plot_width=600):
+    df = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val')
 
 
 def get_pm25_exposure_change_map(plot_width=600):
@@ -156,6 +131,7 @@ def _get_provincial_map(
     selected_fill_color=None, background=False,
     line_color='black', line_width=0.5,
     selected_line_color=deep_orange, selected_line_width=1,
+    tooltip_text=''
 ):
     assert plot_width
     assert source
@@ -176,17 +152,12 @@ def _get_provincial_map(
     provinces = Patches(
         xs='xs', ys='ys', fill_color=fill_color, line_color=line_color, line_width=line_width, line_join='round',
     )
-    provinces_selected = Patches(
-        xs='xs', ys='ys', fill_color=selected_fill_color, line_color=selected_line_color, line_width=selected_line_width, line_join='round',
-    )
-
-    patches_renderer = p_map.add_glyph(
-        source, provinces, nonselection_glyph=provinces, selection_glyph=provinces_selected
-    )
-
+    p_map.add_glyph(source, provinces)
     tibet = Patches(
         xs='xs', ys='ys', fill_color='white', line_color='gray', line_dash='dashed', line_width=0.5,
     )
     p_map.add_glyph(tibet_source, tibet)
-    p_map.add_tools(TapTool(renderers=[patches_renderer]))
+    tooltips = "<span class='tooltip-text'>@name_en</span>"
+    tooltips = tooltips + "<span class='tooltip-text'>%s</span>" % tooltip_text
+    p_map.add_tools(HoverTool(tooltips=tooltips))
     return p_map

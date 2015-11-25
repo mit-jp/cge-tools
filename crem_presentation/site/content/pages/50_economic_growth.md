@@ -1,5 +1,5 @@
 Title: Economic growth
-SubTitleHead: Slower economic growth means an earlier CO2 emissions peak, less expansion of non-fossil energy 
+SubTitleHead: Slower economic growth means an earlier CO₂ emissions peak, less expansion of non-fossil energy 
 SubTitle: If economic growth is 1 percentage point slower in every year through 2030, relative to the baseline scenario, an emissions peak is achieved earlier for a given level of policy stringency.
 Date: 2015-10-05
 Viz: comparison_national_lo_growth

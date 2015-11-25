@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
 
-from .charts import get_national_scenario_line_plot, get_pm25_national_plot, get_nonfossil
+from .charts import get_co2_national_plot, get_pm25_national_plot, get_nonfossil
 from .utils import env
 
 
 def render():
     plot_params = dict(plot_width=700, grid=True, end_factor=6)
-    co2, _ = get_national_scenario_line_plot(parameter='CO2_emi', y_ticks=[7000, 10000, 13000, 16000], **plot_params)
+    co2, _ = get_co2_national_plot(**plot_params)
     pm25, _ = get_pm25_national_plot(**plot_params)
     nonfossil = get_nonfossil(include_bau=True, **plot_params)
     template = env.get_template('viz/comparison_national.html')

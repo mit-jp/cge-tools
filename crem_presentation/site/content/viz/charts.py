@@ -14,14 +14,6 @@ from .constants import scenarios_colors, names, scenarios_no_bau, scenarios, ene
 from .constants_styling import PLOT_FORMATS, deselected_alpha, dark_grey
 
 
-def get_lo_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None, y_range=None, include_bau=True):
-    assert parameter
-    assert y_ticks
-
-    sources, data = get_lo_national_data(parameter, include_bau)
-    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor, y_range)
-
-
 def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=10, y_range=None, include_bau=True):
     assert parameter
     assert y_ticks
@@ -64,7 +56,7 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
             line_color=None, fill_color=None
         )
         scenario_label = Text(
-            x=value(source.data['t'][-1] + 1), y=value(source.data[parameter][-1]), text=value(names[scenario]),
+            x=value(source.data['t'][-1] + 0.8), y=value(source.data[parameter][-1] * 0.98), text=value(names[scenario]),
             text_color=scenarios_colors[scenario], text_font_size="8pt",
         )
 
@@ -79,6 +71,20 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
     return (plot, line_renderers)
 
 
+def add_lo_economic_growth_lines(plot, parameter):
+    sources, _ = get_lo_national_data(parameter)
+    line_renderers = {}
+    for scenario in scenarios:
+        source = sources[scenario]
+        line = Line(
+            x='t', y=parameter, line_color=scenarios_colors[scenario],
+            line_width=2, line_cap='round', line_join='round', line_dash='dashed'
+        )
+        line_renderer = plot.add_glyph(source, line)
+        line_renderers[scenario] = line_renderer
+    return (plot, line_renderers)
+
+
 def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
     sources, data = get_pm25_national_data()
     y_ticks = [30, 40, 50, 60]
@@ -89,12 +95,23 @@ def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
     )
 
 
+def get_co2_national_plot(plot_width=600, end_factor=None, grid=True, include_bau=True):
+    sources, data = get_national_data('CO2_emi', include_bau)
+    y_ticks = [7000, 10000, 13000, 16000]
+    y_range = Range1d(7000, 16500)
+    return _get_national_scenario_line_plot(
+        sources, data, 'CO2_emi',
+        y_ticks=y_ticks, plot_width=plot_width, grid=grid,
+        end_factor=end_factor, y_range=y_range, include_bau=include_bau
+    )
+
+
 def get_nonfossil(plot_width=750, end_factor=5, grid=True, include_bau=False):
     plot, _ = get_national_scenario_line_plot(
         parameter='energy_nonfossil_share',
-        y_ticks=[0, 20, 40],
+        y_ticks=[10, 15, 20, 25],
         plot_width=plot_width,
-        y_range=Range1d(0, 45),
+        y_range=Range1d(8, 29),
         grid=grid,
         end_factor=end_factor,
         include_bau=include_bau

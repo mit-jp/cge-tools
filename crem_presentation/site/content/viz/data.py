@@ -20,8 +20,8 @@ def get_df_and_strip_2007_15_20_25(filename, read_props):
     return df
 
 
-def get_lo_national_data(parameter, include_bau):
-    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv', include_bau)
+def get_lo_national_data(parameter):
+    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv', include_bau=True)
 
 
 def get_national_data(parameter, include_bau):

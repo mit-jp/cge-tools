@@ -2,7 +2,7 @@
 from bokeh.embed import components
 from bokeh.models import CustomJS, TextInput
 
-from .charts import get_national_scenario_line_plot, get_pm25_national_plot
+from .charts import get_pm25_national_plot, get_co2_national_plot
 from .constants import scenarios
 from .utils import get_js_array, env
 
@@ -24,13 +24,8 @@ def render():
 def get():
     plot_width = 900
     end_factor = 5
-    ap_plot, ap_line_renderers = get_pm25_national_plot(plot_width=plot_width)
-    co2_plot, co2_line_renderers = get_national_scenario_line_plot(
-        parameter='CO2_emi',
-        y_ticks=[7000, 11000, 15000],
-        plot_width=plot_width,
-        end_factor=end_factor,
-    )
+    ap_plot, ap_line_renderers = get_pm25_national_plot(plot_width=plot_width, end_factor=end_factor)
+    co2_plot, co2_line_renderers = get_co2_national_plot(plot_width=plot_width, end_factor=end_factor)
     prefixed_line_renderers = {}
     for key in scenarios:
         prefixed_line_renderers['ap_%s' % key] = ap_line_renderers[key]

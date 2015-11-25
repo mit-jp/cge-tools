@@ -99,6 +99,18 @@ html, body {
   text-transform: uppercase;
 }
 
+.legend {
+  margin: auto;
+  text-align: center;
+}
+.legend-item {
+  margin-left: 20px;
+}
+
+.solid-line {
+ letter-spacing: -2px; 
+}
+
 @media (min-width: 600px) {
   .mdl-components-dl {
     padding: 0.5em 0.5em 0 0.5em;

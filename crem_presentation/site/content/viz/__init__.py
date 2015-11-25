@@ -6,18 +6,8 @@ def render_co2_by_scenario():
     return render()
 
 
-def render_air_pollution_1():
-    from .air_pollution import render_1
-    return render_1()
-
-
-def render_air_pollution_2():
-    from .air_pollution import render_2
-    return render_2()
-
-
-def render_health_impacts():
-    from .health_impacts import render
+def render_air_pollution():
+    from .air_pollution import render
     return render()
 
 

@@ -120,11 +120,13 @@ html, body {
 }
 
 .plottitle {
+  font-size: 80%;
   padding: 1em 0em 0em 1em;
 }
 
 .plotdiv {
-  width: 98%;
+  margin-left: 10px;
+  width: 95%;
 }
 
 /*
@@ -249,9 +251,12 @@ html, body {
   padding: 0;
 }
 
+.energy-mix .plotdiv {
+  margin-left: 0px;
+}
+
 .energy-mix .unit {
   margin-top: 8px;
-  margin-bottom: -5px;
   padding-left: 14px;
   font-weight: 400;
 }

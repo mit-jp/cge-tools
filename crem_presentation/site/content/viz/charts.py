@@ -87,8 +87,8 @@ def get_nonfossil():
 
 def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     plot = Plot(
-        x_range=get_year_range(end_factor=12),
-        y_range=Range1d(0, 4200),
+        x_range=get_year_range(end_factor=15),
+        y_range=Range1d(0, 4300),
         plot_width=plot_width,
         **PLOT_FORMATS
     )

@@ -68,3 +68,6 @@ energy_mix_columns = {
     'GAS_energy': 'Gas',
     'energy_nonfossil': 'Non-fossil',
 }
+
+map_legend_x = 73
+map_legend_y = 53

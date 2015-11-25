@@ -23,6 +23,7 @@ def get_map_plot(plot_width):
         plot_height=plot_height,
         **PLOT_FORMATS
     )
+    map_params.update(min_border_bottom=10)
     return Plot(**map_params)
 
 

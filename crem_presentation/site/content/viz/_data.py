@@ -5,7 +5,9 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from matplotlib import pyplot
 from matplotlib.colors import rgb2hex
-from .constants import provinces, scenarios, scenarios_no_bau, file_names, energy_mix_columns
+from .constants import (
+    provinces, scenarios, scenarios_no_bau, file_names, energy_mix_columns, map_legend_x
+)
 
 
 def get_lo_national_data(parameter):
@@ -87,10 +89,10 @@ def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 
-    df = normalize_and_color(df, key_value, key_color, cmap_name, boost_factor)
+    df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name, boost_factor)
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
-    return df
+    return (df, legend_data)
 
 
 def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, parameter):
@@ -109,10 +111,10 @@ def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 
         bau = get_df_and_strip_2007('../cecp-cop21-data/%s/bau.csv' % province, read_props)
         df[key_value][province] = get_2030_4_vs_bau_delta(four, bau, parameter)
 
-    df = normalize_and_color(df, key_value, key_color, cmap_name)
+    df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name)
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
-    return df
+    return (df, legend_data)
 
 
 def _get_national_data(parameter, filepath, include_bau):
@@ -139,6 +141,19 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
     return bau - four
 
 
+def build_legend_data(df, key_value, colormap, boost_factor):
+    val_min = df[key_value].min()
+    val_max = df[key_value].max()
+    vals = pd.Series(np.linspace(val_min, val_max, num=100))
+    norm_vals = vals / (np.linalg.norm(df[key_value]))
+    norm_vals = norm_vals * boost_factor
+    norm_map = norm_vals.apply(colormap)
+    norm_hex = norm_map.apply(rgb2hex)
+    df = pd.DataFrame({'vals': vals, 'color': norm_hex})
+    df['x'] = (df.index / 4) + map_legend_x
+    return df
+
+
 def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=5):
     norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
     norm_array = norm_array * boost_factor
@@ -146,11 +161,12 @@ def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=5):
     norm_map = norm_array.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
     df[key_color] = norm_hex
-    return df
+    legend_data = build_legend_data(df, key_value, colormap, boost_factor)
+    return (df, legend_data)
 
 
 def convert_provincial_dataframe_to_map_datasource(df):
-    province_info = pd.read_hdf('content/viz/province_map_data_simplified.hdf', 'df')
+    province_info = pd.read_hdf('content/viz/__province_map_data_simplified.hdf', 'df')
     province_info = province_info.set_index('alpha')
 
     map_df = pd.concat([df, province_info], axis=1)

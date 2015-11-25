@@ -99,9 +99,9 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
     return bau - four
 
 
-def normalize_and_color(df, key_value, key_color, cmap_name):
+def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=5):
     norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
-    norm_array = norm_array * 2  # Beef up the color
+    norm_array = norm_array * boost_factor
     colormap = pyplot.get_cmap(cmap_name)
     norm_map = norm_array.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
@@ -131,6 +131,10 @@ def get_population_in_2030_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2030)
 
 
+def get_gdp_delta_in_2030_by_province(prefix, cmap_name='Blues', boost_factor=None):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP_delta', 2030, boost_factor)
+
+
 def get_pm25_conc_in_2030_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_conc', 2030)
 
@@ -139,7 +143,7 @@ def get_pm25_exposure_in_2030_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030)
 
 
-def get_gdp_per_capita_in_2010_by_province(prefix, cmap_name='Blues'):
+def get_gdp_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
 
 
@@ -167,7 +171,7 @@ def get_gdp_delta_change_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'GDP_delta')
 
 
-def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index):
+def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=5):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -183,7 +187,7 @@ def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 
-    df = normalize_and_color(df, key_value, key_color, cmap_name)
+    df = normalize_and_color(df, key_value, key_color, cmap_name, boost_factor)
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
     return df

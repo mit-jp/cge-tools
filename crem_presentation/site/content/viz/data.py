@@ -143,6 +143,10 @@ def get_gdp_per_capita_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
 
 
+def get_2030_pm25_exposure_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030)
+
+
 def get_co2_2010_to_2030_change_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'CO2_emi')
 
@@ -153,6 +157,10 @@ def get_co2_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
 
 def get_pm25_exposure_change_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_2010_to_2030_change_in_provincial_data(prefix, cmap_name, 'PM25_exposure')
+
+
+def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc')
 
 
 def get_gdp_delta_change_by_province(prefix, cmap_name='Blues'):

@@ -10,6 +10,8 @@ from .data import (
     get_gdp_delta_change_by_province,
     get_co2_2010_to_2030_change_by_province,
     get_co2_2030_4_vs_bau_change_by_province,
+    get_2030_pm25_exposure_by_province,
+    get_pm25_2030_4_vs_bau_change_by_province,
     get_pm25_exposure_change_by_province,
 )
 from .constants import deep_orange
@@ -47,6 +49,12 @@ def get_gdp_per_capita_2010_map(plot_width=600):
     return _get_provincial_map(plot_width, source, tibet_source, fill_color='gdppercap_2010_color')
 
 
+def get_2030_pm25_exposure_map(plot_width=600):
+    df = get_2030_pm25_exposure_by_province(prefix='pm25exposure_2030', cmap_name='Purples')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25exposure_2030_color', tooltip_text='Weighted exposure: @pm25exposure_2030_val μg/m³')
+
+
 def get_co2_2010_to_2030_change_map(plot_width=600):
     df = get_co2_2010_to_2030_change_by_province(prefix='co2_change', cmap_name='Oranges')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
@@ -57,6 +65,12 @@ def get_co2_2030_4_vs_bau_change_map(plot_width=600):
     df = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
     return _get_provincial_map(plot_width, source, tibet_source, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val')
+
+
+def get_pm25_2030_4_vs_bau_change_map(plot_width=600):
+    df = get_pm25_2030_4_vs_bau_change_by_province(prefix='pm25_change', cmap_name='Greens')
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    return _get_provincial_map(plot_width, source, tibet_source, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val')
 
 
 def get_pm25_exposure_change_map(plot_width=600):

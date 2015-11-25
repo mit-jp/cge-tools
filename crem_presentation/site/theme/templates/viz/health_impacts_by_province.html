@@ -1,30 +1,17 @@
 {# 
   This template expects:
 #}
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--5-col-tablet mdl-grid">
-  <div class="plotwrap">
-    <div class="plottitle">Population weighted PM2.5 exposure</div>
-    <div class="plotdiv" id="{{ plot_div.plot.elementid }}"></div>
-  </div>
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-grid mdl-cell--6-col mdl-cell--5-col-tablet">
   <div class="mdl-color--white mdl-cell mdl-cell--12-col">
-    <figcaption class="mdl-typography--caption">All data shown is for the 4%/year policy scenario</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.pm25_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">2030 reduction in PM2.5 exposure in 4% scenario compared to `No policy` scenario, μg/m³</figcaption> 
   </div>
 </div>
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--3-col-tablet mdl-grid">
+
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-grid mdl-cell--6-col mdl-cell--5-col-tablet">
   <div class="mdl-color--white mdl-cell mdl-cell--12-col">
-  <figcaption class="mdl-typography--caption">Click on provinces to highlight, and outside map to deselect.</figcaption> 
-  </div>
-  <div class="mdl-color--white mdl-cell mdl-cell--6-col">
-    <div class="plotdiv" id="{{ plot_div.region_map.elementid }}"></div>
-    <figcaption class="mdl-typography--caption">Regional change in PM2.5 exposure</figcaption> 
-  </div>
-  <div class="mdl-color--white mdl-cell mdl-cell--6-col">
-    <div class="plotdiv" id="{{ plot_div.col_province_map.elementid }}"></div>
-    <figcaption class="mdl-typography--caption">Coal share in 2010</figcaption> 
-  </div>
-  <div class="mdl-color--white mdl-cell mdl-cell--12-col">
-    <div class="plotdiv" id="{{ plot_div.province_map.elementid }}"></div>
-    <figcaption class="mdl-typography--caption">Provincial change in PM2.5 exposure</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.exposure_map.elementid }}"></div>
+    <figcaption class="mdl-typography--caption">Population-weighted exposure to PM2.5 μg/m³ in 2030 under 4% scenario</figcaption> 
   </div>
 </div>
 

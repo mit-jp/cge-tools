@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- #
 from bokeh.models import (
-    Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource, MultiLine,
+    Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource
 )
 from bokeh.properties import value
 
@@ -159,22 +159,3 @@ def get_energy_mix_by_scenario(df, scenario, plot_width=700):
 
     plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
     return plot
-
-
-def get_provincial_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, source=None, data=None):
-    plot = Plot(
-        x_range=get_year_range(end_factor=2), y_range=Range1d(0, data.max() * 1.10),
-        plot_width=plot_width, **PLOT_FORMATS
-    )
-    plot = add_axes(plot, y_ticks)
-    line = MultiLine(
-        xs='t', ys=parameter, line_color='col_2010_color',
-        line_width=2, line_cap='round', line_join='round', line_alpha=0.8,
-    )
-    province_label = Text(
-        x='text_x', y='text_y', text='index', text_color='col_2010_color',
-        text_font_size='8pt', text_alpha=0.8,
-    )
-    plot.add_glyph(source, line)
-    plot.add_glyph(source, province_label)
-    return (plot, source)

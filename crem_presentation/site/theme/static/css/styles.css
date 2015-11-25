@@ -243,3 +243,15 @@ html, body {
   font-size: 0.8em;
   color: white;
 }
+
+.energy-mix .mdl-card__supporting-text {
+  width: 95%;
+  padding: 0;
+}
+
+.energy-mix .unit {
+  margin-top: 8px;
+  margin-bottom: -5px;
+  padding-left: 14px;
+  font-weight: 400;
+}

@@ -14,18 +14,20 @@ def get_df_and_strip_2007(filename, read_props):
     return df
 
 
-def get_lo_national_data(parameter):
-    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv')
+def get_lo_national_data(parameter, include_bau):
+    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv', include_bau)
 
 
-def get_national_data(parameter):
-    return _get_national_data(parameter, '../cecp-cop21-data/national/%s.csv')
+def get_national_data(parameter, include_bau):
+    return _get_national_data(parameter, '../cecp-cop21-data/national/%s.csv', include_bau)
 
 
-def _get_national_data(parameter, filepath):
+def _get_national_data(parameter, filepath, include_bau):
     read_props = dict(usecols=['t', parameter])
     sources = {}
     data = []
+    if not include_bau:
+        scenarios.pop(scenarios.index('bau'))
     for scenario in scenarios:
         df = get_df_and_strip_2007(filepath % file_names[scenario], read_props)
         sources[scenario] = ColumnDataSource(df)
@@ -44,6 +46,17 @@ def get_energy_mix_for_all_scenarios():
         all_scenarios['t'] = df['t']
         for energy_mix_column in energy_mix_columns:
             all_scenarios['%s_%s' % (scenario, energy_mix_column)] = df[energy_mix_column]
+    return all_scenarios
+
+
+def get_nonfossil_energy_for_all_scenarios():
+    usecols = ['t', 'energy_nonfossil_share']
+    read_props = dict(usecols=usecols)
+    all_scenarios = pd.DataFrame()
+    for scenario in scenarios:
+        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
+        all_scenarios['t'] = df['t']
+        all_scenarios[scenario] = df['energy_nonfossil_share']
     return all_scenarios
 
 

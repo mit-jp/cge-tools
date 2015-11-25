@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*- #
-teal = '#009688'
+teal = '#48B4AC'
 green = '#4CAF50'
 orange = '#FF9800'
-deep_orange = '#FF5722'
-purple = '#9C27B0'
+deep_orange = '#FF8D64'
+purple = '#BC6FC8'
 deep_purple = '#673AB7'
 grey = '#9E9E9E'
 indigo = '#3F51B5'

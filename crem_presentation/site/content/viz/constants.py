@@ -7,7 +7,7 @@ names = {
     'three': '3%',
     'four': '4%',
     'five': '5%',
-    'bau': 'BAU'
+    'bau': 'No policy'
 }
 
 file_names = {
@@ -25,8 +25,8 @@ scenarios_colors = {
     'three_nh3': teal,
     'four': deep_orange,
     'four_nh3': deep_orange,
-    'five': deep_purple,
-    'five_nh3': deep_purple,
+    'five': purple,
+    'five_nh3': purple,
     'bau': grey
 }
 

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*- #
-import numpy as np
 from bokeh.models import (
     Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource, MultiLine,
 )
@@ -11,44 +10,43 @@ from .data import (
 )
 from .utils import get_y_range, get_year_range, add_axes
 from .constants import scenarios_colors, names, scenarios, energy_mix_columns
-from .constants_styling import PLOT_FORMATS, deselected_alpha
+from .constants_styling import PLOT_FORMATS, deselected_alpha, dark_grey
 
 
-def get_lo_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
+def get_lo_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None, y_range=None, include_bau=True):
     assert parameter
     assert y_ticks
 
-    sources, data = get_lo_national_data(parameter)
-    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor)
+    sources, data = get_lo_national_data(parameter, include_bau)
+    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor, y_range)
 
 
-def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
+def get_national_scenario_line_plot(parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=10, y_range=None, include_bau=True):
     assert parameter
     assert y_ticks
 
-    sources, data = get_national_data(parameter)
-    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor)
+    sources, data = get_national_data(parameter, include_bau)
+    return _get_national_scenario_line_plot(sources, data, parameter, y_ticks, plot_width, grid, end_factor, y_range)
 
 
-def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None):
+def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None, plot_width=600, grid=True, end_factor=None, y_range=None):
+    if not y_range:
+        y_range = get_y_range(data)
+
     plot = Plot(
         x_range=get_year_range(end_factor),
-        y_range=get_y_range(data),
+        y_range=y_range,
         plot_width=plot_width,
         **PLOT_FORMATS
     )
-    plot = add_axes(plot, y_ticks, grid=grid)
+    plot = add_axes(plot, y_ticks, color=dark_grey, grid=grid)
     hit_renderers = []
     line_renderers = {}
     for scenario in scenarios:
         source = sources[scenario]
-        if scenario == 'four':
-            line_alpha = 0.8
-        else:
-            line_alpha = deselected_alpha
         line = Line(
             x='t', y=parameter, line_color=scenarios_colors[scenario],
-            line_width=2, line_cap='round', line_join='round', line_alpha=line_alpha
+            line_width=2, line_cap='round', line_join='round'
         )
         circle = Circle(
             x='t', y=parameter, size=4,
@@ -75,15 +73,26 @@ def _get_national_scenario_line_plot(sources, data, parameter=None, y_ticks=None
     plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
     return (plot, line_renderers)
 
+def get_nonfossil():
+    plot, line_renderers = get_national_scenario_line_plot(
+        parameter='energy_nonfossil_share',
+        y_ticks=[0, 20, 40],
+        plot_width=700,
+        y_range=Range1d(0, 50),
+        end_factor=5,
+        include_bau=False
+    )
+    print(line_renderers)
+    return plot
 
 def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     plot = Plot(
-        x_range=get_year_range(end_factor=15),
-        y_range=Range1d(0, 5000),
+        x_range=get_year_range(end_factor=12),
+        y_range=Range1d(0, 4200),
         plot_width=plot_width,
         **PLOT_FORMATS
     )
-    plot = add_axes(plot, [500, 2500, 4500], color=scenarios_colors[scenario])
+    plot = add_axes(plot, [0, 2000, 4000], color=scenarios_colors[scenario])
     source = ColumnDataSource(df)
 
     hit_renderers = []

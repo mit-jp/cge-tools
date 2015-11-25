@@ -1,29 +1,41 @@
 {# 
-  This template expects:
+  This template expects: three, four, five, nonfossil
 #}
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid energy-mix">
+  <div class="mdl-color--white mdl-cell mdl-cell--3-col">
     <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
       <h4 class="mdl-card__title-text">3% / year scenario</h4>
     </div>
     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <div class="unit"><span class="mdl-color-text--teal-300">Mtce</span></div>
       <div class="plotdiv" id="{{ plot_div.three.elementid }}"></div>
     </div>
   </div>
-  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+  <div class="mdl-color--white mdl-cell mdl-cell--3-col">
     <div class="mdl-card__title mdl-card--expand mdl-color--deep-orange-300">
       <h4 class="mdl-card__title-text">4% / year scenario</h4>
     </div>
     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <div class="unit"><span class="mdl-color-text--deep-orange-300">Mtce</span></div>
       <div class="plotdiv" id="{{ plot_div.four.elementid }}"></div>
     </div>
   </div>
-  <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+  <div class="mdl-color--white mdl-cell mdl-cell--3-col">
     <div class="mdl-card__title mdl-card--expand mdl-color--purple-300">
       <h4 class="mdl-card__title-text">5% / year scenario</h4>
     </div>
     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <div class="unit"><span class="mdl-color-text--purple-300">Mtce</span></div>
       <div class="plotdiv" id="{{ plot_div.five.elementid }}"></div>
+    </div>
+  </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--3-col">
+    <div class="mdl-card__title mdl-card--expand mdl-color--grey-600">
+      <h4 class="mdl-card__title-text">Non-fossil energy share</h4>
+    </div>
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <div class="unit"><span class="mdl-color-text--grey-600">%</span></div>
+      <div class="plotdiv" id="{{ plot_div.nonfossil.elementid }}"></div>
     </div>
   </div>
 </div>

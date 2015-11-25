@@ -141,6 +141,22 @@ html, body {
   width: 95%;
 }
 
+.maps .plotdiv {
+  margin-left: 0;
+}
+
+.content-footer {
+  width: 100%;
+  margin-right: 20px;
+}
+
+.content-footer > p {
+  font-size: 0.8em;
+  color: grey;
+  text-align: right;
+  margin-bottom: 0;
+}
+
 /*
  *
  * MAIN BOKEH SETUP

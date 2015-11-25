@@ -52,7 +52,7 @@ def get_gdp_2010_map(plot_width=600):
 
 
 def get_gdp_delta_in_2030_map(plot_width=600):
-    df, legend_data = get_gdp_delta_in_2030_by_province(prefix='gdpdelta_change', cmap_name='Greys', boost_factor=20)
+    df, legend_data = get_gdp_delta_in_2030_by_province(prefix='gdpdelta_change', cmap_name='Greys')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
     return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='gdpdelta_change_color', tooltip_text='Change in GDP: @gdpdelta_change_val{0.0}%')
 
@@ -93,13 +93,21 @@ def _get_provincial_map(
     )
     p_map.add_glyph(legend_source, rect)
     # Add start val
+    text_start = [legend_data.vals[0][:-2]]
     p_map.add_glyph(
-        Text(x=map_legend_x, y=map_legend_y - 3.5, text=str(legend_data.vals[0]), text_font_size='8pt')
-    )
-    p_map.add_glyph(
-        Text(x=map_legend_x + 25, y=map_legend_y - 3.5, text=str(legend_data.vals[99]), text_font_size='8pt', text_align='right')
+        ColumnDataSource(
+            dict(x=[map_legend_x], y=[map_legend_y - 3.5], text=text_start)
+        ), Text(x='x', y='y', text='text', text_font_size='8pt', text_align='left')
     )
     # Add end val
+    text_end = [legend_data.vals[99][:-2]]
+    if len(text_end[0]) > 5:
+        text_end = [legend_data.vals[99][0:5]]
+    p_map.add_glyph(
+        ColumnDataSource(
+            dict(x=[map_legend_x + 25], y=[map_legend_y - 3.5], text=text_end)
+        ), Text(x='x', y='y', text='text', text_font_size='8pt', text_align='right')
+    )
 
     # Add hovers
     tooltips = "<span class='tooltip-text'>@name_en</span>"

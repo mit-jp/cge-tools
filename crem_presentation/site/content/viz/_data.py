@@ -53,8 +53,8 @@ def get_population_in_2030_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2030)
 
 
-def get_gdp_delta_in_2030_by_province(prefix, cmap_name='Blues', boost_factor=None):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP_delta', 2030, boost_factor)
+def get_gdp_delta_in_2030_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP_delta', 2030, boost_factor=15)
 
 
 def get_gdp_in_2010_by_province(prefix, cmap_name='Blues'):
@@ -73,7 +73,7 @@ def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc')
 
 
-def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=5):
+def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=None):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -142,19 +142,23 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
 
 
 def build_legend_data(df, key_value, colormap, boost_factor):
-    val_min = df[key_value].min()
-    val_max = df[key_value].max()
+    val_min = df[key_value].min().round()
+    val_max = df[key_value].max().round()
+    if key_value == 'col_2010_val':
+        val_max = val_min + df[key_value].max() - df[key_value].min()
     vals = pd.Series(np.linspace(val_min, val_max, num=100))
     norm_vals = vals / (np.linalg.norm(df[key_value]))
     norm_vals = norm_vals * boost_factor
     norm_map = norm_vals.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
-    df = pd.DataFrame({'vals': vals, 'color': norm_hex})
+    df = pd.DataFrame({'vals': vals, 'color': norm_hex}, dtype=str)
     df['x'] = (df.index / 4) + map_legend_x
     return df
 
 
-def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=5):
+def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=None):
+    if not boost_factor:
+        boost_factor = 2
     norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
     norm_array = norm_array * boost_factor
     colormap = pyplot.get_cmap(cmap_name)

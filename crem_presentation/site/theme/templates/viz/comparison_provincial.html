@@ -1,36 +1,39 @@
 {# 
   This template expects:
 #}
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid maps">
   <h4 class="mdl-cell mdl-cell--12-col">Factors</h4>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
-    <div class="plotdiv" id="{{ plot_div.pop_map.elementid }}"></div>
     <figcaption class="mdl-typography--caption">Population by province in 2030</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.pop_map.elementid }}"></div>
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
-    <div class="plotdiv" id="{{ plot_div.col_map.elementid }}"></div>
     <figcaption class="mdl-typography--caption">Value share of coal in industrial production in 2010</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.col_map.elementid }}"></div>
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
+    <figcaption class="mdl-typography--caption">2010 GDP, billions of U.S. dollars</figcaption> 
     <div class="plotdiv" id="{{ plot_div.gdp_map.elementid }}"></div>
-    <figcaption class="mdl-typography--caption">Gross domestic product billions of U.S. dollars (in 2010 constant at 2007)</figcaption> 
   </div>
 </div>
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid maps">
   <h4 class="mdl-cell mdl-cell--12-col">Outcomes</h4>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
-    <div class="plotdiv" id="{{ plot_div.co2_delta_map.elementid }}"></div>
     <figcaption class="mdl-typography--caption">2030 reduction in CO₂ in 4% scenario compared to `No policy` scenario, Mt</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.co2_delta_map.elementid }}"></div>
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
-    <div class="plotdiv" id="{{ plot_div.exp_delta_map.elementid }}"></div>
     <figcaption class="mdl-typography--caption">2030 reduction in PM2.5 exposure in 4% scenario compared to `No policy` scenario, μg/m³</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.exp_delta_map.elementid }}"></div>
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
-    <div class="plotdiv" id="{{ plot_div.gdp_delta_map.elementid }}"></div>
     <figcaption class="mdl-typography--caption">Change in gross domestic product in 4% scenario relative to `No policy` scenario, %</figcaption> 
+    <div class="plotdiv" id="{{ plot_div.gdp_delta_map.elementid }}"></div>
   </div>
 </div>
 
+  <div class="content-footer">
+    <p>Model projections available for mainland China only.</p>
+  </div>
 {{ plot_script }}
 

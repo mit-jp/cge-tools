@@ -1,6 +1,11 @@
 # The render functions here are used by the pelican reader to assemble the plot
 
 
+def render_home():
+    from .home import render
+    return render()
+
+
 def render_air_pollution():
     from .national_air_pollution import render
     return render()

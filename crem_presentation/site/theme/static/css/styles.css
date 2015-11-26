@@ -341,10 +341,11 @@ html, body {
 }
 
 .home-menu .mdl-card__title-text {
-  margin-top: -2em;
+  margin-top: -1.5em;
   font-size: 16px;
   padding: 10px;
   opacity: 0.9;
+  float: right;
 }
 
 .home-menu .mdl-card__title-text:hover {
@@ -354,8 +355,4 @@ html, body {
 .home-menu .mdl-card__title-text a {
   color: white;
   text-decoration: none;
-}
-
-.home-menu .mdl-card__title-text a:hover {
-  text-decoration: underline;
 }

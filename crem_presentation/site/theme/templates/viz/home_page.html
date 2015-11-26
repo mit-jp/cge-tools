@@ -1,11 +1,11 @@
 {% for p in page_index %}
 <div class="home-menu mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
-  <div class="mdl-card__title {{ p.link }} mdl-color--cyan-500"> </div>
+  <div class="mdl-card__title {{ p.link }}"> </div>
+  <a href="{{ SITEURL }}/pages/{{ p.link }}.html">
   <div class="mdl-card__title-text mdl-color--blue-grey-800">
-    <a href="{{ SITEURL }}/pages/{{ p.link }}.html">
     {{ p.title }}
-  </a>
   </div>
+  </a>
   <div class="mdl-card__supporting-text mdl-color-text--grey-600">
     {{ p.text|truncate(80, end='...') }} <a href="/pages/{{ p.link }}.html">more</a>
   </div>
@@ -13,8 +13,8 @@
 {% endfor %}
 <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
   <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-    <img class="cecp-description-logo" src="{{ SITEURL }}/theme/images/logos/jp.jpg" alt="Joint Program Logo" height="100" width="100"> 
-    <img class="cecp-description-logo" src="{{ SITEURL }}/theme/images/logos/eee.png" alt="Energy Environment Economy Logo" height="110" width="110"> 
+    <img class="cecp-description-logo" src="theme/images/logos/jp.jpg" alt="Joint Program Logo" height="100" width="100"> 
+    <img class="cecp-description-logo" src="theme/images/logos/eee.png" alt="Energy Environment Economy Logo" height="95" width="95"> 
     <p class="cecp-description">
     This site is a project of <a href="">MIT's China Energy and Climate Project</a>.
     The CECP is an alliance between the <a href="">MIT Joint Program on the Science and

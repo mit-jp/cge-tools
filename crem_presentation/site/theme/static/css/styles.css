@@ -23,6 +23,21 @@ html, body {
   padding: 2em 1em 1em 1em;
 }
 
+.drawer-header p {
+  clear: both;
+}
+
+.site-logo {
+  width: 140px;
+  margin-bottom: 1em;
+  margin-right: 1em;
+  float: right;
+}
+
+.cecp-description-logo {
+  float: right;
+}
+
 .mdl-navigation {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;

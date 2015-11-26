@@ -1,4 +1,4 @@
-﻿Title: Climate Policy Scenarios
+﻿Title: Home
 SubTitleHead: How will climate policy targets in China affect CO2 emissions?
 SubTitle: China’s climate pledge aims to halt the rise in the nation's CO₂ emissions trajectory at latest by 2030, and increase the share of non-fossil energy in the primary energy mix to 20% by the same year, targeting an overall reduction in CO₂ intensity of 60-65% in 2030, relative to the 2005 level. Assume an economic growth trajectory consistent with China’s goal to become a well-off society in 2030, we find that targeting a reduction in CO₂ intensity of 4%/year from 2015 to 2030 is consistent with peaking emissions at latest by 2030.
 Date: 2015-11-23

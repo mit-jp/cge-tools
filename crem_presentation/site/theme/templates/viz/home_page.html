@@ -1,7 +1,8 @@
 {% for p in page_index %}
 <div class="home-menu mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
-  <div class="mdl-card__title {{ p.link }}"> </div>
-  <a href="{{ SITEURL }}/pages/{{ p.link }}.html">
+  <div class="mdl-card__title {{ p.link }}"></div>
+  <div class="image-overlay"></div>
+  <a href="pages/{{ p.link }}.html">
   <div class="mdl-card__title-text mdl-color--blue-grey-800">
     {{ p.title }}
   </div>

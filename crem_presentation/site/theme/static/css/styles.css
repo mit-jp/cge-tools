@@ -289,3 +289,58 @@ html, body {
   padding-left: 8px;
   line-height: 1.1em;
 }
+
+.home-menu  .mdl-card__title {
+  min-height: 125px;
+  background-size: 95%;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.mdl-card__title.air-pollution {
+  background-image: url('../images/air-pollution.png');
+}
+
+.mdl-card__title.energy-mix {
+  background-image: url('../images/energy-mix.png');
+}
+
+.mdl-card__title.national-comparison {
+  background-image: url('../images/national-comparison.png');
+}
+
+.mdl-card__title.economic-growth {
+  background-image: url('../images/economic-growth.png');
+}
+
+.mdl-card__title.co2-by-province {
+  background-image: url('../images/co2-by-province.png');
+}
+
+.mdl-card__title.health-impacts-by-province {
+  background-image: url('../images/health-impacts-by-province.png');
+}
+
+.mdl-card__title.provincial-comparison {
+  background-image: url('../images/provincial-comparison.png');
+}
+
+.home-menu .mdl-card__title-text {
+  margin-top: -2em;
+  font-size: 16px;
+  padding: 10px;
+  opacity: 0.9;
+}
+
+.home-menu .mdl-card__title-text:hover {
+  background-color: #00838f !important;
+}
+
+.home-menu .mdl-card__title-text a {
+  color: white;
+  text-decoration: none;
+}
+
+.home-menu .mdl-card__title-text a:hover {
+  text-decoration: underline;
+}

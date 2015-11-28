@@ -49,8 +49,8 @@ def get_coal_share_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'COL_share', 2010)
 
 
-def get_population_in_2030_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2030)
+def get_population_in_2010_by_province(prefix, cmap_name='Blues'):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2010)
 
 
 def get_gdp_delta_in_2030_by_province(prefix, cmap_name='Blues'):
@@ -99,17 +99,25 @@ def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
+    key_percent = '%s_percent' % prefix
 
     province_list = provinces.keys()
     n = len(province_list)
     # Create a null dataframe
-    df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
+    df = pd.DataFrame(
+        {
+            key_value: np.empty(n),
+            key_color: np.empty(n),
+            key_percent: np.empty(n)
+        },
+        index=province_list
+    )
 
     # Populate the values
     for province in province_list:
         four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
         bau = get_df_and_strip_2007('../cecp-cop21-data/%s/bau.csv' % province, read_props)
-        df[key_value][province] = get_2030_4_vs_bau_delta(four, bau, parameter)
+        df[key_value][province], df[key_percent][province] = get_2030_4_vs_bau_delta(four, bau, parameter)
 
     df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name)
     df.loc['XZ', key_value] = 'No Data'
@@ -138,20 +146,24 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
     bau = bau.set_index('t')
     four = four[parameter][2030]
     bau = bau[parameter][2030]
-    return bau - four
+    absolute = four - bau
+    percent = (four - bau) / bau
+    return (absolute, percent)
 
 
-def build_legend_data(df, key_value, colormap, boost_factor):
+def build_legend_data(df, key_value, sign, colormap, boost_factor):
     val_min = df[key_value].min().round()
     val_max = df[key_value].max().round()
-    if key_value == 'col_2010_val':
+    if val_max == val_min:
+        # This takes account of the fact that rounding, specifically in the case of col_2010
+        # (may need to revisit)
         val_max = val_min + df[key_value].max() - df[key_value].min()
-    vals = pd.Series(np.linspace(val_min, val_max, num=100))
+    vals = pd.Series(np.linspace(val_min, val_max, num=100)) * sign
     norm_vals = vals / (np.linalg.norm(df[key_value]))
     norm_vals = norm_vals * boost_factor
     norm_map = norm_vals.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
-    df = pd.DataFrame({'vals': vals, 'color': norm_hex}, dtype=str)
+    df = pd.DataFrame({'vals': vals * sign, 'color': norm_hex}, dtype=str)
     df['x'] = (df.index / 4) + map_legend_x
     return df
 
@@ -159,13 +171,16 @@ def build_legend_data(df, key_value, colormap, boost_factor):
 def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=None):
     if not boost_factor:
         boost_factor = 2
-    norm_array = df[key_value] / (np.linalg.norm(df[key_value]))
+    sign = 1
+    if df[key_value].max() <= 0:
+        sign = -1
+    norm_array = df[key_value] * sign / (np.linalg.norm(df[key_value]))
     norm_array = norm_array * boost_factor
     colormap = pyplot.get_cmap(cmap_name)
     norm_map = norm_array.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)
     df[key_color] = norm_hex
-    legend_data = build_legend_data(df, key_value, colormap, boost_factor)
+    legend_data = build_legend_data(df, key_value, sign, colormap, boost_factor)
     return (df, legend_data)
 
 

@@ -2,7 +2,7 @@
 from bokeh.embed import components
 
 from ._maps import (
-    get_provincial_pop_2030_map,
+    get_provincial_pop_2010_map,
     get_col_2010_map,
     get_gdp_2010_map,
     get_co2_2030_4_vs_bau_change_map,
@@ -13,7 +13,7 @@ from .__utils import env
 
 
 def render():
-    pop_map = get_provincial_pop_2030_map()
+    pop_map = get_provincial_pop_2010_map()
     col_map = get_col_2010_map()
     gdp_map = get_gdp_2010_map()
     co2_delta_map = get_co2_2030_4_vs_bau_change_map()

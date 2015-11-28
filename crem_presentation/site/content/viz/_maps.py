@@ -4,7 +4,7 @@ from .constants import map_legend_x, map_legend_y
 from ._data import (
     convert_provincial_dataframe_to_map_datasource,
     get_coal_share_in_2010_by_province,
-    get_population_in_2030_by_province,
+    get_population_in_2010_by_province,
     get_gdp_delta_in_2030_by_province,
     get_gdp_in_2010_by_province,
     get_co2_2030_4_vs_bau_change_by_province,
@@ -17,7 +17,7 @@ from .__utils import get_map_plot
 def get_co2_2030_4_vs_bau_change_map(plot_width=600):
     df, legend_data = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt')
+    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt (@co2_change_percent{0.00}%)')
 
 
 def get_col_2010_map(plot_width=600):
@@ -29,7 +29,7 @@ def get_col_2010_map(plot_width=600):
 def get_pm25_2030_4_vs_bau_change_map(plot_width=600):
     df, legend_data = get_pm25_2030_4_vs_bau_change_by_province(prefix='pm25_change', cmap_name='Greens')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³')
+    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³ (@pm25_change_percent{0.00}%)')
 
 
 def get_2030_pm25_exposure_map(plot_width=600):
@@ -38,10 +38,10 @@ def get_2030_pm25_exposure_map(plot_width=600):
     return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25exposure_2030_color', tooltip_text='Weighted exposure: @pm25exposure_2030_val μg/m³')
 
 
-def get_provincial_pop_2030_map(plot_width=600):
-    pop_df, legend_data = get_population_in_2030_by_province(prefix='pop_2030', cmap_name='Purples')
+def get_provincial_pop_2010_map(plot_width=600):
+    pop_df, legend_data = get_population_in_2010_by_province(prefix='pop_2010', cmap_name='Purples')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(pop_df)
-    pop_map = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pop_2030_color', tooltip_text='Population: @pop_2030_val{0} million')
+    pop_map = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pop_2010_color', tooltip_text='Population: @pop_2010_val{0} million')
     return pop_map
 
 

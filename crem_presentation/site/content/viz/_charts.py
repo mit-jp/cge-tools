@@ -125,10 +125,10 @@ def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     plot = add_axes(plot, [0, 2000, 4000], color=scenarios_colors[scenario])
     source = ColumnDataSource(df)
 
-    hit_renderers = []
     line_renderers = {}
 
     for energy_mix_column in energy_mix_columns.keys():
+        energy_name = energy_mix_columns[energy_mix_column]
         parameter = '%s_%s' % (scenario, energy_mix_column)
         line = Line(
             x='t', y=parameter, line_color='black',
@@ -139,19 +139,17 @@ def get_energy_mix_by_scenario(df, scenario, plot_width=700):
         )
         # invisible circle used for hovering
         hit_target = Circle(
-            x='t', y=parameter, size=20, line_color=None, fill_color=None
+            x='t', y=parameter, size=10, line_color=None, fill_color=None
         )
         scenario_label = Text(
             x=value(source.data['t'][-1] + 2), y=value(source.data[parameter][-1] - 200),
-            text=value(energy_mix_columns[energy_mix_column]), text_color='grey', text_font_size='8pt',
+            text=value(energy_name), text_color='grey', text_font_size='8pt',
         )
 
         hit_renderer = plot.add_glyph(source, hit_target)
-        hit_renderers.append(hit_renderer)
-        line_renderer = plot.add_glyph(source, line)
-        line_renderers[scenario] = line_renderer
+        plot.add_tools(HoverTool(tooltips="%s - @%s{0,0} (@t)" % (energy_name, parameter), renderers=[hit_renderer]))
+        plot.add_glyph(source, line)
         plot.add_glyph(source, circle)
         plot.add_glyph(scenario_label)
 
-    plot.add_tools(HoverTool(tooltips="@%s{0,0} (@t)" % parameter, renderers=hit_renderers))
     return plot

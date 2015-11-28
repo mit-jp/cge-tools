@@ -23,7 +23,7 @@ def get_co2_2030_4_vs_bau_change_map(plot_width=600):
 def get_col_2010_map(plot_width=600):
     df, legend_data = get_coal_share_in_2010_by_province(prefix='col_2010')
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='col_2010_color', tooltip_text='Coal share: @col_2010_val{0.000}')
+    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='col_2010_color', tooltip_text='Coal share: @col_2010_val{0.0}%')
 
 
 def get_pm25_2030_4_vs_bau_change_map(plot_width=600):

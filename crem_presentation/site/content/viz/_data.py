@@ -174,6 +174,7 @@ def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=None):
     sign = 1
     if df[key_value].max() <= 0:
         sign = -1
+    df = df.dropna()
     norm_array = df[key_value] * sign / (np.linalg.norm(df[key_value]))
     norm_array = norm_array * boost_factor
     colormap = pyplot.get_cmap(cmap_name)

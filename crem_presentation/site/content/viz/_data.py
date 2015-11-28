@@ -53,10 +53,6 @@ def get_population_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2010)
 
 
-def get_gdp_delta_in_2030_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP_delta', 2030, boost_factor=15)
-
-
 def get_gdp_in_2010_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
 
@@ -73,7 +69,7 @@ def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
     return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc')
 
 
-def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=None):
+def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -89,6 +85,11 @@ def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 
+    return (df, key_value, key_color)
+
+
+def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=None):
+    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index)
     df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name, boost_factor)
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
@@ -205,3 +206,35 @@ def get_df_and_strip_2007_15_20_25(filename, read_props):
     df = pd.read_csv(filename, **read_props)
     df = df[(df.t == 2010) | (df.t == 2030)]
     return df
+
+
+# Handle specially because of outlier value
+def _normalize_gdp_delta(vals, dmin, dmax):
+    colormap = pyplot.get_cmap('RdYlGn')
+    norm_vals = vals * 0.8
+    norm_vals = (norm_vals - dmin) / (dmax - dmin + 4)
+    norm_map = norm_vals.apply(colormap)
+    norm_hex = norm_map.apply(rgb2hex)
+    return norm_hex
+
+
+def get_gdp_delta_in_2030_by_province(prefix):
+
+    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, 'GDP_delta', 2030)
+    vals = df[key_value]
+    vals.pop('SX')
+
+    dmin = vals.min().round()
+    dmax = vals.max().round()
+
+    df[key_color] = _normalize_gdp_delta(vals, dmin, dmax)
+
+    legend_vals = pd.Series(np.linspace(dmin, dmax, num=100))
+    legend_hex = _normalize_gdp_delta(legend_vals, dmin, dmax)
+    legend_data = pd.DataFrame({'vals': legend_vals, 'color': legend_hex}, dtype=str)
+    legend_data['x'] = (legend_data.index / 4) + map_legend_x
+
+    df.loc['XZ', key_value] = 'No Data'
+    df.loc['XZ', key_color] = 'white'
+    df.loc['SX', key_color] = 'black'
+    return (df, legend_data)

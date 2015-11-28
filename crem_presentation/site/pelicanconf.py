@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'CECP'
-SITENAME = 'C-REM'
+SITENAME = "CECP - Exploring China's energy system"
 SITEURL = ''
 SITESUBTITLE = "Exploring China’s future energy system and its environmental impacts"
 

@@ -19,19 +19,30 @@ html, body {
 }
 /* END iOS Safari specific workaround */
 
-.drawer-header {
-  padding: 2em 1em 1em 1em;
-}
-
 .drawer-header p {
   clear: both;
 }
 
+.site-logo-container {
+  padding: 1em;
+}
+
 .site-logo {
-  width: 140px;
-  margin-bottom: 1em;
-  margin-right: 1em;
-  float: right;
+  width: 100%;
+  margin: auto;
+}
+
+.site-subheader {
+  margin-top: 1em;
+  line-height: 1em;
+  font-size: 0.7em;
+  color: #212121;
+}
+
+@media (max-width: 840px) {
+  .mdl-cell--0-col-tablet {
+    display: none;
+  }
 }
 
 .cecp-description-logo {

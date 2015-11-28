@@ -20,11 +20,16 @@ html, body {
 /* END iOS Safari specific workaround */
 
 .drawer-header p {
+  font-size: 0.9em;
+  margin: 30px 40px;
+  line-height: 1.1em;
+  color: white;
   clear: both;
 }
 
 .site-logo-container {
   padding: 1em;
+  height: 95px;
 }
 
 .site-logo {

@@ -17,6 +17,16 @@
             <input type="checkbox" id="{{ prefix|default("_") }}chk_bau" class="mdl-checkbox__input" checked/>
             <span class="mdl-checkbox__label">No policy</span>
         </label>
+        {% if economic_scenarios==True %}
+        <label for="all" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <input type="checkbox" id="all" class="mdl-checkbox__input" checked/>
+            <span class="mdl-checkbox__label"><span class="solid-line">----</span> Normal scenarios</span>
+        </label>
+        <label for="lo_all" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <input type="checkbox" id="lo_all" class="mdl-checkbox__input" checked/>
+            <span class="mdl-checkbox__label">--- 1% slower economic growth scenarios</span>
+        </label>
+        {% endif %}
     </form>
 </div>
 <script type="application/javascript">

@@ -305,6 +305,8 @@ html, body {
   color: white;
 }
 
+/* Misc customizations */
+
 .energy-mix .mdl-card__supporting-text {
   width: 95%;
   padding: 0;
@@ -379,4 +381,12 @@ html, body {
 .home-menu .mdl-card__title-text a {
   color: white;
   text-decoration: none;
+}
+
+.horizontal .mdl-checkbox {
+  width: auto;
+}
+
+.horizontal .mdl-checkbox__label {
+  margin-right: 20px;
 }

@@ -28,35 +28,39 @@ def get_col_2010_map(plot_width=600, df=None):
     return (m, df, source)
 
 
-def get_pm25_2030_4_vs_bau_change_map(plot_width=600):
-    df, legend_data = get_pm25_2030_4_vs_bau_change_by_province(prefix='pm25_change', cmap_name='Greens')
+def get_pm25_2030_4_vs_bau_change_map(plot_width=600, df=None):
+    df, legend_data = get_pm25_2030_4_vs_bau_change_by_province(prefix='pm25_change', cmap_name='Greens', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³ (@pm25_change_percent{0.00}%)')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³ (@pm25_change_percent{0.00}%)')
+    return (m, df, source)
 
 
-def get_2030_pm25_exposure_map(plot_width=600):
-    df, legend_data = get_2030_pm25_exposure_by_province(prefix='pm25exposure_2030', cmap_name='Purples')
+def get_2030_pm25_exposure_map(plot_width=600, df=None):
+    df, legend_data = get_2030_pm25_exposure_by_province(prefix='pm25exposure_2030', cmap_name='Purples', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25exposure_2030_color', tooltip_text='Weighted exposure: @pm25exposure_2030_val μg/m³')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25exposure_2030_color', tooltip_text='Weighted exposure: @pm25exposure_2030_val μg/m³')
+    return (m, df, source)
 
 
-def get_provincial_pop_2010_map(plot_width=600):
-    pop_df, legend_data = get_population_in_2010_by_province(prefix='pop_2010', cmap_name='Purples')
-    source, tibet_source = convert_provincial_dataframe_to_map_datasource(pop_df)
-    pop_map = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pop_2010_color', tooltip_text='Population: @pop_2010_val{0} million')
-    return pop_map
-
-
-def get_gdp_2010_map(plot_width=600):
-    df, legend_data = get_gdp_in_2010_by_province(prefix='gdp_2010', cmap_name='Greys')
+def get_provincial_pop_2010_map(plot_width=600, df=None):
+    df, legend_data = get_population_in_2010_by_province(prefix='pop_2010', cmap_name='Purples', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='gdp_2010_color', tooltip_text='2010 GDP: @gdp_2010_val{0} bn$')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pop_2010_color', tooltip_text='Population: @pop_2010_val{0} million')
+    return (m, df, source)
 
 
-def get_gdp_delta_in_2030_map(plot_width=600):
-    df, legend_data = get_gdp_delta_in_2030_by_province(prefix='gdpdelta_change')
+def get_gdp_2010_map(plot_width=600, df=None):
+    df, legend_data = get_gdp_in_2010_by_province(prefix='gdp_2010', cmap_name='Greys', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='gdpdelta_change_color', tooltip_text='Change in GDP: @gdpdelta_change_val{0.0}%')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='gdp_2010_color', tooltip_text='2010 GDP: @gdp_2010_val{0} bn$')
+    return (m, df, source)
+
+
+def get_gdp_delta_in_2030_map(plot_width=600, df=None):
+    df, legend_data = get_gdp_delta_in_2030_by_province(prefix='gdpdelta_change', df=df)
+    source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='gdpdelta_change_color', tooltip_text='Change in GDP: @gdpdelta_change_val{0.0}%')
+    return (m, df, source)
 
 
 def _get_provincial_map(

@@ -178,8 +178,10 @@ def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=None):
     sign = 1
     if df[key_value].max() <= 0:
         sign = -1
-    df = df.dropna()
-    norm_array = df[key_value] * sign / (np.linalg.norm(df[key_value]))
+    norm_array = df[key_value].copy()
+    if key_value == 'col_2010_val':
+        norm_array = norm_array.dropna()
+    norm_array = norm_array * sign / (np.linalg.norm(norm_array))
     norm_array = norm_array * boost_factor
     colormap = pyplot.get_cmap(cmap_name)
     norm_map = norm_array.apply(colormap)
@@ -221,9 +223,9 @@ def _normalize_gdp_delta(vals, dmin, dmax):
     return norm_hex
 
 
-def get_gdp_delta_in_2030_by_province(prefix):
+def get_gdp_delta_in_2030_by_province(prefix, df=None):
 
-    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, 'GDP_delta', 2030)
+    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, 'GDP_delta', 2030, df=df)
     vals = df[key_value]
     vals.pop('SX')
 

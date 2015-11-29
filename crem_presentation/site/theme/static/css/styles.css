@@ -118,7 +118,7 @@ html, body {
 }
 
 .mdl-components-dd {
-  padding: 0 0.5em 0 0;
+  padding: 0px 2em 0.5em 0px;
 }
 
 .mdl-components-dd p {
@@ -152,7 +152,7 @@ html, body {
   }
 
   .mdl-components-dd {
-    padding: 0 0 0.5em 0;
+    padding: 0px 2em 0.5em 0px;
   }
 }
 

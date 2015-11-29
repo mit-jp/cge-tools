@@ -12,7 +12,7 @@ def render():
     pm25, _ = get_pm25_national_plot(**plot_params)
     nonfossil = get_nonfossil(include_bau=True, **plot_params)
 
-    template = env.get_template('viz/comparison_national.html')
+    template = env.get_template('viz/national_comparison.html')
     script, div = components(
         dict(co2=co2, pm25=pm25, nonfossil=nonfossil),
         wrap_plot_info=False

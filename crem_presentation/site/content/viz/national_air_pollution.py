@@ -9,7 +9,7 @@ from .__utils import get_js_array, env
 
 def render():
     co2_plot, ap_plot, text = get()
-    template = env.get_template('viz/two_plots_with_selectors.html')
+    template = env.get_template('viz/national_air_pollution.html')
     script, div = components(
         dict(plot1=co2_plot, plot2=ap_plot, text=text),
         wrap_plot_info=False

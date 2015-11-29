@@ -11,7 +11,7 @@ from .__utils import env
 def render():
     pm25_map = get_pm25_2030_4_vs_bau_change_map()
     exposure_map = get_2030_pm25_exposure_map()
-    template = env.get_template('viz/health_impacts_by_province.html')
+    template = env.get_template('viz/by_province_health_impacts.html')
     script, div = components(
         dict(pm25_map=pm25_map, exposure_map=exposure_map),
         wrap_plot_info=False

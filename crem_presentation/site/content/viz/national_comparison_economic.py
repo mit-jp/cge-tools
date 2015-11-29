@@ -20,7 +20,7 @@ def render():
     nonfossil = get_nonfossil(include_bau=True, **plot_params)
     nonfossil, _ = add_lo_economic_growth_lines(nonfossil, 'energy_nonfossil_share')
 
-    template = env.get_template('viz/comparison_national_economic_growth.html')
+    template = env.get_template('viz/national_comparison_economic.html')
     script, div = components(
         dict(co2=co2, pm25=pm25, nonfossil=nonfossil),
         wrap_plot_info=False

@@ -48,12 +48,16 @@ def render():
                 glyph = line.get('glyph');
                 glyph.set('line_alpha', 0.8);
             }
-            set_alpha(lines['pm25_' + key]);
-            set_alpha(lines['pm25_lo_' + key]);
-            set_alpha(lines['co2_' + key]);
-            set_alpha(lines['co2_lo_' + key]);
-            set_alpha(lines['nonfossil_' + key]);
-            set_alpha(lines['nonfossil_lo_' + key]);
+            if (highlight.indexOf('norm') > -1) {
+                set_alpha(lines['pm25_' + key]);
+                set_alpha(lines['co2_' + key]);
+                set_alpha(lines['nonfossil_' + key]);
+            }
+            if (highlight.indexOf('lo') > -1) {
+                set_alpha(lines['pm25_lo_' + key]);
+                set_alpha(lines['co2_lo_' + key]);
+                set_alpha(lines['nonfossil_lo_' + key]);
+            }
         });
     ''' % line_array
 

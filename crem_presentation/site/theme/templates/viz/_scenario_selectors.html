@@ -18,12 +18,12 @@
             <span class="mdl-checkbox__label">No policy</span>
         </label>
         {% if economic_scenarios==True %}
-        <label for="all" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-            <input type="checkbox" id="all" class="mdl-checkbox__input" checked/>
+        <label for="norm" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <input type="checkbox" id="norm" class="mdl-checkbox__input" checked/>
             <span class="mdl-checkbox__label"><span class="solid-line">----</span> Normal scenarios</span>
         </label>
-        <label for="lo_all" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-            <input type="checkbox" id="lo_all" class="mdl-checkbox__input" checked/>
+        <label for="lo" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <input type="checkbox" id="lo" class="mdl-checkbox__input" checked/>
             <span class="mdl-checkbox__label">--- 1% slower economic growth scenarios</span>
         </label>
         {% endif %}
@@ -51,6 +51,14 @@
       if ( form.{{ prefix|default("_") }}chk_bau.checked ) {
           scenarios = scenarios + 'bau,';
       }
+      {% if economic_scenarios==True %}
+      if ( form.lo.checked ) {
+          scenarios = scenarios + 'lo,';
+      }
+      if ( form.norm.checked ) {
+          scenarios = scenarios + 'norm,';
+      }
+      {% endif %}
       Bokeh.custom.{{ prefix|default("_") }}select_scenario(scenarios);
   };
 

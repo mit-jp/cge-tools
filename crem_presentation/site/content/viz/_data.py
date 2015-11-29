@@ -45,31 +45,31 @@ def get_energy_mix_for_all_scenarios():
     return all_scenarios
 
 
-def get_coal_share_in_2010_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'COL_share', 2010)
+def get_co2_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'CO2_emi', df=df)
 
 
-def get_population_in_2010_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2010)
+def get_coal_share_in_2010_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'COL_share', 2010, df=df)
 
 
-def get_gdp_in_2010_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010)
+def get_population_in_2010_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'pop', 2010, df=df)
 
 
-def get_2030_pm25_exposure_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030)
+def get_gdp_in_2010_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'GDP', 2010, df=df)
 
 
-def get_co2_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'CO2_emi')
+def get_2030_pm25_exposure_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_specific_provincial_data(prefix, cmap_name, 'PM25_exposure', 2030, df=df)
 
 
-def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues'):
-    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc')
+def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues', df=None):
+    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc', df=df)
 
 
-def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index):
+def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index, df=None):
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -77,8 +77,11 @@ def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index):
     province_list = provinces.keys()
     n = len(province_list)
     # Create a null dataframe
-    df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
-
+    null_df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n)}, index=province_list)
+    if df is not None:
+        df = pd.merge(df, null_df, left_index=True, right_index=True)
+    else:
+        df = null_df
     # Populate the values
     for province in province_list:
         four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
@@ -88,15 +91,19 @@ def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index):
     return (df, key_value, key_color)
 
 
-def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, boost_factor=None):
-    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index)
+def get_dataframe_of_specific_provincial_data(prefix, cmap_name, parameter, row_index, df=None, boost_factor=None):
+    if df is not None:
+        assert isinstance(df, pd.DataFrame)
+    df, key_value, key_color = _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index, df)
     df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name, boost_factor)
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
     return (df, legend_data)
 
 
-def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, parameter):
+def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, parameter, df=None):
+    if df is not None:
+        assert isinstance(df, pd.DataFrame)
     read_props = dict(usecols=['t', parameter])
     key_value = '%s_val' % prefix
     key_color = '%s_color' % prefix
@@ -105,14 +112,11 @@ def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 
     province_list = provinces.keys()
     n = len(province_list)
     # Create a null dataframe
-    df = pd.DataFrame(
-        {
-            key_value: np.empty(n),
-            key_color: np.empty(n),
-            key_percent: np.empty(n)
-        },
-        index=province_list
-    )
+    null_df = pd.DataFrame({key_value: np.empty(n), key_color: np.empty(n), key_percent: np.empty(n)}, index=province_list)
+    if df is not None:
+        df = pd.merge(df, null_df, left_index=True, right_index=True)
+    else:
+        df = null_df
 
     # Populate the values
     for province in province_list:
@@ -153,11 +157,10 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
 
 
 def build_legend_data(df, key_value, sign, colormap, boost_factor):
-    val_min = df[key_value].min().round()
-    val_max = df[key_value].max().round()
+    val_min = round(df[key_value].min())
+    val_max = round(df[key_value].max())
     if val_max == val_min:
-        # This takes account of the fact that rounding, specifically in the case of col_2010
-        # (may need to revisit)
+        # This takes account of the fact that rounding, specifically in the case of col_2010 (may need to revisit)
         val_max = val_min + df[key_value].max() - df[key_value].min()
     vals = pd.Series(np.linspace(val_min, val_max, num=100)) * sign
     norm_vals = vals / (np.linalg.norm(df[key_value]))

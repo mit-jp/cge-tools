@@ -14,9 +14,9 @@ from .__utils import env
 
 def render():
     pop_map = get_provincial_pop_2010_map()
-    col_map = get_col_2010_map()
+    col_map, df, source = get_col_2010_map()
     gdp_map = get_gdp_2010_map()
-    co2_delta_map = get_co2_2030_4_vs_bau_change_map()
+    co2_delta_map, df, source = get_co2_2030_4_vs_bau_change_map()
     exp_delta_map = get_pm25_2030_4_vs_bau_change_map()
     gdp_delta_map = get_gdp_delta_in_2030_map()
     template = env.get_template('viz/by_province_comparison.html')

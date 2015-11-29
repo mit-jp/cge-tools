@@ -14,16 +14,18 @@ from ._data import (
 from .__utils import get_map_plot
 
 
-def get_co2_2030_4_vs_bau_change_map(plot_width=600):
-    df, legend_data = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges')
+def get_co2_2030_4_vs_bau_change_map(plot_width=600, df=None):
+    df, legend_data = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt (@co2_change_percent{0.00}%)')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt (@co2_change_percent{0.00}%)')
+    return (m, df, source)
 
 
-def get_col_2010_map(plot_width=600):
-    df, legend_data = get_coal_share_in_2010_by_province(prefix='col_2010')
+def get_col_2010_map(plot_width=600, df=None):
+    df, legend_data = get_coal_share_in_2010_by_province(prefix='col_2010', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    return _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='col_2010_color', tooltip_text='Coal share: @col_2010_val{0.0}%')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='col_2010_color', tooltip_text='Coal share: @col_2010_val{0.0}%')
+    return (m, df, source)
 
 
 def get_pm25_2030_4_vs_bau_change_map(plot_width=600):

@@ -85,10 +85,20 @@ def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
     sources, data = get_pm25_national_data()
     y_ticks = [30, 40, 50, 60]
     y_range = Range1d(30, 62)
-    return _get_national_scenario_line_plot(
+    pm25, line_renderers = _get_national_scenario_line_plot(
         sources, data, 'PM25_conc',
         y_ticks=y_ticks, plot_width=plot_width, grid=grid, end_factor=end_factor, y_range=y_range
     )
+    # Add Targets
+    pm25.add_glyph(
+        ColumnDataSource(data=dict(x=[2010, 2030], y=[35, 35])),
+        Line(x='x', y='y', line_width=2, line_dash='dotdash'),
+    )
+    pm25.add_glyph(
+        ColumnDataSource(data=dict(x=[2010.5], y=[33.1], text=['PM2.5 target'])),
+        Text(x='x', y='y', text='text', text_font_size='8pt'),
+    )
+    return (pm25, line_renderers)
 
 
 def get_co2_national_plot(plot_width=600, end_factor=None, grid=True, include_bau=True):
@@ -112,6 +122,15 @@ def get_nonfossil(plot_width=750, end_factor=5, grid=True, include_bau=False):
         end_factor=end_factor,
         include_bau=include_bau
     )
+    plot.add_glyph(
+        ColumnDataSource(data=dict(x=[2010, 2030], y=[20, 20])),
+        Line(x='x', y='y', line_width=2, line_dash='dotdash'),
+    )
+    plot.add_glyph(
+        ColumnDataSource(data=dict(x=[2010.5], y=[20.2], text=['Non-fossil target'])),
+        Text(x='x', y='y', text='text', text_font_size='8pt'),
+    )
+
     return plot
 
 

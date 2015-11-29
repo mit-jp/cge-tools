@@ -20,12 +20,11 @@
       <div class="plotdiv" id="{{ plot_div.nonfossil.elementid }}"></div>
     </div>
   </div>
+  <div class="mdl-color--white mdl-cell mdl-cell--12-col horizontal">
+    {% set economic_scenarios=True %}
+    {% include 'viz/_scenario_selectors.html' %}
+  </div>
 </div>
 
 <div class="hidden" id="{{ plot_div.text.elementid }}"></div>
 {{ plot_script }}
-
-<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col horizontal">
-{% set economic_scenarios=True %}
-{% include 'viz/_scenario_selectors.html' %}
-</div>

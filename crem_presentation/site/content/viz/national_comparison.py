@@ -11,12 +11,13 @@ def render():
     plot_params = dict(plot_width=700, grid=True, end_factor=6)
     co2, co2_line_renderers = get_co2_national_plot(**plot_params)
     pm25, pm25_line_renderers = get_pm25_national_plot(**plot_params)
-    nonfossil = get_nonfossil(include_bau=True, **plot_params)
+    nonfossil, nonfossil_line_renderers = get_nonfossil(include_bau=True, **plot_params)
 
     prefixed_line_renderers = {}
     for key in scenarios:
         prefixed_line_renderers['pm25_%s' % key] = pm25_line_renderers[key]
         prefixed_line_renderers['co2_%s' % key] = co2_line_renderers[key]
+        prefixed_line_renderers['nonfossil_%s' % key] = nonfossil_line_renderers[key]
 
     line_array = get_js_array(prefixed_line_renderers.keys())
     code = '''
@@ -38,6 +39,7 @@ def render():
             }
             set_alpha(lines['pm25_' + key]);
             set_alpha(lines['co2_' + key]);
+            set_alpha(lines['nonfossil_' + key]);
         });
     ''' % line_array
 

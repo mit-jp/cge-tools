@@ -24,5 +24,10 @@
     <div class="legend"><span class="legend-item"><span class="solid-line">------</span>  normal scenarios</span><span class="legend-item"> ---- 1% slower economic growth</span></div>
   </div>
 </div>
+
+<div class="hidden" id="{{ plot_div.text.elementid }}"></div>
 {{ plot_script }}
 
+<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col horizontal">
+{% include 'viz/_scenario_selectors.html' %}
+</div>

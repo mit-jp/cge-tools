@@ -114,7 +114,7 @@ def get_co2_national_plot(plot_width=600, end_factor=None, grid=True, include_ba
 
 
 def get_nonfossil(plot_width=750, end_factor=5, grid=True, include_bau=False):
-    plot, _ = get_national_scenario_line_plot(
+    plot, line_renderers = get_national_scenario_line_plot(
         parameter='energy_nonfossil_share',
         y_ticks=[10, 15, 20, 25],
         plot_width=plot_width,
@@ -132,7 +132,7 @@ def get_nonfossil(plot_width=750, end_factor=5, grid=True, include_bau=False):
         Text(x='x', y='y', text='text', text_font_size='8pt'),
     )
 
-    return plot
+    return (plot, line_renderers)
 
 
 def get_energy_mix_by_scenario(df, scenario, plot_width=700):
@@ -144,8 +144,6 @@ def get_energy_mix_by_scenario(df, scenario, plot_width=700):
     )
     plot = add_axes(plot, [0, 2000, 4000], color=scenarios_colors[scenario])
     source = ColumnDataSource(df)
-
-    line_renderers = {}
 
     for energy_mix_column in energy_mix_columns.keys():
         energy_name = energy_mix_columns[energy_mix_column]

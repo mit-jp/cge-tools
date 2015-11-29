@@ -1,28 +1,68 @@
 # -*- coding: utf-8 -*- #
 from bokeh.embed import components
-from bokeh.models import Line, ColumnDataSource, Text
+from bokeh.models import TextInput, CustomJS
 
+from .constants import scenarios
 from ._charts import (
     get_pm25_national_plot,
     get_co2_national_plot,
     get_nonfossil,
     add_lo_economic_growth_lines,
 )
-from .__utils import env
+from .__utils import get_js_array, env
 
 
 def render():
     plot_params = dict(plot_width=700, grid=True, end_factor=6)
-    co2, _ = get_co2_national_plot(**plot_params)
-    co2, _ = add_lo_economic_growth_lines(co2, 'CO2_emi')
-    pm25, _ = get_pm25_national_plot(**plot_params)
-    pm25, _ = add_lo_economic_growth_lines(pm25, 'PM25_conc')
-    nonfossil = get_nonfossil(include_bau=True, **plot_params)
-    nonfossil, _ = add_lo_economic_growth_lines(nonfossil, 'energy_nonfossil_share')
+    co2, co2_line_renderers = get_co2_national_plot(**plot_params)
+    co2, co2_lo_line_renderers = add_lo_economic_growth_lines(co2, 'CO2_emi')
+    pm25, pm25_line_renderers = get_pm25_national_plot(**plot_params)
+    pm25, pm25_lo_line_renderers = add_lo_economic_growth_lines(pm25, 'PM25_conc')
+    nonfossil, nonfossil_line_renderers = get_nonfossil(include_bau=True, **plot_params)
+    nonfossil, nonfossil_lo_line_renderers = add_lo_economic_growth_lines(nonfossil, 'energy_nonfossil_share')
+
+    prefixed_line_renderers = {}
+    for key in scenarios:
+        prefixed_line_renderers['pm25_%s' % key] = pm25_line_renderers[key]
+        prefixed_line_renderers['pm25_lo_%s' % key] = pm25_lo_line_renderers[key]
+        prefixed_line_renderers['co2_%s' % key] = co2_line_renderers[key]
+        prefixed_line_renderers['co2_lo_%s' % key] = co2_lo_line_renderers[key]
+        prefixed_line_renderers['nonfossil_%s' % key] = nonfossil_line_renderers[key]
+        prefixed_line_renderers['nonfossil_lo_%s' % key] = nonfossil_lo_line_renderers[key]
+
+    line_array = get_js_array(prefixed_line_renderers.keys())
+    code = '''
+        var lines = %s,
+            value = cb_obj.get('value'),
+            highlight,
+            glyph;
+
+        value = value.replace(/(,$)/g, '');
+        highlight = value.split(',');
+        Bokeh.$.each(lines, function(key, line) {
+            glyph = line.get('glyph');
+            glyph.set('line_alpha', 0.1);
+        });
+        Bokeh.$.each(highlight, function(i, key) {
+            function set_alpha(line) {
+                glyph = line.get('glyph');
+                glyph.set('line_alpha', 0.8);
+            }
+            set_alpha(lines['pm25_' + key]);
+            set_alpha(lines['pm25_lo_' + key]);
+            set_alpha(lines['co2_' + key]);
+            set_alpha(lines['co2_lo_' + key]);
+            set_alpha(lines['nonfossil_' + key]);
+            set_alpha(lines['nonfossil_lo_' + key]);
+        });
+    ''' % line_array
+
+    callback = CustomJS(code=code, args=prefixed_line_renderers)
+    text = TextInput(callback=callback)
 
     template = env.get_template('viz/national_comparison_economic.html')
     script, div = components(
-        dict(co2=co2, pm25=pm25, nonfossil=nonfossil),
+        dict(co2=co2, pm25=pm25, nonfossil=nonfossil, text=text),
         wrap_plot_info=False
     )
     return template.render(plot_script=script, plot_div=div)

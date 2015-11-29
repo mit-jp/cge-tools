@@ -11,7 +11,7 @@ def render():
     three = get_energy_mix_by_scenario(df, 'three')
     four = get_energy_mix_by_scenario(df, 'four')
     five = get_energy_mix_by_scenario(df, 'five')
-    nonfossil = get_nonfossil()
+    nonfossil, _ = get_nonfossil()
     template = env.get_template('viz/national_energy_mix.html')
     script, div = components(
         dict(three=three, four=four, five=five, nonfossil=nonfossil),

@@ -1,10 +1,14 @@
 Title: Provincial comparison
-SubTitleHead: The impacts of policy on provinces can be traced to differences in population, per-capita income, and reliance on coal
-SubTitle: Under a climate policy, reductions in CO₂ (and associated reductions in local pollutants) occur primarily over large population centers in the central part of the country. However, a CO₂ policy does not deliver as significant a reduction in PM2.5 in the populous and relatively affluent eastern provinces, where CO₂ and fossil energy intensity must drop from a lower starting level and thus additional reductions prove relatively costly.
-Date: 2015-10-05
+SubTitleHead: Differences in population, share of coal production in provincial GDP, and the size of provincial GDP affect the impact of policy
+SubTitle: While the complex economic and energy system linkages among provinces prevent simple explanations of policy impacts, some general trends are apparent.
+Date: 2015-11-29
 Viz: comparison_provincial
-BodyTitle: Impacts on GDP are modest at the national level, but may be large in some provinces
+BodyTitle: CO₂ emissions and PM2.5 exposure fall most in populous, industrializing provinces
 
-Provinces that rely heavily on coal as an input to production and consumption are most affected by the policy. These provinces include Hebei, Jilin, and Shanxi, while some provinces experience much more limited impacts. How the impacts of policy are distributed is highly dependent on the initial allocation of CO₂ emissions rights, which is ultimately a choice for public policy makers.
+Relative to the No Policy scenario, CO₂ emissions are significantly lower in Shanxi, a major center of coal production, and Hubei, a province with a relatively clean energy system in 2010 that sees its coal consumption increase in the No Policy scenario. This reduction corresponds to significant reductions in air pollution exposure in China’s industrializing central provinces.
+
+How the economic impacts of a national climate policy are distributed is ultimately a public policy choice that occurs in the design of the emissions rights (emissions trading system) or revenue recycling (tax) scheme. The distribution of GDP impacts could look very different, for instance, if a progressive scheme that required wealthy provinces to foot the bill for less affluent provinces with lower cost abatement opportunities were adopted. Without a policy aimed at redistribution, Shanxi province as a coal exporter experiences the deepest reductions in its GDP under climate policy in 2030. While only the 4% scenario is shown here, general trends are similar in the 3% and 5% scenarios.
+
+Note: Model projections available for mainland China only. 
 
 

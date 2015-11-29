@@ -1,8 +1,9 @@
 ﻿Title: Energy mix
 SubTitleHead: Energy mix
-SubTitle: China's target of 20% of energy from non-fossil sources is met in 2030 in the 4% scenario. Non-fossil sources include wind, solar, hydro, and nuclear power. Primary energy shares are calculated using the coal-equivalent method.
-Date: 2015-10-05
+SubTitle: All policy scenarios meet or exceed China’s non-fossil energy target
+Main sources contributing the rising non-fossil energy share are in the power generation sector: wind, solar, biomass, hydro, and nuclear.
+Date: 2015-11-29
 Viz: energy_mix
 BodyTitle: Non-fossil energy increases significantly in all scenarios 
 
-China’s non-fossil energy target is met in all scenarios. Both a feed-in tariff for renewable energy plus the CO₂ price make low carbon energy deployment a relatively stable feature of all scenarios, while the fossil energy requirement is far less certain. In particular, the role of natural gas is very sensitive to the level of simulated policy effort.
+China’s non-fossil energy target is met in all scenarios. Both a feed-in tariff for renewable energy plus the CO₂ price make low carbon energy deployment a relatively stable feature of all scenarios, while the coal requirement is highly sensitive to the level of policy stringency. Natural gas and oil demand are far less sensitive, given their lower CO₂ content and lack of substitutes in some uses.

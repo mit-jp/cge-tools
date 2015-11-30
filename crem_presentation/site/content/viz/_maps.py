@@ -103,7 +103,7 @@ def _get_provincial_map(
     p_map.add_glyph(
         ColumnDataSource(
             dict(x=[map_legend_x], y=[map_legend_y - 3.5], text=text_start)
-        ), Text(x='x', y='y', text='text', text_font_size='8pt', text_align='left')
+        ), Text(x='x', y='y', text='text', text_font_size='7pt', text_align='left')
     )
     # Add end val
     text_end = [legend_data.vals[99][:-2]]  # Note the 99 is dependent on legend having 100 points

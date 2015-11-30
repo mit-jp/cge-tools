@@ -70,4 +70,4 @@ energy_mix_columns = {
 }
 
 map_legend_x = 73
-map_legend_y = 53
+map_legend_y = 53.5

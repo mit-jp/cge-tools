@@ -157,13 +157,13 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
 
 
 def build_legend_data(df, key_value, sign, colormap, boost_factor):
-    val_min = round(df[key_value].min())
-    val_max = round(df[key_value].max())
-    if val_max == val_min:
-        # This takes account of the fact that rounding, specifically in the case of col_2010 (may need to revisit)
-        val_max = val_min + df[key_value].max() - df[key_value].min()
+    norm_array = df[key_value]
+    val_min = round(norm_array.min())
+    val_max = round(norm_array.max())
+    if key_value == 'col_2010_val':
+        norm_array = norm_array.dropna()
     vals = pd.Series(np.linspace(val_min, val_max, num=100)) * sign
-    norm_vals = vals / (np.linalg.norm(df[key_value]))
+    norm_vals = vals / (np.linalg.norm(norm_array))
     norm_vals = norm_vals * boost_factor
     norm_map = norm_vals.apply(colormap)
     norm_hex = norm_map.apply(rgb2hex)

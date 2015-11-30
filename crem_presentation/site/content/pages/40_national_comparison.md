@@ -1,6 +1,6 @@
 ﻿Title: National comparison
 SubTitleHead: CO₂ policy impacts: Summary
-SubTitle: To reach a CO₂ emissions peak by 2030 under the baseline economic growth assumption, China’s CO₂ intensity will need to fall between 4%-5%/year through 2030 (left panel). 
+SubTitle: To reach a CO₂ emissions peak before 2030 under the baseline economic growth assumption, China’s CO₂ intensity will need to fall by at least 4%/year through 2030 (left panel). 
 Date: 2015-11-29
 Viz: comparison_national
 BodyTitle: Comparing across the policy scenarios 

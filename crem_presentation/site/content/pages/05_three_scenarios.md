@@ -1,6 +1,6 @@
 Title: Policy scenarios
 SubTitleHead: China’s Climate Pledge
-SubTitle: [China’s climate pledge](http://www4.unfccc.int/submissions/INDC/Published%20Documents/China/1/China's%20INDC%20-%20on%2030%20June%202015.pdf) aims to halt the rise in the nation's CO₂ emissions trajectory at latest by 2030, and increase the share of non-fossil energy in the primary energy mix to 20% by the same year, targeting an overall reduction in CO₂ intensity of 60-65% in 2030, relative to the 2005 level. This reduction goal is equivalent to a roughly 4%/year decline in CO₂ intensity from 2015-2030.
+SubTitle: [China’s climate pledge](http://www4.unfccc.int/submissions/INDC/Published Documents/China/1/China's INDC - on 30 June 2015.pdf) aims to halt the rise in the nation's CO₂ emissions trajectory at latest by 2030, and increase the share of non-fossil energy in the primary energy mix to 20% by the same year, targeting an overall reduction in CO₂ intensity of 60–65% in 2030, relative to the 2005 level. This reduction goal is equivalent to a roughly 4%/year decline in CO₂ intensity from 2015–2030.
 Date: 2015-11-29
 
 <h4>Our Goal</h4>
@@ -13,7 +13,7 @@ Carbon intensity falls by 3%/year from 2010 to 2030, starting in 2010. Consisten
 Carbon intensity falls by 4%/year from 2010 to 2030, starting in 2010. *Consistent with China’s current pledge.*
 
 <h5 style="color: #BC6FC8">5% scenario</h5>
-Carbon intensity falls by 5%/year from 2010 to 2030, starting in 2010. More aggressive than China’s current pledge. China’s CO2 intensity approaches the U.S. 2010 level by 2030. 
+Carbon intensity falls by 5%/year from 2010 to 2030, starting in 2010. More aggressive than China’s current pledge. China’s CO₂ intensity approaches the U.S. 2010 level by 2030.
 
 The CO₂ price rises under each constraint, with steeper increases required to achieve more stringent CO₂ intensity targets. All scenarios include the pre-existing feed-in tariff for renewable energy, which is financed via an electricity price surcharge. Economic growth is an input to the model in each future period, such that all scenarios explored here embody an economic growth trajectory. In most of the scenarios we present, economic growth follows a rising path, consistent with China’s stated goal to become a well-off society by 2050. We explore sensitivity of our results to slower economic growth in one set of scenarios.
 

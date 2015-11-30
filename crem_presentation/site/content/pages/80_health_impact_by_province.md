@@ -1,7 +1,6 @@
 Title: Health impacts by province
 SubTitleHead: Health impacts are reduced most in the industrializing central provinces
-SubTitle: Focusing on the 4% scenario, population-weighted PM2.5 exposure falls most in provinces where a CO₂ price shifts provinces on to a cleaner industrialization path.
-
+SubTitle: Focusing on the 4% scenario, population-weighted PM<sub>2.5</sub> exposure falls most in provinces where a CO₂ price shifts provinces on to a cleaner industrialization path.
 Date: 2015-11-29
 Viz: health_impacts_by_province
 BodyTitle: Impacts are more limited along the coasts and in the less populated northern and western regions

@@ -7,6 +7,8 @@ SITENAME = "CECP - Exploring China's energy system"
 SITEURL = ''
 SITESUBTITLE = "Exploring China’s future energy system and its environmental impacts"
 
+FORMATTED_FIELDS = ['subtitle']
+
 PATH = 'content'
 
 TIMEZONE = 'America/New_York'

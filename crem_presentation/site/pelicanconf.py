@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 AUTHOR = 'CECP'
 SITENAME = "CECP - Exploring China's energy system"
 SITEURL = ''
-SITESUBTITLE = "Exploring China’s future energy system and its environmental impacts"
+SITESUBTITLE = "CECP - Exploring regional impacts of climate policy in China"
 
 FORMATTED_FIELDS = ['subtitle']
 
@@ -18,4 +18,4 @@ DEFAULT_LANG = 'en'
 THEME = 'theme'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['viz_renderer',]
+PLUGINS = ['viz_renderer']

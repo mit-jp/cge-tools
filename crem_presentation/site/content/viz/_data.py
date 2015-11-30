@@ -241,5 +241,5 @@ def get_gdp_delta_in_2030_by_province(prefix, df=None):
 
     df.loc['XZ', key_value] = 'No Data'
     df.loc['XZ', key_color] = 'white'
-    df.loc['SX', key_color] = 'black'
+    df.loc['SX', key_color] = '#A81625'
     return (df, legend_data)

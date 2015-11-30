@@ -23,13 +23,13 @@ html, body {
   font-size: 0.9em;
   margin: 30px 40px;
   line-height: 1.1em;
-  color: white;
-  clear: both;
+  color: lightgray;
+  text-transform: uppercase;
 }
 
 .site-logo-container {
   padding: 1em;
-  height: 95px;
+  max-height: 130px;
 }
 
 .site-logo {
@@ -140,6 +140,11 @@ html, body {
 
 .solid-line {
  letter-spacing: -2px; 
+}
+
+.mdl-typography--caption {
+  line-height: 1.1em;
+  font-size: 10px;
 }
 
 @media (min-width: 600px) {

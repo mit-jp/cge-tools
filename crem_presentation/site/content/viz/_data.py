@@ -152,7 +152,7 @@ def get_2030_4_vs_bau_delta(four, bau, parameter):
     four = four[parameter][2030]
     bau = bau[parameter][2030]
     absolute = four - bau
-    percent = (four - bau) / bau
+    percent = ((four - bau) / bau) * 100
     return (absolute, percent)
 
 

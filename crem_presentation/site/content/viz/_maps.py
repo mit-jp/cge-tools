@@ -17,7 +17,7 @@ from .__utils import get_map_plot
 def get_co2_2030_4_vs_bau_change_map(plot_width=600, df=None):
     df, legend_data = get_co2_2030_4_vs_bau_change_by_province(prefix='co2_change', cmap_name='Oranges', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt (@co2_change_percent{0.00}%)')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='co2_change_color', tooltip_text='Change in CO₂: @co2_change_val{0} Mt (@co2_change_percent{0}%)')
     return (m, df, source)
 
 
@@ -31,7 +31,7 @@ def get_col_2010_map(plot_width=600, df=None):
 def get_pm25_2030_4_vs_bau_change_map(plot_width=600, df=None):
     df, legend_data = get_pm25_2030_4_vs_bau_change_by_province(prefix='pm25_change', cmap_name='Greens', df=df)
     source, tibet_source = convert_provincial_dataframe_to_map_datasource(df)
-    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³ (@pm25_change_percent{0.00}%)')
+    m = _get_provincial_map(plot_width, source, tibet_source, legend_data, fill_color='pm25_change_color', tooltip_text='Change in PM2.5: @pm25_change_val{0.0} μg/m³ (@pm25_change_percent{0}%)')
     return (m, df, source)
 
 

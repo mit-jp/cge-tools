@@ -17,7 +17,7 @@ def render():
     co2, co2_line_renderers = get_co2_national_plot(**plot_params)
     co2, co2_lo_line_renderers = add_lo_economic_growth_lines(co2, 'CO2_emi')
     pm25, pm25_line_renderers = get_pm25_national_plot(**plot_params)
-    pm25, pm25_lo_line_renderers = add_lo_economic_growth_lines(pm25, 'PM25_conc')
+    pm25, pm25_lo_line_renderers = add_lo_economic_growth_lines(pm25, 'PM25_exposure')
     nonfossil, nonfossil_line_renderers = get_nonfossil(include_bau=True, **plot_params)
     nonfossil, nonfossil_lo_line_renderers = add_lo_economic_growth_lines(nonfossil, 'energy_nonfossil_share')
 

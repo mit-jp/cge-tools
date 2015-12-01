@@ -83,10 +83,10 @@ def add_lo_economic_growth_lines(plot, parameter):
 
 def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
     sources, data = get_pm25_national_data()
-    y_ticks = [30, 40, 50, 60]
-    y_range = Range1d(30, 62)
+    y_ticks = [30, 40, 50, 60, 70]
+    y_range = Range1d(30, 72)
     pm25, line_renderers = _get_national_scenario_line_plot(
-        sources, data, 'PM25_conc',
+        sources, data, 'PM25_exposure',
         y_ticks=y_ticks, plot_width=plot_width, grid=grid, end_factor=end_factor, y_range=y_range
     )
     # Add Targets

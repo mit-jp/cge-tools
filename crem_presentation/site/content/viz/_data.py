@@ -20,7 +20,7 @@ def get_national_data(parameter, include_bau):
 
 def get_pm25_national_data():
     filepath = '../cecp-cop21-data/national/%s.csv'
-    parameter = 'PM25_conc'
+    parameter = 'PM25_exposure'
     read_props = dict(usecols=['t', parameter])
     sources = {}
     data = []

@@ -4,7 +4,7 @@
 # # Data preparation for CECP CoP21 website
 # File locations:
 
-# In[4]:
+# In[1]:
 
 GDX_DIR = 'gdx'
 OUT_DIR = '../cecp-cop21-data'
@@ -32,7 +32,7 @@ get_ipython().run_cell_magic('bash', '', 'gams pre.gms --file=gdx/result_urban_e
 
 # ## 3. Read the GDX files
 
-# In[6]:
+# In[2]:
 
 # Load all the GDX files
 import csv
@@ -68,7 +68,7 @@ cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[7]:
+# In[3]:
 
 # List all the parameters available in each file
 #CREM.parameters()
@@ -82,7 +82,7 @@ def label(variable, desc, unit_long, unit_short):
                                    'unit_short': unit_short})
 
 
-# In[8]:
+# In[4]:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
@@ -100,7 +100,7 @@ label('GDP_delta', 'Change in gross domestic product relative to BAU',
       'percent', '%')
 
 
-# In[9]:
+# In[5]:
 
 # CO2 emissions
 temp = []
@@ -112,7 +112,7 @@ label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
 
 
-# In[10]:
+# In[6]:
 
 # Air pollutant emissions
 temp = []
@@ -129,7 +129,7 @@ for u in temp['urb']:
           'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[11]:
+# In[7]:
 
 # CO₂ price
 temp = []
@@ -140,7 +140,7 @@ label('CO2_price', 'Price of CO₂ emissions permit',
       '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[12]:
+# In[8]:
 
 # Consumption
 temp = []
@@ -151,7 +151,7 @@ label('cons', 'Household consumption',
       'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[13]:
+# In[9]:
 
 # Primary energy
 temp = []
@@ -199,7 +199,7 @@ label('penergy_nonfossil_share',
       'percent', '%')
 
 
-# In[14]:
+# In[10]:
 
 # Reported share of NHW
 temp1 = []
@@ -214,7 +214,7 @@ label('energy_nonfossil_share',
 nhw_share = 100 * xray.concat(temp2, dim=cases)
 
 
-# In[15]:
+# In[11]:
 
 # Population
 temp = []
@@ -225,7 +225,7 @@ arrays['pop'] = xray.concat(temp, dim=cases).drop('g').sel(rs=CREM.set('r'))    
 label('pop', 'Population', 'millions', '10⁶')
 
 
-# In[32]:
+# In[12]:
 
 # Share of coal in provincial GDP
 temp = []
@@ -240,7 +240,7 @@ label('COL_share', 'Share of coal production in provincial GDP',
 # ### 3.1. PM2.5 concentrations & population-weighted exposure
 # **Note:** these are contained in a separate XLSX file, pm.xslx.
 
-# In[33]:
+# In[28]:
 
 # Open the workbook and worksheet
 wb = load_workbook('pm.xlsx', read_only=True)
@@ -249,11 +249,13 @@ cols = {
     None: None,
     2010: ('bau', '2010'),
     '2030_BAU': ('bau', '2030'),
-    '2030_p2': ('2', '2030'),
-    '2030_p3': ('3', '2030'),
-    '2030_p4': ('4', '2030'),
-    '2030_p5': ('5', '2030'),
-    '2030_p6': ('6', '2030'),
+    '2030_cint3': ('3', '2030'),
+    '2030_cint4': ('4', '2030'),
+    '2030_cint5': ('5', '2030'),
+    '2030_BAU_lessGDP': ('bau_lo', '2030'),
+    '2030_cint3_lessGDP': ('3_lo', '2030'),
+    '2030_cint4_lessGDP': ('4_lo', '2030'),
+    '2030_cint5_lessGDP': ('5_lo', '2030'),
     }
 pm_extra = {}
 for ws in wb:
@@ -279,18 +281,18 @@ for ws in wb:
     da.loc[:,:,'2010'] = da.loc['bau',:,'2010']
 
     if ws.title == 'prv_actual_average':
-        arrays['PM25_conc'] = da.drop(['2', '6'], dim='case')
+        arrays['PM25_conc'] = da
         label('PM25_conc', 'Province-wide average PM2.5',
               'micrograms per cubic metre', 'μg/m³')
     elif ws.title == 'prv_pop_average':
-        arrays['PM25_exposure'] = da.drop(['2', '6'], dim='case')
+        arrays['PM25_exposure'] = da
         label('PM25_exposure', 'Population-weighted exposure to PM2.5',
               'micrograms per cubic metre', 'μg/m³')
     else:
         pm_extra[ws.title] = da
 
 
-# In[34]:
+# In[29]:
 
 df = pd.DataFrame([
     ['bau', '2010', 66.37],
@@ -313,7 +315,7 @@ label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
 
 # ### 3.2. Finish preprocessing
 
-# In[35]:
+# In[41]:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
@@ -329,18 +331,13 @@ data['scenarios'] = xray.DataArray((
     'Policy: Reduce carbon-intensity of GDP by 5%/year from LO',
     ), coords={'case': cases}, dims='case')
 
-for var in [data.PM25_exposure, data.PM25_conc]:
-    # interpolate PM data for missing years
-    var.loc[:,:,'2007'] = var.loc[:,:,'2010']
-    increment = (var.loc[:,:,'2030'] - var.loc[:,:,'2010']) / 4
-    var.loc[:,:,'2015'] = var.loc[:,:,'2010'] + increment
-    var.loc[:,:,'2020'] = var.loc[:,:,'2010'] + 2 * increment
-    var.loc[:,:,'2025'] = var.loc[:,:,'2010'] + 3 * increment
-    # fill in PM data for missing cases
-    var.loc['bau_lo',:,:] = var.loc['bau',:,:] * 0.9
-    var.loc['3_lo',:,:] = var.loc['3',:,:] * 0.9
-    var.loc['4_lo',:,:] = var.loc['4',:,:] * 0.9
-    var.loc['5_lo',:,:] = var.loc['5',:,:] * 0.9
+#for var in [data.PM25_exposure, data.PM25_conc]:
+#    # interpolate PM data for missing years
+#    var.loc[:,:,'2007'] = var.loc[:,:,'2010']
+#    increment = (var.loc[:,:,'2030'] - var.loc[:,:,'2010']) / 4
+#    var.loc[:,:,'2015'] = var.loc[:,:,'2010'] + increment
+#    var.loc[:,:,'2020'] = var.loc[:,:,'2010'] + 2 * increment
+#    var.loc[:,:,'2025'] = var.loc[:,:,'2010'] + 3 * increment
 
 # Construct data for low-ammonia cases
 # N.B. the NH₃ cases do not appear on the final website, so these lines simply
@@ -360,15 +357,22 @@ national['penergy_nonfossil_share'] = (national['energy_nonfossil'] /
                                        national['energy_total']) * 100
 national['energy_nonfossil_share'] = nhw_share
 national['PM25_exposed_frac'] = PM25_exposed_frac
-# FIXME use a proper national average
 # Unweighted average across provincial averages
-national['PM25_exposure'] = data.PM25_exposure.mean(dim='r')
-national['PM25_conc'] = data.PM25_conc.mean(dim='r')
+national['PM25_exposure'] = pm_extra['region_pop_average']                             .sel(r='Whole China').drop('r')
+national['PM25_conc'] = pm_extra['region_actual_average'].sel(r='Whole China')                                                         .drop('r')
+    
+for var in [national.PM25_exposure, national.PM25_conc]:
+    # interpolate PM data for missing years
+    var.loc[:,'2007'] = var.loc[:,'2010']
+    increment = (var.loc[:,'2030'] - var.loc[:,'2010']) / 4
+    var.loc[:,'2015'] = var.loc[:,'2010'] + increment
+    var.loc[:,'2020'] = var.loc[:,'2010'] + 2 * increment
+    var.loc[:,'2025'] = var.loc[:,'2010'] + 3 * increment
 
 
 # ## 4. Output data
 
-# In[37]:
+# In[42]:
 
 # Output a file with scenario information
 data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),

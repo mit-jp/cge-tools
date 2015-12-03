@@ -144,7 +144,7 @@ html, body {
 
 .mdl-typography--caption {
   line-height: 1.1em;
-  font-size: 10px;
+  font-size: 0.8em;
 }
 
 @media (min-width: 600px) {

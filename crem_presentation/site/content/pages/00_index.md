@@ -6,4 +6,6 @@ save_as: index.html
 viz: home
 BodyTitle: About the MIT-Tsinghua China Energy and Climate Project
 
+<br /><span style="font-weight: bold; color: #FF4081">This site is under development. The current beta version should not be cited or quoted without permission.</span><br/>
+
 Launched in mid-2011, the MIT-Tsinghua China Energy and Climate Project is a five-year project devoted to understanding the impact of climate policy on China’s energy and economic system. A core component of this project has been to develop a regional energy-economic model for China and linking it with a state-of-the-art atmospheric chemistry model to capture impacts of policy on energy, emissions, air quality, and human health within a single framework.

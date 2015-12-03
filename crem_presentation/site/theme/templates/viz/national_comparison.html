@@ -16,13 +16,16 @@
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--4-col">
     <div class="plotwrap">
-      <div class="plottitle">Share of non-fossil sources in final energy, %</div>
+      <div class="plottitle">Share of non-fossil sources in primary energy, % *</div>
       <div class="plotdiv" id="{{ plot_div.nonfossil.elementid }}"></div>
     </div>
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--12-col horizontal">
     {% include 'viz/_scenario_selectors.html' %}
   </div>
+</div>
+<div class="content-footer">
+  <p>* Modeling scenarios are given by China's 2030 pledges and in some cases do not automatically meet China's earlier pledges, such as the non-fossil primary energy target of 15% by 2020 made in Copenhagen.</p>
 </div>
 
 <div class="hidden" id="{{ plot_div.text.elementid }}"></div>

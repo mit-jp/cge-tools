@@ -187,6 +187,12 @@ html, body {
 }
 
 .content-footer > p {
+  width: 65%;
+  float: right;
+  line-height: 1.1em;
+}
+
+.content-footer > p {
   font-size: 0.8em;
   color: grey;
   text-align: right;

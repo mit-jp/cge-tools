@@ -95,7 +95,7 @@ def get_pm25_national_plot(plot_width=600, end_factor=None, grid=True):
         Line(x='x', y='y', line_width=2, line_dash='dotdash'),
     )
     pm25.add_glyph(
-        ColumnDataSource(data=dict(x=[2010.5], y=[33.1], text=['PM2.5 target'])),
+        ColumnDataSource(data=dict(x=[2010.5], y=[32.5], text=['PM2.5 target'])),
         Text(x='x', y='y', text='text', text_font_size='8pt'),
         level='overlay',
     )

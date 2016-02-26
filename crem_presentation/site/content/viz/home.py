@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*- #
 from .__utils import env
 
+from os.path import join
 
 def render():
-    template = env.get_template('viz/home_page.html')
+    template = env.get_template('home_page.html')
     pages = [
         {
             "title": "Air pollution",

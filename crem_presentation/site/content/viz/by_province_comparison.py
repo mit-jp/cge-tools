@@ -12,6 +12,7 @@ from ._maps import (
 )
 from .__utils import env
 
+from os.path import join
 
 def render():
     pop_map, df, _ = get_provincial_pop_2010_map()
@@ -28,7 +29,7 @@ def render():
                 gr.data_source = source
                 break
 
-    template = env.get_template('viz/by_province_comparison.html')
+    template = env.get_template('by_province_comparison.html')
     script, div = components(
         dict(
             pop_map=pop_map,

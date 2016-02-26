@@ -9,17 +9,19 @@ from .constants import (
     provinces, scenarios, scenarios_no_bau, file_names, energy_mix_columns, map_legend_x
 )
 
+from os.path import join
+DATA_DIR = join('..', '..', '..', 'cecp-cop21-data')
 
 def get_lo_national_data(parameter):
-    return _get_national_data(parameter, '../cecp-cop21-data/national/%s_lo.csv', include_bau=True)
+    return _get_national_data(parameter, join(DATA_DIR, 'national', '%s_lo.csv'), include_bau=True)
 
 
 def get_national_data(parameter, include_bau):
-    return _get_national_data(parameter, '../cecp-cop21-data/national/%s.csv', include_bau)
+    return _get_national_data(parameter, join(DATA_DIR, 'national', '%s.csv'), include_bau)
 
 
 def get_pm25_national_data():
-    filepath = '../cecp-cop21-data/national/%s.csv'
+    filepath = join(DATA_DIR, 'national', '%s.csv')
     parameter = 'PM25_exposure'
     read_props = dict(usecols=['t', parameter])
     sources = {}
@@ -38,7 +40,7 @@ def get_energy_mix_for_all_scenarios():
     read_props = dict(usecols=usecols)
     all_scenarios = pd.DataFrame()
     for scenario in scenarios:
-        df = get_df_and_strip_2007('../cecp-cop21-data/national/%s.csv' % file_names[scenario], read_props)
+        df = get_df_and_strip_2007(join(DATA_DIR, 'national', '%s.csv') % file_names[scenario], read_props)
         all_scenarios['t'] = df['t']
         for energy_mix_column in energy_mix_columns:
             all_scenarios['%s_%s' % (scenario, energy_mix_column)] = df[energy_mix_column]
@@ -84,7 +86,7 @@ def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index, df=
         df = null_df
     # Populate the values
     for province in province_list:
-        four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
+        four = get_df_and_strip_2007(join(DATA_DIR, '%s', '4.csv') % province, read_props)
         four = four.set_index('t')
         df[key_value][province] = four[parameter][row_index]
 
@@ -120,8 +122,8 @@ def get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 
 
     # Populate the values
     for province in province_list:
-        four = get_df_and_strip_2007('../cecp-cop21-data/%s/4.csv' % province, read_props)
-        bau = get_df_and_strip_2007('../cecp-cop21-data/%s/bau.csv' % province, read_props)
+        four = get_df_and_strip_2007(join(DATA_DIR, '%s', '4.csv') % province, read_props)
+        bau = get_df_and_strip_2007(join(DATA_DIR, '%s', 'bau.csv') % province, read_props)
         df[key_value][province], df[key_percent][province] = get_2030_4_vs_bau_delta(four, bau, parameter)
 
     df, legend_data = normalize_and_color(df, key_value, key_color, cmap_name)
@@ -192,7 +194,7 @@ def normalize_and_color(df, key_value, key_color, cmap_name, boost_factor=None):
 
 
 def convert_provincial_dataframe_to_map_datasource(df):
-    province_info = pd.read_hdf('content/viz/__province_map_data_simplified.hdf', 'df')
+    province_info = pd.read_hdf(join('content', 'viz', '__province_map_data_simplified.hdf'), 'df')
     province_info = province_info.set_index('alpha')
 
     map_df = pd.concat([df, province_info], axis=1)

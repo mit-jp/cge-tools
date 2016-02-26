@@ -8,6 +8,7 @@ from ._maps import (
 )
 from .__utils import env
 
+from os.path import join
 
 def render():
     pm25_map, df, _ = get_pm25_2030_4_vs_bau_change_map()
@@ -19,7 +20,7 @@ def render():
             gr.data_source = source
             break
 
-    template = env.get_template('viz/by_province_health_impacts.html')
+    template = env.get_template('by_province_health_impacts.html')
     script, div = components(
         dict(pm25_map=pm25_map, exposure_map=exposure_map),
         wrap_plot_info=False

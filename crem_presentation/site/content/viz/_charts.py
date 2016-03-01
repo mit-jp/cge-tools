@@ -2,7 +2,7 @@
 from bokeh.models import (
     Plot, Range1d, Line, Text, Circle, HoverTool, ColumnDataSource
 )
-from bokeh.properties import value
+from bokeh.core.properties import value
 
 from ._data import get_national_data, get_lo_national_data, get_pm25_national_data
 from .__utils import get_y_range, get_year_range, add_axes

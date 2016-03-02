@@ -4,10 +4,13 @@
 # # Data preparation for CECP CoP21 website
 # File locations:
 
-# In[1]:
+# Cell:
 
-GDX_DIR = 'gdx'
-OUT_DIR = '../cecp-cop21-data'
+from os.path import join
+
+GDX_DIR = join('..', '..', '..', 'crem', 'gdx')
+OUT_DIR = join('..', '..', '..', 'cecp-cop21-data')
+GDX_DIR
 
 
 # ## 1. Run C-REM
@@ -17,7 +20,7 @@ OUT_DIR = '../cecp-cop21-data'
 # 
 # See [issue #35](https://github.com/mit-jp/crem/issues/35).
 
-# In[2]:
+# Cell:
 
 get_ipython().run_cell_magic('bash', '', '# C-REM runs\ncrem gdx/result_urban_exo -- --case=default\ncrem gdx/result_cint_n_3 -- --case=cint_n --cint_n_rate=3\ncrem gdx/result_cint_n_4 -- --case=cint_n --cint_n_rate=4\ncrem gdx/result_cint_n_5 -- --case=cint_n --cint_n_rate=5\n# Low-growth cases\ncrem gdx/result_urban_exo_lessGDP -- --case=default\ncrem gdx/result_cint_n_3_lessGDP -- --case=cint_n --cint_n_rate=3\ncrem gdx/result_cint_n_4_lessGDP -- --case=cint_n --cint_n_rate=4\ncrem gdx/result_cint_n_5_lessGDP -- --case=cint_n --cint_n_rate=5')
 
@@ -25,14 +28,14 @@ get_ipython().run_cell_magic('bash', '', '# C-REM runs\ncrem gdx/result_urban_ex
 # ## 2. Preprocess the GDX files
 # Some of the quantities used below are stored in the GAMS parameters `report(*,*,*)` and `egyreport2(*,*,*,*)`, which pyGDX cannot handle. The cell below runs the simple GAMS script `pre.gms` to produce a new file named `*foo*_extra.gdx` with the pyGDX-friendly variables `ptcarb_t(t)`, `pe_t(e,r,t)` and `cons_t(r,t)`.
 
-# In[5]:
+# Cell:
 
-get_ipython().run_cell_magic('bash', '', 'gams pre.gms --file=gdx/result_urban_exo\ngams pre.gms --file=gdx/result_cint_n_3\ngams pre.gms --file=gdx/result_cint_n_4\ngams pre.gms --file=gdx/result_cint_n_5\ngams pre.gms --file=gdx/result_urban_exo_lessGDP\ngams pre.gms --file=gdx/result_cint_n_3_lessGDP\ngams pre.gms --file=gdx/result_cint_n_4_lessGDP\ngams pre.gms --file=gdx/result_cint_n_5_lessGDP')
+get_ipython().run_cell_magic('win-bash', '', 'gams pre.gms --file=gdx/result_urban_exo\ngams pre.gms --file=gdx/result_cint_n_3\ngams pre.gms --file=gdx/result_cint_n_4\ngams pre.gms --file=gdx/result_cint_n_5\ngams pre.gms --file=gdx/result_urban_exo_lessGDP\ngams pre.gms --file=gdx/result_cint_n_3_lessGDP\ngams pre.gms --file=gdx/result_cint_n_4_lessGDP\ngams pre.gms --file=gdx/result_cint_n_5_lessGDP')
 
 
 # ## 3. Read the GDX files
 
-# In[2]:
+# Cell:
 
 # Load all the GDX files
 import csv
@@ -60,15 +63,15 @@ FILES = [
 raw = OrderedDict()
 extra = dict()
 for case, fn in FILES:
-    raw[case] = gdx.File('gdx/' + fn)
-    extra[case] = gdx.File('gdx/' + fn.replace('.gdx', '_extra.gdx'))
+    raw[case] = gdx.File(join(GDX_DIR, fn))
+    extra[case] = gdx.File(join(GDX_DIR, fn.replace('.gdx', '_extra.gdx')))
 
 CREM = raw['bau']
 cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
 
 
-# In[3]:
+# Cell:
 
 # List all the parameters available in each file
 #CREM.parameters()
@@ -82,7 +85,7 @@ def label(variable, desc, unit_long, unit_short):
                                    'unit_short': unit_short})
 
 
-# In[4]:
+# Cell:
 
 # GDP
 temp = [raw[case].extract('gdp_ref') for case in cases]
@@ -100,7 +103,7 @@ label('GDP_delta', 'Change in gross domestic product relative to BAU',
       'percent', '%')
 
 
-# In[5]:
+# Cell:
 
 # CO2 emissions
 temp = []
@@ -112,7 +115,7 @@ label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
 
 
-# In[6]:
+# Cell:
 
 # Air pollutant emissions
 temp = []
@@ -129,7 +132,7 @@ for u in temp['urb']:
           'millions of tonnes of ' + str(u_fancy), 'Mt')
 
 
-# In[7]:
+# Cell:
 
 # CO₂ price
 temp = []
@@ -140,7 +143,7 @@ label('CO2_price', 'Price of CO₂ emissions permit',
       '2007 US dollars per tonne CO₂', '2007 USD/t')
 
 
-# In[8]:
+# Cell:
 
 # Consumption
 temp = []
@@ -151,7 +154,7 @@ label('cons', 'Household consumption',
       'billions of U.S. dollars, constant at 2007', '10⁹ USD')
 
 
-# In[9]:
+# Cell:
 
 # Primary energy
 temp = []
@@ -199,7 +202,7 @@ label('penergy_nonfossil_share',
       'percent', '%')
 
 
-# In[10]:
+# Cell:
 
 # Reported share of NHW
 temp1 = []
@@ -214,7 +217,7 @@ label('energy_nonfossil_share',
 nhw_share = 100 * xray.concat(temp2, dim=cases)
 
 
-# In[11]:
+# Cell:
 
 # Population
 temp = []
@@ -225,7 +228,7 @@ arrays['pop'] = xray.concat(temp, dim=cases).drop('g').sel(rs=CREM.set('r'))    
 label('pop', 'Population', 'millions', '10⁶')
 
 
-# In[12]:
+# Cell:
 
 # Share of coal in provincial GDP
 temp = []
@@ -240,10 +243,10 @@ label('COL_share', 'Share of coal production in provincial GDP',
 # ### 3.1. PM2.5 concentrations & population-weighted exposure
 # **Note:** these are contained in a separate XLSX file, pm.xslx.
 
-# In[28]:
+# Cell:
 
 # Open the workbook and worksheet
-wb = load_workbook('pm.xlsx', read_only=True)
+wb = load_workbook(join(GDX_DIR,'pm.xlsx'), read_only=True)
 
 cols = {
     None: None,
@@ -292,7 +295,7 @@ for ws in wb:
         pm_extra[ws.title] = da
 
 
-# In[29]:
+# Cell:
 
 df = pd.DataFrame([
     ['bau', '2010', 66.37],
@@ -311,16 +314,17 @@ arrays['PM25_exposed_frac'] = xray.DataArray([nan] * len(time), coords=[time],
                                              dims='t')
 label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
       ' than 35 μg/m³', 'percent', '%')
+PM25_exposed_frac
 
 
 # ### 3.2. Finish preprocessing
 
-# In[41]:
+# Cell:
 
 # Combine all variables into a single xray.Dataset and truncate time
 data = xray.Dataset(arrays).sel(t=time)
 
-data['scenarios'] = xray.DataArray((
+data['scenarios'] = xray.DataArray([
     'BAU: Business-as-usual',
     'Policy: Reduce carbon-intensity of GDP by 3%/year from BAU',
     'Policy: Reduce carbon-intensity of GDP by 4%/year from BAU',
@@ -329,7 +333,7 @@ data['scenarios'] = xray.DataArray((
     'Policy: Reduce carbon-intensity of GDP by 3%/year from LO',
     'Policy: Reduce carbon-intensity of GDP by 4%/year from LO',
     'Policy: Reduce carbon-intensity of GDP by 5%/year from LO',
-    ), coords={'case': cases}, dims='case')
+    ], coords={'case': cases}, dims='case')
 
 #for var in [data.PM25_exposure, data.PM25_conc]:
 #    # interpolate PM data for missing years
@@ -372,7 +376,7 @@ for var in [national.PM25_exposure, national.PM25_conc]:
 
 # ## 4. Output data
 
-# In[42]:
+# Cell:
 
 # Output a file with scenario information
 data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),
@@ -383,6 +387,7 @@ data['scenarios'].to_dataframe().to_csv(join(OUT_DIR, 'scenarios.csv'),
 var_info = pd.DataFrame(index=[d for d in data.data_vars if d != 'scenarios'],
                         columns=['desc', 'unit_long', 'unit_short'],
                         dtype=str)
+
 print('Missing dimension info:')
 none_missing = True
 for name, _ in var_info.iterrows():
@@ -408,6 +413,9 @@ for c in map(lambda x: x.values, data.case):
     # Provincial data
     for r in CREM.set('r'):
         data.sel(case=c, r=r).drop(['case', 'r', 'scenarios']).to_dataframe()             .to_csv(join(OUT_DIR, r, '{}.csv'.format(c)))
+            
+    # Todo: sort column names before dump data to csv
+    
     # National data
     national.sel(case=c).drop(['case', 'scenarios']).to_dataframe()             .to_csv(join(OUT_DIR, 'national', '{}.csv'.format(c)))
 

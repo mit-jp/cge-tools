@@ -11,6 +11,7 @@ from ._charts import (
 )
 from .__utils import get_js_array, env
 
+from os.path import join
 
 def render():
     plot_params = dict(plot_width=700, grid=True, end_factor=6)
@@ -64,7 +65,7 @@ def render():
     callback = CustomJS(code=code, args=prefixed_line_renderers)
     text = TextInput(callback=callback)
 
-    template = env.get_template('viz/national_comparison_economic.html')
+    template = env.get_template('national_comparison_economic.html')
     script, div = components(
         dict(co2=co2, pm25=pm25, nonfossil=nonfossil, text=text),
         wrap_plot_info=False

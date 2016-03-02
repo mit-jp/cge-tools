@@ -1,6 +1,7 @@
-PY?=python3
+PY?=python
 PELICAN?=pelican
 PELICANOPTS=
+SCP=pscp
 
 BASEDIR=$(CURDIR)
 INPUTDIR="$(BASEDIR)/content"
@@ -36,7 +37,7 @@ help:
 	@echo '                                                                       '
 
 html:
-	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
+	$(PELICAN) --debug $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 clean:
 	[ ! -d $(OUTPUTDIR) ] || rm -rf $(OUTPUTDIR)
@@ -66,10 +67,10 @@ publish:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload: publish
-	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
-	scp -P $(SSH_PORT) $(OUTPUTDIR)/.htaccess $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	$(SCP) -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	$(SCP) -P $(SSH_PORT) $(OUTPUTDIR)/.htaccess $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
 athena_upload: publish
-	scp -o 'GSSAPIDelegateCredentials yes' -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
+	$(SCP) -o 'GSSAPIDelegateCredentials yes' -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload athena_upload

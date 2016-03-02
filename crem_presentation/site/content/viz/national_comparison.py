@@ -5,6 +5,7 @@ from bokeh.models import TextInput, CustomJS
 from .constants import scenarios
 from ._charts import get_co2_national_plot, get_pm25_national_plot, get_nonfossil
 from .__utils import get_js_array, env
+from os.path import join
 
 
 def render():
@@ -46,7 +47,7 @@ def render():
     callback = CustomJS(code=code, args=prefixed_line_renderers)
     text = TextInput(callback=callback)
 
-    template = env.get_template('viz/national_comparison.html')
+    template = env.get_template('national_comparison.html')
     script, div = components(
         dict(co2=co2, pm25=pm25, nonfossil=nonfossil, text=text),
         wrap_plot_info=False

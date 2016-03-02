@@ -9,14 +9,15 @@ from .__utils import get_js_array, env
 
 def render():
     co2_plot, ap_plot, text = get()
-    template = env.get_template('viz/national_air_pollution.html')
+    template = env.get_template('national_air_pollution.html')
     script, div = components(
         dict(plot1=co2_plot, plot2=ap_plot, text=text),
         wrap_plot_info=False
     )
     return template.render(
         plot_script=script, plot_div=div,
-        plot2_title="Population-weighted PM<sub><small>2.5</small></sub> concentrations, μg/m³",
+        plot2_title=("Population-weighted PM<sub><small>2.5</small></sub> "
+                     "concentrations, μg/m³"),
         prefix='dual',
     )
 
@@ -24,8 +25,10 @@ def render():
 def get():
     plot_width = 900
     end_factor = 5
-    ap_plot, ap_line_renderers = get_pm25_national_plot(plot_width=plot_width, end_factor=end_factor)
-    co2_plot, co2_line_renderers = get_co2_national_plot(plot_width=plot_width, end_factor=end_factor)
+    ap_plot, ap_line_renderers = get_pm25_national_plot(plot_width=plot_width,
+                                                        end_factor=end_factor)
+    co2_plot, co2_line_renderers = get_co2_national_plot(plot_width=plot_width,
+                                                         end_factor=end_factor)
     prefixed_line_renderers = {}
     for key in scenarios:
         prefixed_line_renderers['ap_%s' % key] = ap_line_renderers[key]

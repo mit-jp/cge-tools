@@ -1,4 +1,4 @@
-{# 
+{#
   This template expects:
   - plot_div.plot1
   - plot_div.plot2
@@ -14,7 +14,7 @@
 #}
 <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
   <div class="mdl-color--white mdl-cell mdl-cell--2-col">
-  {% include 'viz/_scenario_selectors.html' %}
+  {% include '_scenario_selectors.html' %}
   </div>
   <div class="mdl-color--white mdl-cell mdl-cell--5-col">
     <div class="plotwrap">
@@ -32,4 +32,3 @@
 
 <div class="hidden" id="{{ plot_div.text.elementid }}"></div>
 {{ plot_script }}
-

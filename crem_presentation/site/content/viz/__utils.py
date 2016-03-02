@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*- #
 from bokeh.models import LinearAxis, Range1d, Grid, FixedTicker, NumeralTickFormatter, Plot
 
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, FileSystemLoader
 
 from .constants import AXIS_FORMATS, PLOT_FORMATS, grey, dark_grey
 
-env = Environment(loader=PackageLoader('theme', 'templates'))
+from os.path import join
+
+env = Environment(loader=FileSystemLoader(join('theme', 'templates', 'viz')))
 
 
 def get_map_plot(plot_width):

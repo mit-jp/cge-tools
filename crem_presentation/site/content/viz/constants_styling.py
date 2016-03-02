@@ -42,5 +42,8 @@ PLOT_FORMATS = dict(
     responsive=True,
     toolbar_location=None,
     outline_line_color=None,
-    min_border=0
+    min_border_top=0,
+    min_border_right=0,
+    min_border_left=0,
+    min_border_bottom=0,
 )

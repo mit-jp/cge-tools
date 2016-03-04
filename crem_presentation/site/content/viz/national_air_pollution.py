@@ -17,7 +17,7 @@ def render():
     return template.render(
         plot_script=script, plot_div=div,
         plot2_title=("Population-weighted PM<sub><small>2.5</small></sub> "
-                     "concentrations, μg/m³"),
+                     "concentrations, μg/m³*"),
         prefix='dual',
     )
 

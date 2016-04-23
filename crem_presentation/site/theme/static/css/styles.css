@@ -336,7 +336,7 @@ html, body {
 
 .home-menu  .mdl-card__title {
   min-height: 125px;
-  background-size: 95%;
+  background-size: cover;
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
@@ -344,9 +344,15 @@ html, body {
 .home-menu .image-overlay {
   width: 100%;
   height: 125px;
+/*
   background-color: #00838f;
   opacity: 0.2;
+*/
   margin-top: -125px;
+}
+
+.mdl-card__title.three-scenarios {
+  background-image: url('../images/three-scenarios.png');
 }
 
 .mdl-card__title.air-pollution {

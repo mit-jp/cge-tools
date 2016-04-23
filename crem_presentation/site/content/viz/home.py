@@ -7,7 +7,12 @@ def render():
     template = env.get_template('home_page.html')
     pages = [
         {
-            "title": "Air pollution",
+            "title": "Policy scenarios",
+            "link": "three-scenarios",
+            "text": "We project and compare the evolution of China’s energy and economic system under increasingly stringent national CO₂ intensity reduction targets."
+        },
+        {
+            "title": "CO₂ & Air Quality",
             "link": "air-pollution",
             "text": "China has a unique opportunity to clean up CO₂ and local air pollution at the same time."
         },
@@ -15,11 +20,6 @@ def render():
             "title": "Energy mix",
             "link": "energy-mix",
             "text": "China's target of 20% of energy from non-fossil sources (wind, solar, hydro, and nuclear power) is met in 2030 in the 4% scenario."
-        },
-        {
-            "title": "National comparison",
-            "link": "national-comparison",
-            "text": "To reach a CO₂ emissions peak by 2030 under baseline economic assumptions, China’s CO₂ intensity will need to fall between 4%-5%/year."
         },
         {
             "title": "Economic growth",

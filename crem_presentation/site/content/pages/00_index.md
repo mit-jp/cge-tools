@@ -1,6 +1,6 @@
 ﻿Title: Home
 SubTitleHead: Explore the Impacts of Climate Policy in China on Energy, Emissions, Air Quality, and Health
-SubTitle: [**<span style="color:#ff4081">This site is under development. The current beta version should not be cited or quoted without permission. Click here for more information.</span>**](pages/beta.html)<br/><br/>In every nation, sound climate policy design benefits from an understanding of the system-wide response and its associated uncertainties. This response includes not only reductions in CO₂ emissions, but also impacts on the energy system, economy, air quality, and human health. This site is devoted to understanding climate policy impacts in China.
+SubTitle: In every nation, sound climate policy design benefits from an understanding of the system-wide response and its associated uncertainties. This response includes not only reductions in CO₂ emissions, but also impacts on the energy system, economy, air quality, and human health. This site is devoted to understanding climate policy impacts in China.
 Date: 2015-11-29
 save_as: index.html
 viz: home

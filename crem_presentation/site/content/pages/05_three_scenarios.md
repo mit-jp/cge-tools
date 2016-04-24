@@ -9,6 +9,9 @@ We project and compare the evolution of China’s energy and economic system und
 CO₂ emissions reductions are achieved with a CO₂ price that incentivizes deployment of abatement options available in the model that meet the CO₂ intensity constraint at least cost.
 We compare all policy scenarios to a No Policy counterfactual, which assumes that no climate policy is in place after 2010. We use the No Policy scenario as a benchmark to assess the implications of a CO₂ price that achieves increasingly stringent annual reductions in CO₂ intensity, as follows:
 
+<h5>No Policy counterfactual</h5>
+In the No Policy counterfactual, the Chinese economy grows at 7/% per year, and the growth rate is assumed to gradually show down to  4.5/% per year in 2030. We further tested another set of cases with the economy growth rate being 1/% less in all time periods; this exercise gives us a sense of the pressure given by economy growth to the environment.
+
 <h5 style="color: #48B4AC">3% scenario</h5>
 Carbon intensity falls by 3%/year from 2010 to 2030, starting in 2010. 
 Consistent with China’s previous declared level of CO₂ intensity reduction effort under the 2009 Copenhagen climate pledge, which was to reduce national CO₂ intensity by 40-45% between 2005 and 2020 (does not include the non-fossil primary energy target).

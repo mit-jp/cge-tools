@@ -8,7 +8,7 @@ def render():
     pages = [
         {
             "title": "Policy scenarios",
-            "link": "three-scenarios",
+            "link": "policy-scenarios",
             "text": "We project and compare the evolution of China’s energy and economic system under increasingly stringent national CO₂ intensity reduction targets."
         },
         {

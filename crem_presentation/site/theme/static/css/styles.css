@@ -351,8 +351,8 @@ html, body {
   margin-top: -125px;
 }
 
-.mdl-card__title.three-scenarios {
-  background-image: url('../images/three-scenarios.png');
+.mdl-card__title.policy-scenarios {
+  background-image: url('../images/policy-scenarios.png');
 }
 
 .mdl-card__title.air-pollution {

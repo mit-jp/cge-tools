@@ -1,7 +1,7 @@
 PY?=python
 PELICAN?=pelican
 PELICANOPTS=
-SCP=pscp
+SCP?=pscp
 
 BASEDIR=$(CURDIR)
 INPUTDIR="$(BASEDIR)/content"

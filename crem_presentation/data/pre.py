@@ -252,13 +252,16 @@ wb = load_workbook(PM_FILE, read_only=True)
 cols = {
     None: ('r', ''),
     2010: ('bau', '2010'),
-    # 2018-04-21 pnk: these column labels have changed; earlier pm.xlsx used
-    # the versions in the line comments
-    'bau': ('bau', '2030'),  # 2030_BAU
-    'cint3': ('3', '2030'),  # 2030_cint3
-    'cint4': ('4', '2030'),  # 2030_cint4
-    'cint5': ('5', '2030'),  # 2030_cint5
+    # 2018-04-21 pnk: these column labels have changed
+    'bau': ('bau', '2030'),
+    'cint3': ('3', '2030'),
+    'cint4': ('4', '2030'),
+    'cint5': ('5', '2030'),
     # 2018-04-21 pnk: these column labels no longer appear
+    '2030_BAU': ('bau', '2030'),
+    '2030_cint3': ('3', '2030'),
+    '2030_cint4': ('4', '2030'),
+    '2030_cint5': ('5', '2030'),
     '2030_BAU_lessGDP': ('bau_lo', '2030'),
     '2030_cint3_lessGDP': ('3_lo', '2030'),
     '2030_cint4_lessGDP': ('4_lo', '2030'),
@@ -281,12 +284,13 @@ for ws in wb:
 
     # Convert to a pandas.Series
     df = pd.DataFrame(temp, columns=columns) \
-           .set_index([('r', '')]) \
            .dropna(axis=(0, 1), how='all') \
-           .drop(columns='drop') \
+           .set_index([('r', '')]) \
+           .drop(columns='drop', errors='ignore') \
            .stack(['case', 't'])
     df.index = df.index.rename(['r', 'case', 't']) \
-                       .swaplevel('case', 'r')
+                       .swaplevel('case', 'r') \
+                       .remove_unused_levels()
 
     # Convert to an xr.DataArray
     da = xr.DataArray.from_series(df)

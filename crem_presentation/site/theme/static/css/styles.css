@@ -375,8 +375,8 @@ html, body {
   background-image: url('../images/co2-by-province.png');
 }
 
-.mdl-card__title.health-impacts-by-province {
-  background-image: url('../images/health-impacts-by-province.png');
+.mdl-card__title.air-quality-impacts-by-province {
+  background-image: url('../images/air-quality-impacts-by-province.png');
 }
 
 .mdl-card__title.provincial-comparison {

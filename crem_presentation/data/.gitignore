@@ -1,2 +1,4 @@
+*.gdx
 *.lst
 *.xlsx
+.~lock*

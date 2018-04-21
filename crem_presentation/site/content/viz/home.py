@@ -32,8 +32,8 @@ def render():
             "text": "The effects of policy vary widely across China’s provinces, consistent with diverse features of provincial energy systems and economies."
         },
         {
-            "title": "Health impacts by province",
-            "link": "health-impacts-by-province",
+            "title": "Air quality impacts by province",
+            "link": "air-quality-impacts-by-province",
             "text": "Combining the spatial distribution of population with projections of air quality provide insight where the health consequences will be greatest."
         },
         {

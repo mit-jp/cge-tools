@@ -1,7 +1,8 @@
 PY?=python
 PELICAN?=pelican
 PELICANOPTS=
-SCP?=pscp
+# On Windows using PuTTY, may want 'pscp' here
+SCP?=scp
 
 BASEDIR=$(CURDIR)
 INPUTDIR="$(BASEDIR)/content"

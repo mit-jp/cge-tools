@@ -1,11 +1,2 @@
 .ipynb_checkpoints
-.ropeproject
 __pycache__
-*.egg-info
-*.gdx
-output
-private_settings.py
-*.swp
-node_modules
-*.pid
-cecp-cop21-data.lnk

@@ -5,4 +5,4 @@ Date: 2015-11-29
 Viz: co2_by_province
 BodyTitle: Coal production in provincial GDP is one strong predictor of CO₂ reduction
 
-Each province faces a different marginal cost of reducing CO₂. A CO₂ price induces provinces with low cost abatement opportunities to reduce CO₂ and avoid the charge, while high abatement cost producers will continue to emit and pay the charge instead. Nationally, among CO₂-intensive fuels demand for coal falls most as there are range of substitutes for its use. This significantly impacts major coal producing and domestic exporting provinces such as Shanxi (dark blue in the right panel).
+Each province faces a different marginal cost of reducing CO₂. A CO₂ price induces provinces with low cost abatement opportunities to reduce CO₂ and avoid the charge, while high abatement cost producers will continue to emit and pay the charge instead. Nationally, among CO₂-intensive fuels demand for coal falls most as there are a range of substitutes for its use. This significantly impacts major coal producing and domestic exporting provinces such as Shanxi (dark blue in the right panel).

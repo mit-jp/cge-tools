@@ -68,7 +68,7 @@ def get_2030_pm25_exposure_by_province(prefix, cmap_name='Blues', df=None):
 
 
 def get_pm25_2030_4_vs_bau_change_by_province(prefix, cmap_name='Blues', df=None):
-    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_conc', df=df)
+    return get_dataframe_of_2030_4_vs_bau_change_in_provincial_data(prefix, cmap_name, 'PM25_exposure', df=df)
 
 
 def _get_dataframe_of_specific_provincial_data(prefix, parameter, row_index, df=None):

@@ -12,16 +12,16 @@ We compare all policy scenarios to a No Policy counterfactual, which assumes tha
 <h5>No Policy counterfactual</h5>
 In the No Policy counterfactual, the Chinese economy grows at 7/% per year in 2015, and the growth rate is assumed to gradually show down to 4.5/% per year in 2030.
 
-<h5 style="color: #48B4AC">3% scenario</h5>
+<h5 style="color: #48B4AC">3% Policy scenario</h5>
 Carbon intensity falls by 3%/year from 2015 to 2030, starting in 2015.
-Consistent with China’s previous declared level of CO₂ intensity reduction effort under the 2009 Copenhagen climate pledge, which was to reduce national CO₂ intensity by 40-45% between 2005 and 2020 (does not include the non-fossil primary energy target).
+This scenario is consistent with China’s previous declared level of CO₂ intensity reduction effort under the 2009 Copenhagen climate pledge, which was to reduce national CO₂ intensity by 40-45% between 2005 and 2020 (does not include the non-fossil primary energy target).
 In reality, China’s CO₂ emissions intensity reduction has exceeded 3%/year from 2010 to 2015.
 
-<h5 style="color: #FF8D64">4% scenario</h5>
-Carbon intensity falls by 4%/year from 2015 to 2030, starting in 2015. *Consistent with China’s current pledge under the 2015 Paris Climate Agreement.*
+<h5 style="color: #FF8D64">4% Policy scenario</h5>
+Carbon intensity falls by 4%/year from 2015 to 2030, starting in 2015. *This scenario is consistent with China’s current pledge under the 2015 Paris Climate Agreement.*
 
-<h5 style="color: #BC6FC8">5% scenario</h5>
-Carbon intensity falls by 5%/year from 2010 to 2030, starting in 2010. More aggressive than China’s current pledge. By 2030, China’s CO₂ intensity approaches the global 2007 average.
+<h5 style="color: #BC6FC8">5% Policy scenario</h5>
+Carbon intensity falls by 5%/year from 2010 to 2030, starting in 2010. This scenario is more aggressive than China’s current pledge. By 2030, China’s CO₂ intensity approaches the global 2007 average.
 
 The CO₂ price rises under each constraint, with steeper increases required to achieve more stringent CO₂ intensity targets.
 In all scenarios, economic growth follows a rising path, consistent with China's stated goal to become a well-off society by 2050.

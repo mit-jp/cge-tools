@@ -44,17 +44,19 @@ CASE_INFO = [
     ('5', 'result_cint_n_5',
      'Policy: Reduce carbon-intensity of GDP by 5%/year from BAU'),
     # 2018-04-21 pnk: final version of site does not use these data
-    # ('bau_lo', 'result_urban_exo_lessGDP',
-    #  'LO: BAU with 1% lower annual GDP growth'),
-    # ('3_lo', 'result_cint_n_3_lessGDP',
-    #  'Policy: Reduce carbon-intensity of GDP by 3%/year from LO'),
-    # ('4_lo', 'result_cint_n_4_lessGDP',
-    #  'Policy: Reduce carbon-intensity of GDP by 4%/year from LO'),
-    # ('5_lo', 'result_cint_n_5_lessGDP',
-    #  'Policy: Reduce carbon-intensity of GDP by 5%/year from LO'),
+    ('bau_lo', 'result_urban_exo_lessGDP',
+     'LO: BAU with 1% lower annual GDP growth'),
+    ('3_lo', 'result_cint_n_3_lessGDP',
+     'Policy: Reduce carbon-intensity of GDP by 3%/year from LO'),
+    ('4_lo', 'result_cint_n_4_lessGDP',
+     'Policy: Reduce carbon-intensity of GDP by 4%/year from LO'),
+    ('5_lo', 'result_cint_n_5_lessGDP',
+     'Policy: Reduce carbon-intensity of GDP by 5%/year from LO'),
     ]
 
 PM_FILE = GDX_DIR / 'pm.xlsx'
+
+PM_FILE_FORMAT = 2  # either 1 (ca. 2015) or 2 (ca. 2018)
 
 # 2. Preprocess the GDX files.
 #    Some of the quantities used below are stored in the GAMS parameters
@@ -74,8 +76,11 @@ for case, fn, label in CASE_INFO:
 
     # Read the GDX files
     fn = fn.with_suffix('.gdx')
-    raw[case] = gdx.File(fn)
-    extra[case] = gdx.File(str(fn).replace('.gdx', '_extra.gdx'))
+    try:
+        raw[case] = gdx.File(fn)
+        extra[case] = gdx.File(str(fn).replace('.gdx', '_extra.gdx'))
+    except FileNotFoundError:
+        continue
 
 # Use the BAU file to reference dimensions, sets etc.
 CREM = raw['bau']
@@ -83,6 +88,9 @@ CREM = raw['bau']
 # Indices for result objects
 cases = pd.Index(raw.keys(), name='case')
 time = pd.Index(filter(lambda t: int(t) <= 2030, CREM.set('t')))
+
+# Description of the scenarios being loaded
+scenarios_desc = pd.Series({case[0]: case[2] for case in CASE_INFO})[cases]
 
 # for debugging:
 # # List all the parameters available in each file
@@ -249,15 +257,13 @@ label('COL_share', 'Share of coal production in provincial GDP',
 # Open the workbook and worksheet
 wb = load_workbook(PM_FILE, read_only=True)
 
+# Mapping from values in the first row of the worksheet(s) to pd.MultiIndex
+# labels
 cols = {
     None: ('r', ''),
     2010: ('bau', '2010'),
-    # 2018-04-21 pnk: these column labels have changed
-    'bau': ('bau', '2030'),
-    'cint3': ('3', '2030'),
-    'cint4': ('4', '2030'),
-    'cint5': ('5', '2030'),
-    # 2018-04-21 pnk: these column labels no longer appear
+    }
+cols.update({
     '2030_BAU': ('bau', '2030'),
     '2030_cint3': ('3', '2030'),
     '2030_cint4': ('4', '2030'),
@@ -266,8 +272,15 @@ cols = {
     '2030_cint3_lessGDP': ('3_lo', '2030'),
     '2030_cint4_lessGDP': ('4_lo', '2030'),
     '2030_cint5_lessGDP': ('5_lo', '2030'),
-    }
-pm_extra = {}
+    } if PM_FILE_FORMAT == 1 else {
+    'bau': ('bau', '2030'),
+    'cint3': ('3', '2030'),
+    'cint4': ('4', '2030'),
+    'cint5': ('5', '2030'),
+    })
+
+# Storage for extra, ad-hoc values (ie. national-level values)
+arrays_extra = {}
 for ws in wb:
     # Read the table in to a list of lists
     temp = []
@@ -297,35 +310,52 @@ for ws in wb:
     # Fill in 2010 values across cases
     da.loc[:, :, '2010'] = da.loc['bau', :, '2010']
 
-    if ws.title == 'prv_actual_average':
-        arrays['PM25_conc'] = da
-        label('PM25_conc', 'Province-wide average PM2.5',
-              'micrograms per cubic metre', 'μg/m³')
-    elif ws.title == 'prv_pop_average':
+    if PM_FILE_FORMAT == 1:
+        if ws.title == 'prv_actual_average':
+            arrays['PM25_conc'] = da
+            label('PM25_conc', 'Province-wide average PM2.5',
+                  'micrograms per cubic metre', 'μg/m³')
+        elif ws.title == 'prv_pop_average':
+            arrays['PM25_exposure'] = da
+            label('PM25_exposure', 'Population-weighted exposure to PM2.5',
+                  'micrograms per cubic metre', 'μg/m³')
+        elif ws.title == 'region_actual_average':
+            arrays_extra['PM25_conc'] = da.sel(r='Whole China', drop=True)
+        elif ws.title == 'region_pop_average':
+            arrays_extra['PM25_exposure'] = da.sel(r='Whole China', drop=True)
+    elif PM_FILE_FORMAT == 2:
+        # Split off the national data
+        da_national = da.sel(r='National', drop=True)
+        da = da.where(da.r != 'National', drop=True)
+
         arrays['PM25_exposure'] = da
         label('PM25_exposure', 'Population-weighted exposure to PM2.5',
               'micrograms per cubic metre', 'μg/m³')
-    else:
-        pm_extra[ws.title] = da
+
+        arrays_extra['PM25_exposure'] = da_national
 
 
-df = pd.DataFrame([
-    ['bau', '2010', 66.37],
-    ['bau', '2030', 84.78],
-    ['3',   '2030', 78.64],
-    ['4',   '2030', 71.23],
-    ['5',   '2030', 60.87]],
-    columns=['case', 't', 'value']).set_index(['case', 't'])
-da = xr.DataArray.from_series(df['value'])
-# Fill in 2010 values across cases
-da.loc[:, '2010'] = da.loc['bau', '2010']
-PM25_exposed_frac = da
-
-# Placeholder value at regional level
-arrays['PM25_exposed_frac'] = xr.DataArray([nan] * len(time), coords=[time],
-                                           dims='t')
-label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
-      ' than 35 μg/m³', 'percent', '%')
+# Commented: unused on the final website
+#
+# # Exposed fraction of population
+# df = pd.DataFrame([
+#     ['bau', '2010', 66.37],
+#     ['bau', '2030', 84.78],
+#     ['3',   '2030', 78.64],
+#     ['4',   '2030', 71.23],
+#     ['5',   '2030', 60.87]],
+#     columns=['case', 't', 'value']).set_index(['case', 't'])
+# da = xr.DataArray.from_series(df['value'])
+# # Fill in 2010 values across cases
+# da.loc[:, '2010'] = da.loc['bau', '2010']
+# arrays_extra['PM25_exposed_frac'] = da
+#
+# # Placeholder value at regional level
+# arrays['PM25_exposed_frac'] = xr.DataArray([nan] * len(time),
+#                                            coords=[time],
+#                                            dims='t')
+# label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations '
+#       'greater than 35 μg/m³', 'percent', '%')
 
 
 # 3.2. Finish preprocessing
@@ -334,10 +364,13 @@ label('PM25_exposed_frac', 'Population exposed to PM2.5 concentrations greater'
 data = xr.Dataset(arrays).sel(t=time)
 
 # Description of scenarios
-data['scenarios'] = xr.DataArray([c[2] for c in CASE_INFO],
+data['scenarios'] = xr.DataArray(scenarios_desc,
                                  coords={'case': cases},
                                  dims='case')
 
+# Commented: unused on the final website
+#
+# # Interpolate data for missing years.
 # for var in [data.PM25_exposure, data.PM25_conc]:
 #     # interpolate PM data for missing years
 #     var.loc[:,:,'2007'] = var.loc[:,:,'2010']
@@ -345,53 +378,33 @@ data['scenarios'] = xr.DataArray([c[2] for c in CASE_INFO],
 #     var.loc[:,:,'2015'] = var.loc[:,:,'2010'] + increment
 #     var.loc[:,:,'2020'] = var.loc[:,:,'2010'] + 2 * increment
 #     var.loc[:,:,'2025'] = var.loc[:,:,'2010'] + 3 * increment
-
-# Construct data for low-ammonia cases
-# N.B. the NH₃ cases do not appear on the final website, so these lines simply
-#      copy data from the other cases.
-base_cases = [str(name.values) for name in data['case']]
-nh3_cases = [name + '_nh3' for name in base_cases]
-d = xr.Dataset(coords={'case': nh3_cases})
-data.merge(d, join='outer', inplace=True)
-try:
-    # fill in PM data for missing cases
-    for nh3_case, base_case in zip(nh3_cases, base_cases):
-        data['PM25_conc'].loc[nh3_case, :, :] = data['PM25_conc'] \
-                                                .loc[base_case, :, :]
-except KeyError:
-    # 2018-04-21 pnk: pm.xlsx is currently missing this data
-    pass
-
+#
+# # Construct data for low-ammonia cases
+# base_cases = [str(name.values) for name in data['case']]
+# nh3_cases = [name + '_nh3' for name in base_cases]
+# d = xr.Dataset(coords={'case': nh3_cases})
+# data.merge(d, join='outer', inplace=True)
+# # fill in PM data for missing cases
+# for nh3_case, base_case in zip(nh3_cases, base_cases):
+#     data['PM25_conc'].loc[nh3_case, :, :] = data['PM25_conc'] \
+#                                             .loc[base_case, :, :]
 
 # Compute national totals and averages
 national = data.sum('r')
 national['penergy_nonfossil_share'] = (national['energy_nonfossil'] /
                                        national['energy_total']) * 100
 national['energy_nonfossil_share'] = nhw_share
-national['PM25_exposed_frac'] = PM25_exposed_frac
-# Unweighted average across provincial averages
-try:
-    national['PM25_exposure'] = pm_extra['region_pop_average'] \
-                                .sel(r='Whole China') \
-                                .drop('r')
-except KeyError:
-    # 2018-04-21 pnk: pm.xlsx is currently missing this data
-    pass
-try:
-    national['PM25_conc'] = pm_extra['region_actual_average'] \
-                            .sel(r='Whole China') \
-                            .drop('r')
-except KeyError:
-    # 2018-04-21 pnk: pm.xlsx is currently missing this data
-    pass
+national['PM25_exposure'] = arrays_extra['PM25_exposure']
 
-for varname in ['PM25_exposure', 'PM25_conc']:
-    try:
-        var = national[varname]
-    except KeyError:
-        # 2018-04-21 pnk: pm.xlsx is currently missing this data
-        continue
-    # interpolate PM data for missing years
+interpolate = ['PM25_exposure']
+
+if PM_FILE_FORMAT == 1:
+    national['PM25_exposed_frac'] = arrays_extra['PM25_exposed_frac']
+    national['PM25_conc'] = arrays_extra['PM23_conc']
+    interpolate.append('PM25_conc')
+
+# Interpolate PM data for missing years
+for var in national[interpolate].data_vars.values():
     var.loc[:, '2007'] = var.loc[:, '2010']
     increment = (var.loc[:, '2030'] - var.loc[:, '2010']) / 4
     var.loc[:, '2015'] = var.loc[:, '2010'] + increment

@@ -24,7 +24,6 @@ from pathlib import Path
 from subprocess import run
 
 import gdx
-from numpy import nan
 from openpyxl import load_workbook
 import pandas as pd
 import xarray as xr
@@ -123,7 +122,7 @@ arrays['GDP_delta'] = (arrays['GDP'] / arrays['GDP'].sel(case='bau') - 1) * 100
 label('GDP_delta', 'Change in gross domestic product relative to BAU',
       'percent', '%')
 
-# CO₂ emissions
+# CO₂ emissions by province
 temp = []
 for case in cases:
     temp.append(raw[case].extract('sectem').sum('g') +
@@ -131,6 +130,12 @@ for case in cases:
 arrays['CO2_emi'] = xr.concat(temp, dim=cases)
 label('CO2_emi', 'Annual CO₂ emissions',
       'millions of tonnes of CO₂', 'Mt')
+
+# CO₂ emissions, national total
+temp = []
+for case in cases:
+    temp.append(extra[case].extract('co2_emi'))
+CO2_emi_national = xr.concat(temp, dim=cases)
 
 
 # Air pollutant emissions
@@ -395,6 +400,7 @@ national['penergy_nonfossil_share'] = (national['energy_nonfossil'] /
                                        national['energy_total']) * 100
 national['energy_nonfossil_share'] = nhw_share
 national['PM25_exposure'] = arrays_extra['PM25_exposure']
+national['CO2_emi'] = CO2_emi_national
 
 interpolate = ['PM25_exposure']
 
@@ -411,6 +417,7 @@ for var in national[interpolate].data_vars.values():
     var.loc[:, '2020'] = var.loc[:, '2010'] + 2 * increment
     var.loc[:, '2025'] = var.loc[:, '2010'] + 3 * increment
 
+# Drop
 
 # 4. Output data
 

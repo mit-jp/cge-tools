@@ -42,7 +42,9 @@ Set r(*) All regions /
 'NX',
 'XJ' /;
 
-set foo / c, ptcarb, CHN, egycons, nhw_share /;
+* These names must be defined so that '*' in the following line will load the
+* corresponding values
+set foo / c, ptcarb, CHN, egycons, nhw_share, consCO2emis /;
 parameters report(*,*,*), egyreport2(*,*,*,*), nucl(r,t), hydr(r,t), wind(r,t), solar(r,t);
 
 execute_load '%file%.gdx', report, egyreport2, nucl, hydr, wind, solar;
@@ -50,11 +52,18 @@ execute_load '%file%.gdx', report, egyreport2, nucl, hydr, wind, solar;
 set e / COL, GAS, OIL, NUC, HYD, WND, SOL /;
 set fe(e) / COL, GAS, OIL /;
 
-parameter pe_t(e,r,t), ptcarb_t(t), cons_t(r,t), nhw_share(r,t), nhw_share_CN(t);
+parameter
+  pe_t(e,r,t),
+  cons_t(r,t),
+  nhw_share(r,t),
+  co2_emi(t),
+  nhw_share_CN(t),
+  ptcarb_t(t);
 
 display report;
 
 loop(t,
+  co2_emi(t) = report('consCO2emis',t,'CHN');
   ptcarb_t(t) = report('ptcarb',t,'CHN');
   nhw_share_CN(t) = report('nhw_share',t,'CHN');
   loop(r,

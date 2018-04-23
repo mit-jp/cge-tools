@@ -21,7 +21,7 @@ In reality, China’s CO₂ emissions intensity reduction has exceeded 3%/year f
 Carbon intensity falls by 4%/year from 2015 to 2030, starting in 2015. *This scenario is consistent with China’s current pledge under the 2015 Paris Climate Agreement.*
 
 <h5 style="color: #BC6FC8">5% Policy scenario</h5>
-Carbon intensity falls by 5%/year from 2010 to 2030, starting in 2010. This scenario is more aggressive than China’s current pledge. By 2030, China’s CO₂ intensity approaches the global 2007 average.
+Carbon intensity falls by 5%/year from 2015 to 2030, starting in 2015. This scenario is more aggressive than China’s current pledge. By 2030, China’s CO₂ intensity approaches the global 2007 average.
 
 The CO₂ price rises under each constraint, with steeper increases required to achieve more stringent CO₂ intensity targets.
 In all scenarios, economic growth follows a rising path, consistent with China's stated goal to become a well-off society by 2050.

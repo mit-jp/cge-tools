@@ -21,11 +21,11 @@ def render():
             "link": "energy-mix",
             "text": "China's target of 20% of energy from non-fossil sources (wind, solar, hydro, and nuclear power) is met in 2030 in the 4% scenario."
         },
-        {
-            "title": "Economic growth",
-            "link": "economic-growth",
-            "text": "Slower economic growth means an earlier CO₂ emissions peak, less expansion of non-fossil energy"
-        },
+        # {
+        #     "title": "Economic growth",
+        #     "link": "economic-growth",
+        #     "text": "Slower economic growth means an earlier CO₂ emissions peak, less expansion of non-fossil energy"
+        # },
         {
             "title": "CO₂ by province",
             "link": "co2-by-province",
